@@ -31,7 +31,7 @@ test('finds all matches', t => {
     [1, 4, 2, 2, 2, 2, 2, 6],
     ];
     
-    t.same(board.evaluate(testBoard), [[[1, 0], 'right', 3][[7, 2], 'right', 5], [[2, 4], 'down', 4], [[2, 7], 'down', 4]]);
+    t.same(board.evaluate(testBoard), [[[1, 0], 'right', 3], [[7, 2], 'right', 5], [[2, 4], 'down', 4], [[2, 7], 'down', 5]]);
 });
 
 test.skip('should have at least one possible match set by default', t => {
