@@ -50,8 +50,36 @@ export default class Board {
      * @returns {Object} - A match event. Includes the
      *
      */
-    evaluate() {
-
+    evaluate(board) {
+        let matchEvents = [],
+            matchLength = 3;
+        for (var x = 0; x < this.height; x++) { // all rows
+            for (var y = 0; y < this.width - 2; y++) { // all but last 2 columns
+                if (board[x][y] == board[x][y+1] && board[x][y+2] == board[x][y]) {
+                    for (var i = 3; i < 5; i++){
+                        if (!board[x][y + i]) { break };
+                        if (board[x][y] == board[x][y + i]) { matchLength++ }
+                    };
+                    matchEvents.push([[x, y], 'right', matchLength]);
+                    matchLength = 3;
+                    break;
+                }
+            }
+        };
+        for (var y = 0; y < this.width; y++) { // all columns
+            for (var x = 0; x < this.height - 2; x++) { // all but last 2 rows    
+                if (board[x][y] == board[x+1][y] && board[x+2][y] == board[x][y]) {
+                    for (var j = 3; j < 5; j++){
+                        if (!board[x + j]) { break };
+                        if (board[x][y] == board[x + j][y]) { matchLength++ }
+                    };
+                    matchEvents.push([[x, y], 'down', matchLength]);
+                    matchLength = 3;
+                    break
+                } 
+            }
+        }
+        return matchEvents  
     }
 
     evaluateAll() {
