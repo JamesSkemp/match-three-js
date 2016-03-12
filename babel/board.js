@@ -50,15 +50,15 @@ export default class Board {
      * @returns {Object} - A match event. Includes the
      *
      */
-    evaluate(board) {
+    evaluate() {
         let matchEvents = [],
             matchLength = 3;
         for (var x = 0; x < this.height; x++) { // all rows
             for (var y = 0; y < this.width - 2; y++) { // all but last 2 columns
-                if (board[x][y] == board[x][y+1] && board[x][y+2] == board[x][y]){
+                if (this.orbs[x][y] == this.orbs[x][y+1] && this.orbs[x][y+2] == this.orbs[x][y]) {
                     for (var i = 3; i < 5; i++){
-                        if (!board[x][y + i]) { break };
-                        if (board[x][y] == board[x][y + i]) { matchLength++ }
+                        if (!this.orbs[x][y + i]) { break };
+                        if (this.orbs[x][y] == this.orbs[x][y + i]) { matchLength++ }
                     };
                     matchEvents.push([[x, y], 'right', matchLength]);
                     matchLength = 3;
@@ -68,10 +68,10 @@ export default class Board {
         };
         for (var y = 0; y < this.width; y++) { // all columns
             for (var x = 0; x < this.height - 2; x++) { // all but last 2 rows    
-                if (board[x][y] == board[x+1][y] && board[x+2][y] == board[x][y]) {
+                if (this.orbs[x][y] == this.orbs[x+1][y] && this.orbs[x+2][y] == this.orbs[x][y]) {
                     for (var j = 3; j < 5; j++){
-                        if (!board[x + j]) { break };
-                        if (board[x][y] == board[x + j][y]) { matchLength++ }
+                        if (!this.orbs[x + j]) { break };
+                        if (this.orbs[x][y] == this.orbs[x + j][y]) { matchLength++ }
                     };
                     matchEvents.push([[x, y], 'down', matchLength]);
                     matchLength = 3;
