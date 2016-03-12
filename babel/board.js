@@ -55,7 +55,7 @@ export default class Board {
             matchLength = 3;
         for (var x = 0; x < this.height; x++) { // all rows
             for (var y = 0; y < this.width - 2; y++) { // all but last 2 columns
-                if (board[x][y] == board[x][y+1] && board[x][y+2] == board[x][y]) {
+                if (board[x][y] == board[x][y+1] && board[x][y+2] == board[x][y]){
                     for (var i = 3; i < 5; i++){
                         if (!board[x][y + i]) { break };
                         if (board[x][y] == board[x][y + i]) { matchLength++ }
