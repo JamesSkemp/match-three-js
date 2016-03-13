@@ -78,8 +78,7 @@ export default class Board {
                     break
                 } 
             }
-        }
-        //return matchEvents
+        };
         
         _.forEach(matchEvents, match => {
             let [[x, y], dir, matchLength] = match;
