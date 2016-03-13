@@ -79,7 +79,36 @@ export default class Board {
                 } 
             }
         }
-        return matchEvents  
+        //return matchEvents
+        
+        _.forEach(matchEvents, match => {
+            let [[x, y], dir, matchLength] = match;
+            if (dir == 'right') {
+                for (var i = x; i >= 0; i--) {
+                    for (var j = 0; j < matchLength; j++) {
+                        if (i > 0) {
+                            this.orbs[i][y + j] = this.orbs[i - 1][y + j]
+                        } else {
+                            this.orbs[i][y + j] = _.sample(this.types)
+                        }
+                    }
+                };
+                
+            } else if (dir == 'down') {
+                let bottomX = x + matchLength - 1;
+                for (var i = bottomX; i >= 0; i--) {
+                    if (i <= bottomX) {
+                        try {
+                            this.orbs[i][y] = this.orbs[i - matchLength][y]
+                        }
+                        catch(err) {
+                            this.orbs[i][y] = _.sample(this.types)
+                        }
+                    }
+                }
+            };       
+        });
+        
     }
 
     evaluateAll() {
