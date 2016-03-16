@@ -46,67 +46,27 @@ export default class Board {
         return _.uniq(_.flatten(this.orbs)).sort();
     }
 
-    /**
-     * @returns {Object} - A match event. Includes the
-     *
-     */
-    evaluate() {
-        let matchEvents = [],
-            matchLength = 3;
-        for (var x = 0; x < this.height; x++) { // all rows
-            for (var y = 0; y < this.width - 2; y++) { // all but last 2 columns
-                if (this.orbs[x][y] == this.orbs[x][y+1] && this.orbs[x][y+2] == this.orbs[x][y]) {
-                    for (var i = 3; i < 5; i++){
-                        if (!this.orbs[x][y + i]) { break };
-                        if (this.orbs[x][y] == this.orbs[x][y + i]) { matchLength++ }
-                    };
-                    matchEvents.push([[x, y], 'right', matchLength]);
-                    matchLength = 3;
-                    break;
-                }
-            }
-        };
-        for (var y = 0; y < this.width; y++) { // all columns
-            for (var x = 0; x < this.height - 2; x++) { // all but last 2 rows    
-                if (this.orbs[x][y] == this.orbs[x+1][y] && this.orbs[x+2][y] == this.orbs[x][y]) {
-                    for (var j = 3; j < 5; j++){
-                        if (!this.orbs[x + j]) { break };
-                        if (this.orbs[x][y] == this.orbs[x + j][y]) { matchLength++ }
-                    };
-                    matchEvents.push([[x, y], 'down', matchLength]);
-                    matchLength = 3;
-                    break
-                } 
-            }
-        };
+    findMatches() {
+        let matches = [],
+            b = _.cloneDeep(this.orbs);
         
-        _.forEach(matchEvents, match => {
-            let [[x, y], dir, matchLength] = match;
-            if (dir == 'right') {
-                for (var i = x; i >= 0; i--) {
-                    for (var j = 0; j < matchLength; j++) {
-                        if (i > 0) {
-                            this.orbs[i][y + j] = this.orbs[i - 1][y + j]
-                        } else {
-                            this.orbs[i][y + j] = _.sample(this.types)
-                        }
-                    }
-                };
-                
-            } else if (dir == 'down') {
-                let bottomX = x + matchLength - 1;
-                for (var i = bottomX; i >= 0; i--) {
-                    if (i <= bottomX) {
-                        try {
-                            this.orbs[i][y] = this.orbs[i - matchLength][y]
-                        }
-                        catch(err) {
-                            this.orbs[i][y] = _.sample(this.types)
-                        }
-                    }
+        _.each(_.range(this.height - 2), x => {
+            _.each(_.range(this.width - 2), y => {
+                if (b[x][y] == b[x][y + 1] && b[x][y] == b[x][y + 2]) {
+                    matches.push([[x, y], [x, y + 1], [x, y + 2]])
+                } else if (b[x][y] == b[x + 1][y] && b[x][y] == b[x + 2][y]) {
+                    matches.push([[x, y], [x + 1, y], [x + 2, y]])
                 }
-            };       
+            })
         });
+        return matches
+    }
+    
+    combineMatches(matches) {
+        
+    }
+    
+    evaluate() {
         
     }
 
