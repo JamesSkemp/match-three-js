@@ -63,9 +63,9 @@ export default class Board {
         return matches;
     }
     
-    combineMatches(matches) {
+    combineMatches() {
         let combinedMatches = [],
-            unused = _.clone(matches), 
+            unused = _.clone(this.findMatches()), 
             couldMatch, before, currentMatch;
         
         while (unused[0] != null) {
