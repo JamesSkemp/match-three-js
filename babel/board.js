@@ -1,5 +1,6 @@
 'use strict';
 import * as _ from 'lodash';
+let SortedSet = require('collections/sorted-set');
 
 /**
  * With `orbs` being
@@ -56,14 +57,34 @@ export default class Board {
                     matches.push([[x, y], [x, y + 1], [x, y + 2]])
                 } else if (b[x][y] == b[x + 1][y] && b[x][y] == b[x + 2][y]) {
                     matches.push([[x, y], [x + 1, y], [x + 2, y]])
-                }
-            })
+                };
+            });
         });
-        return matches
+        return matches;
     }
     
     combineMatches(matches) {
+        let combinedMatches = [],
+            unused = _.clone(matches), 
+            couldMatch, before, currentMatch;
         
+        while (unused[0] != null) {
+            currentMatch = new SortedSet(unused[0]);
+            unused.shift();
+            couldMatch = _.clone(unused);
+                
+            _.each(couldMatch, m => { //only union if there is an overlap!
+                if (currentMatch.intersection(m).toArray()[0] != null) {
+                    before = currentMatch.toArray();
+                    currentMatch.swap(0, currentMatch.length, currentMatch.union(m));
+                    if (before != currentMatch.toArray()) {
+                        unused.splice(unused.indexOf(m), 1);
+                    }
+                }
+            });
+            combinedMatches.push(currentMatch.toArray());
+        }
+        return combinedMatches;
     }
     
     evaluate() {
@@ -92,3 +113,23 @@ export default class Board {
 
     }
 };
+
+//testing
+let board = new Board;
+board.orbs = [ 
+        [ 3, 2, 2, 2, 2, 3, 6, 6 ],
+        [ 4, 2, 0, 5, 3, 0, 1, 5 ],
+        [ 1, 4, 3, 2, 5, 4, 6, 6 ],
+        [ 3, 5, 2, 2, 2, 3, 3, 4 ],
+        [ 1, 1, 3, 2, 5, 2, 6, 2 ],
+        [ 3, 2, 5, 4, 5, 0, 4, 0 ],
+        [ 1, 3, 1, 6, 1, 6, 3, 3 ],
+        [ 1, 0, 3, 0, 1, 1, 3, 3 ] 
+    ];
+
+console.log(board.combineMatches(board.findMatches()));
+
+
+
+
+
