@@ -113,23 +113,3 @@ export default class Board {
 
     }
 };
-
-//testing
-let board = new Board;
-board.orbs = [ 
-        [ 3, 2, 2, 2, 2, 3, 6, 6 ],
-        [ 4, 2, 0, 5, 3, 0, 1, 5 ],
-        [ 1, 4, 3, 2, 5, 4, 6, 6 ],
-        [ 3, 5, 2, 2, 2, 3, 3, 4 ],
-        [ 1, 1, 3, 2, 5, 2, 6, 2 ],
-        [ 3, 2, 5, 4, 5, 0, 4, 0 ],
-        [ 1, 3, 1, 6, 1, 6, 3, 3 ],
-        [ 1, 0, 3, 0, 1, 1, 3, 3 ] 
-    ];
-
-console.log(board.combineMatches(board.findMatches()));
-
-
-
-
-
