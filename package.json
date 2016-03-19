@@ -15,7 +15,7 @@
   },
   "scripts": {
     "build": "babel ./babel -d ./src",
-    "test": "ava test/*.spec.js"
+    "test": "ava"
   },
   "keywords": [
     "match-three",
@@ -27,7 +27,7 @@
   "license": "MIT",
   "ava": {
     "files": [
-      "test/*spec.js"
+      "test/**/*.js"
     ],
     "failFast": true,
     "tap": true,
