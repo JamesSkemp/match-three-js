@@ -13,19 +13,22 @@ let SortedSet = require('collections/sorted-set');
  *   [ [6, 3, 6], [5, 2, 4] ], [ [5, 2, 4], [4, 2, 0] ] ]
  */
 export function iterchunks (orbs, chunkLimitRange = [4, 2]) {
-    // Defaults will find all possible 3-matches. Used by `Board#evaluate`.
-    let [width, height] = chunkLimitRange;
-    let [finalPositionWidth, finalPositionHeight] = [orbs[0].length - width, orbs.length - height];
-    let chunks = [];
-    _.each(_.range(0, finalPositionHeight + 1), heightIndex => {
-        _.each(_.range(0, finalPositionWidth + 1), widthIndex => {
-            chunks.push([
-                orbs[heightIndex].slice(widthIndex, widthIndex + width),
-                orbs[heightIndex + 1].slice(widthIndex, widthIndex + width)
-            ]);
+    let _iterchunks = (orbs, chunkLimitRange) => {
+        let chunks = [];
+        let [width, height] = chunkLimitRange;
+        let [finalPositionWidth, finalPositionHeight] = [orbs[0].length - width, orbs.length - height];
+        _.each(_.range(0, finalPositionHeight + 1), heightIndex => {
+            _.each(_.range(0, finalPositionWidth + 1), widthIndex => {
+                chunks.push([
+                    orbs[heightIndex].slice(widthIndex, widthIndex + width),
+                    orbs[heightIndex + 1].slice(widthIndex, widthIndex + width)
+                ]);
+            });
         });
-    });
-    return chunks;
+        return chunks;
+    };
+    let transposedOrbs = _.zip(...orbs);
+    return [..._iterchunks(orbs, chunkLimitRange), ..._iterchunks(transposedOrbs, chunkLimitRange)]
 };
 
 export function findMatches(orbs) {
@@ -101,10 +104,7 @@ export class Board {
     }
 
     needsShuffle() {
-        let chunks = iterchunks(_.cloneDeep(this.orbs));
-        let chunksBackward = iterchunks(_.zip(..._.cloneDeep(this.orbs)));
-        chunks.push(...chunksBackward);
-        return chunks;
+
     }
 
     hasMatch() {
