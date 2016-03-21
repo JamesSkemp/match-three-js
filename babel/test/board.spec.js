@@ -1,9 +1,9 @@
 'use strict';
 import test from 'ava';
 import * as _ from 'lodash';
-import {Board} from '../babel/board';
-import {combineMatches} from '../babel/board';
-import {findMatches} from '../babel/board';
+import {Board} from '../src/board';
+import {combineMatches} from '../src/board';
+import {findMatches} from '../src/board';
 let board;
 
 test.before(() => {
