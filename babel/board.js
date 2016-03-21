@@ -2,6 +2,40 @@
 import * as _ from 'lodash';
 let SortedSet = require('collections/sorted-set');
 
+// checks for one row of the iterchunk board for a match like [0010].
+export function hasMatchInSingleRow (row) {
+    return _.max(_.values(_.countBy(row))) > 2;
+};
+
+// return the index of all occurrences of `value` in `list`. [5, 3, 7, 5], 5 -> [0, 3]
+export function indexOfAll (list, value) {
+    return _.reduce(list, (acc, e, i) => {
+        if (e === value) {
+            acc.push(i);
+        }
+
+        return acc;
+    }, []);
+};
+
+// checks across both rows for a match, like [0101]
+//                                           [2031]
+export function hasMatchInPairOfRows (pairOfRows) {
+    let allValues = _.uniq(_.flatten(pairOfRows));
+    let allMatches = _.map(allValues, value => {
+        return _.uniq([...indexOfAll(pairOfRows[0], value),
+                       ...indexOfAll(pairOfRows[1], value)]).sort();
+    });
+
+    return _.some(allMatches, match => {
+        return _.some([
+            _.isEqual(match, [0, 1, 2]),
+            _.isEqual(match, [1, 2, 3]),
+            _.isEqual(match, [0, 1, 2, 3]),
+        ]);
+    });
+};
+
 /**
  * With `orbs` being
  * [ [ 6, 5, 4 ],
@@ -143,11 +177,16 @@ export class Board {
     }
 
     needsShuffle() {
-
+        return !this.hasMatch();
     }
 
     hasMatch() {
-        return !this.needsShuffle();
+        let chunks = iterchunks(this.orbs);
+        // [[[1, 2, 3], [2, 3, 4]], [[3, 4, 5], [4, 5, 6]]] becomes
+        //  [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]]
+        let flatChunks = _.flattenDepth(chunks, 1);
+        let hasWideStyleMatch = _.some(_.map(flatChunks, hasMatchInSingleRow));
+        return hasWideStyleMatch || _.some(_.map(chunks), hasMatchInPairOfRows);
     }
 
     shuffle() {
