@@ -91,9 +91,48 @@ export class Board {
     get availableTypes() {
         return _.uniq(_.flatten(this.orbs)).sort();
     }
+    
+    /** 
+      * 1. logs data for each match and replaces each orb with 'X'
+      * 2. replaces each 'X' and all above orbs with either the orb directly above or a random new orb
+      * 3. returns the match data -> [[match1Type, match1Amount], [match2Type, match2Amount], ...]
+      */
+    evaluate(matches) {
+        let matchData = [];
+        
+        _.each(matches, match => {
+            // log data
+            let [xx, yy] = match[0];
+            matchData.push([this.orbs[xx][yy], match.length]);
+            // replace each coordinate with 'X'
+            _.each(match, coord => {
+                let [x, y] = coord;
+                this.orbs[x][y] = 'X'
+            })
+        });
 
-    evaluate() {
+        /**
+          * drop down and generate matches
+          * 1. reads across starting from the top
+          * 2. when it hits 'X', loops from that position directly up
+          * 3. if the row isn't 0, it takes the orb from above
+          * 4. if the row is 0, it creates a random orb
+        */
+        _.each(_.range(this.height), x =>{
+            _.each(_.range(this.width), y => { //1
+                if (this.orbs[x][y] == 'X') {
+                    for (var z = x; z >= 0; z--) { //2
+                        if (z > 0) { //3
+                            this.orbs[z][y] = this.orbs[z - 1][y];
+                        } else { //4
+                            this.orbs[z][y] = _.sample(this.types);;
+                        };
+                    };
+                };
+            });
+        });
 
+        return matchData;
     }
 
     evaluateAll() {
