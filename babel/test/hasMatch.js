@@ -1,9 +1,9 @@
 import test from 'ava';
 import * as _ from 'lodash';
-import {hasMatchInSingleRow} from '../babel/board';
-import {hasMatchInPairOfRows} from '../babel/board';
-import {indexOfAll} from '../babel/board';
-import {Board} from '../babel/board';
+import {hasMatchInSingleRow} from '../src/board';
+import {hasMatchInPairOfRows} from '../src/board';
+import {indexOfAll} from '../src/board';
+import {Board} from '../src/board';
 let board;
 
 test.before(() => {

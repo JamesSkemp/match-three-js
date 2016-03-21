@@ -14,8 +14,9 @@
     "babel-preset-es2015": "^6.6.0"
   },
   "scripts": {
-    "build": "babel ./babel -d ./src",
-    "test": "ava"
+    "babel": "babel ./babel/ -d .",
+    "test": "ava",
+    "test-es5": "ava test/**"
   },
   "keywords": [
     "match-three",
@@ -27,7 +28,7 @@
   "license": "MIT",
   "ava": {
     "files": [
-      "test/**/*.js"
+      "babel/test/**/*.js"
     ],
     "failFast": true,
     "tap": true,

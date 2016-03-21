@@ -1,7 +1,7 @@
 'use strict';
 import test from 'ava';
 import * as _ from 'lodash';
-import {iterchunks} from '../babel/board';
+import {iterchunks} from '../src/board';
 let orbs;
 let chunks;
 
