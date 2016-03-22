@@ -1,8 +1,11 @@
 import test from 'ava';
 import * as _ from 'lodash';
 import {findMatches} from '../src/board';
+import {iterchunks} from '../src/board';
 import {Board} from '../src/board';
-let board, exampleMatches, correctMatches, answer;
+let board;
+let exampleMatches;
+let correctMatches;
 
 test.before(() => {
     board = new Board(5, 5);

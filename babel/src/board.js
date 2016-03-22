@@ -89,7 +89,7 @@ export function hasMatchInPairOfRows (pairOfRows) {
  *     ]
  * ]
  */
-export function iterchunks (orbs, chunkLimitRange = [4, 2], includePositionInformation = false) {
+export function iterchunks (orbs, chunkLimitRange = [4, 2], findingMatches = false) {
     let _iterchunks = (orbs, isTransposed = false) => {
         let chunks = [];
         let [width, height] = chunkLimitRange;
@@ -100,20 +100,17 @@ export function iterchunks (orbs, chunkLimitRange = [4, 2], includePositionInfor
                     return row.slice(widthIndex, widthIndex + width);
                 });
 
-                if (includePositionInformation) {
+                if (findingMatches) {
                     let heightCoordinates = [heightIndex + height - 1, widthIndex + width - 1];
+                    let middleCoordinates = [heightIndex, widthIndex + 1];
                     let widthCoordinates = [heightIndex, widthIndex];
                     if (isTransposed) {
                         widthCoordinates = widthCoordinates.reverse();
+                        middleCoordinates = middleCoordinates.reverse();
                         heightCoordinates = heightCoordinates.reverse();
                     }
 
-                    chunkData.push({
-                        position: {
-                            first: widthCoordinates,
-                            last: heightCoordinates
-                        }
-                    });
+                    chunkData.push([widthCoordinates, middleCoordinates, heightCoordinates]);
                 }
 
                 chunks.push(chunkData);
@@ -127,23 +124,15 @@ export function iterchunks (orbs, chunkLimitRange = [4, 2], includePositionInfor
 
 export function findMatches(orbs) {
     let matches = [];
-    let height = orbs.length;
-    let width = orbs[0].length;
-
-    _.each(_.range(height), x => {
-        _.each(_.range(width - 2), y => {
-            if (orbs[x][y] == orbs[x][y + 1] && orbs[x][y] == orbs[x][y + 2]) {
-                matches.push([[x, y], [x, y + 1], [x, y + 2]])
-            };
-        });
-    });
-    _.each(_.range(height - 2), x => {
-        _.each(_.range(width), y => {
-            if (orbs[x][y] == orbs[x + 1][y] && orbs[x][y] == orbs[x + 2][y]) {
-                matches.push([[x, y], [x + 1, y], [x + 2, y]])
-            };
-        });
-    });
+    let pairs = iterchunks(orbs, [3, 1], true);
+    
+    _.each(pairs, pair => {
+        let [chunk, position] = pair;
+        if (chunk[0] == chunk[1] && chunk[0] == chunk[2]) {
+            matches.push(position)
+        }
+    })
+    
     return matches;
 };
 
