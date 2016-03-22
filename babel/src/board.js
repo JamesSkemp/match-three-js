@@ -45,24 +45,84 @@ export function hasMatchInPairOfRows (pairOfRows) {
  * grouping, and then, each available 2x3 grouping.
  * [ [ [6, 5, 4], [3, 2, 2] ], [ [3, 2, 2], [6, 4, 0] ],
  *   [ [6, 3, 6], [5, 2, 4] ], [ [5, 2, 4], [4, 2, 0] ] ]
+ *
+ * If you want to also return the position of the first member of the chunk,
+ * as X/Y coordinates, pass in `includePositionInformation`. That will return the
+ * same data as above, but with a final piece of information, an object with a `position`
+ * key that maps to the first and last X/Y coordinates of that chunk.
+ * [
+ *     [
+ *         [6, 5, 4], [3, 2, 2],
+ *         {
+ *             position: {
+ *                 first: [0, 0],
+ *                 last: [1, 2]
+ *             }
+ *         }
+ *     ],
+ *     [
+ *         [3, 2, 2], [6, 4, 0],
+ *         {
+ *             position: {
+ *                 first: [1, 0],
+ *                 last: [2, 2]
+ *             }
+ *         }
+ *     ],
+ *     [
+ *         [6, 3, 6], [5, 2, 4],
+ *         {
+ *             position: {
+ *                 first: [0, 0],
+ *                 last: [2, 1]
+ *             }
+ *         }
+ *     ],
+ *     [
+ *         [5, 2, 4], [4, 2, 0]
+ *         {
+ *             position: {
+ *                 first: [0, 1],
+ *                 last: [2, 2]
+ *             }
+ *         }
+ *     ]
+ * ]
  */
-export function iterchunks (orbs, chunkLimitRange = [4, 2]) {
-    let _iterchunks = (orbs, chunkLimitRange) => {
+export function iterchunks (orbs, chunkLimitRange = [4, 2], includePositionInformation = false) {
+    let _iterchunks = (orbs, isTransposed = false) => {
         let chunks = [];
         let [width, height] = chunkLimitRange;
         let [finalPositionWidth, finalPositionHeight] = [orbs[0].length - width, orbs.length - height];
         _.each(_.range(0, finalPositionHeight + 1), heightIndex => {
             _.each(_.range(0, finalPositionWidth + 1), widthIndex => {
-                chunks.push([
-                    orbs[heightIndex].slice(widthIndex, widthIndex + width),
-                    orbs[heightIndex + 1].slice(widthIndex, widthIndex + width)
-                ]);
+                let chunkData = orbs.slice(heightIndex, heightIndex + height).map(row => {
+                    return row.slice(widthIndex, widthIndex + width);
+                });
+
+                if (includePositionInformation) {
+                    let heightCoordinates = [heightIndex + height - 1, widthIndex + width - 1];
+                    let widthCoordinates = [heightIndex, widthIndex];
+                    if (isTransposed) {
+                        widthCoordinates = widthCoordinates.reverse();
+                        heightCoordinates = heightCoordinates.reverse();
+                    }
+
+                    chunkData.push({
+                        position: {
+                            first: widthCoordinates,
+                            last: heightCoordinates
+                        }
+                    });
+                }
+
+                chunks.push(chunkData);
             });
         });
         return chunks;
     };
     let transposedOrbs = _.zip(...orbs);
-    return [..._iterchunks(orbs, chunkLimitRange), ..._iterchunks(transposedOrbs, chunkLimitRange)]
+    return [..._iterchunks(orbs, false), ..._iterchunks(transposedOrbs, true)]
 };
 
 export function findMatches(orbs) {
@@ -81,7 +141,7 @@ export function findMatches(orbs) {
         });
     });
     return matches;
-}
+};
 
 export function combineMatches(matches) {
     let combinedMatches = [];
@@ -105,7 +165,7 @@ export function combineMatches(matches) {
         combinedMatches.push(currentMatch.toArray());
     }
     return combinedMatches;
-}
+};
 
 export class Board {
     constructor (width = 8, height = 8, types = _.range(7)) {
@@ -125,15 +185,15 @@ export class Board {
     get availableTypes() {
         return _.uniq(_.flatten(this.orbs)).sort();
     }
-    
-    /** 
+
+    /**
       * 1. logs data for each match and replaces each orb with 'X'
       * 2. replaces each 'X' and all above orbs with either the orb directly above or a random new orb
       * 3. returns the match data -> [[match1Type, match1Amount], [match2Type, match2Amount], ...]
       */
     evaluate(matches) {
         let matchData = [];
-        
+
         _.each(matches, match => {
             // log data
             let [xx, yy] = match[0];
