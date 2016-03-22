@@ -125,7 +125,7 @@ test.before(() => {
    ];
 });
 
-test('gathers all matches of three', t => {
+test('gathers all matches of three, including overlaps', t => {
    _.each(_.range(exampleMatches.length), i => {
        board.orbs = exampleMatches[i];
        t.true(_.isEqual(findMatches(board.orbs), correctMatches[i]));
