@@ -1,7 +1,6 @@
 import test from 'ava';
 import * as _ from 'lodash';
 import {findMatches} from '../src/board';
-import {iterchunks} from '../src/board';
 import {Board} from '../src/board';
 let board;
 let match;
