@@ -56,7 +56,7 @@ test('matches a simple row four-match', t => {
     t.ok(_.isEqual(findMatches(board.orbs), match));
 });
 
-test('matches a simple row four-match', t => {
+test('matches a simple column four-match', t => {
     board.orbs = [
         [ 1, 2, 3, 4, 5 ],
         [ 5, 1, 2, 6, 4 ],
@@ -89,7 +89,7 @@ test('matches a simple row five-match', t => {
     t.ok(_.isEqual(findMatches(board.orbs), match));
 });
 
-test('matches a simple row five-match', t => {
+test('matches a simple column five-match', t => {
     board.orbs = [
         [ 1, 2, 6, 4, 5 ],
         [ 5, 1, 6, 3, 4 ],
@@ -122,7 +122,7 @@ test('matches a cross-match', t => {
     t.ok(_.isEqual(findMatches(board.orbs), match));
 });
 
-test('matches a cross-match', t => {
+test('matches an L cross-match', t => {
     board.orbs = [
         [ 1, 2, 3, 4, 5 ],
         [ 5, 1, 2, 3, 4 ],
