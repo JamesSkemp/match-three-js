@@ -1,109 +1,32 @@
 import test from 'ava';
 import * as _ from 'lodash';
+import {testOrbs} from './exampleMatchesData';
+import {testCombined} from './exampleMatchesData';
+import {testMatchData} from './exampleMatchesData';
+import {evaluate} from '../src/board';
 import {findMatches} from '../src/board';
 import {combineMatches} from '../src/board';
 import {Board} from '../src/board';
-let board, exampleMatches, correctMatches, answer;
+let board = new Board(5, 5); 
+let index;
 
-test.before(() => {
-    board = new Board(5, 5);
-    exampleMatches = [[
-        [ 1, 2, 3, 4, 5 ],
-        [ 5, 1, 2, 3, 4 ],
-        [ 4, 5, 1, 2, 3 ],
-        [ 3, 6, 6, 6, 2 ],
-        [ 2, 3, 4, 5, 1 ]
-    ], [
-        [ 1, 2, 3, 4, 5 ],
-        [ 5, 1, 2, 3, 4 ],
-        [ 4, 5, 1, 2, 6 ],
-        [ 3, 4, 5, 1, 6 ],
-        [ 2, 3, 4, 5, 6 ]
-    ], [
-        [ 1, 2, 3, 4, 5 ],
-        [ 5, 1, 2, 3, 4 ],
-        [ 4, 5, 1, 2, 3 ],
-        [ 3, 4, 5, 1, 2 ],
-        [ 2, 6, 6, 6, 6 ]
-    ], [
-        [ 1, 2, 3, 4, 5 ],
-        [ 5, 1, 2, 6, 4 ],
-        [ 4, 5, 1, 6, 3 ],
-        [ 3, 4, 5, 6, 2 ],
-        [ 2, 3, 4, 6, 1 ]
-    ], [
-        [ 1, 2, 3, 4, 5 ],
-        [ 5, 1, 2, 3, 4 ],
-        [ 6, 6, 6, 6, 6 ],
-        [ 3, 4, 5, 1, 2 ],
-        [ 2, 3, 4, 5, 1 ]
-    ], [
-        [ 1, 2, 6, 4, 5 ],
-        [ 5, 1, 6, 3, 4 ],
-        [ 4, 5, 6, 2, 3 ],
-        [ 3, 4, 6, 1, 2 ],
-        [ 2, 3, 6, 5, 1 ]
-    ], [
-        [ 1, 2, 3, 4, 5 ],
-        [ 5, 1, 6, 3, 4 ],
-        [ 4, 6, 6, 6, 3 ],
-        [ 3, 4, 6, 1, 2 ],
-        [ 2, 3, 4, 5, 1 ]
-    ], [
-        [ 1, 2, 3, 4, 5 ],
-        [ 5, 1, 2, 3, 4 ],
-        [ 4, 6, 1, 2, 3 ],
-        [ 3, 6, 5, 1, 2 ],
-        [ 2, 6, 6, 6, 1 ]
-    ], [
-        [ 1, 2, 3, 4, 5 ],
-        [ 5, 1, 2, 3, 4 ],
-        [ 6, 6, 6, 6, 3 ],
-        [ 3, 4, 6, 1, 2 ],
-        [ 2, 3, 6, 5, 1 ]
-    ], [
-        [ 1, 2, 3, 4, 5 ],
-        [ 5, 1, 2, 3, 4 ],
-        [ 4, 6, 6, 6, 6 ],
-        [ 3, 4, 6, 1, 2 ],
-        [ 2, 3, 6, 5, 1 ]
-    ], [
-        [ 1, 2, 3, 4, 5 ],
-        [ 5, 1, 2, 3, 4 ],
-        [ 6, 6, 6, 6, 6 ],
-        [ 3, 4, 6, 1, 2 ],
-        [ 2, 3, 6, 5, 1 ]
-    ]];
+_.each(_.range(testOrbs.length), i => {
+    board.orbs = testOrbs[i];
+    let matchData = board.evaluate(combineMatches(findMatches(board.orbs)));
+    
+    test(`gathers data: test match ${i}`, t => {
+        t.ok(_.isEqual(matchData, testMatchData[i]));
+    });
+    
+    test(`removes matches and replaces with valid type orbs: test match ${i}`, t => {
+        _.each(_.flattenDeep(board.orbs), orb => {
+            t.true(_.includes(board.types, orb))
+        });
+    });
 });
-test.skip('gathers data for each match', t=> {
-     let correctMatchData = [[6, 3], [6, 3], [6, 4], [6, 4],
-                             [6, 5], [6, 5], [6, 5], [6, 5], 
-                             [6, 6], [6, 6], [6, 7]];
-     _.each(_.range(11), i => {
-         board.orbs = exampleMatches[i]
-         t.same(board.evaluate(combineMatches(findMatches(board.orbs))), correctMatchData[i]);
-     });
- });
  
- test.skip('makes sure matches have been removed and all orbs are valid types', t=> {
-     board.orbs = [
-         [ 3, 8, 8, 8, 8, 3, 6, 6 ],
-         [ 4, 2, 0, 5, 3, 0, 1, 5 ],
-         [ 1, 4, 3, 8, 5, 4, 6, 6 ],
-         [ 3, 5, 8, 8, 8, 3, 3, 4 ],
-         [ 1, 1, 3, 8, 5, 2, 6, 2 ],
-         [ 3, 2, 5, 4, 5, 0, 4, 0 ],
-         [ 1, 3, 1, 6, 1, 6, 3, 3 ],
-         [ 1, 0, 3, 0, 1, 1, 3, 3 ]
-     ];
-     board.evaluate(combineMatches(findMatches(board.orbs)));
- 
-     _.each(_.flattenDeep(board.orbs), orb => {
-         t.true(_.includes(board.types, orb))
-     });
- });
- 
- test.skip('nonmatch orbs drop down into the correct place', t => {
+// still needs to be iterated through all matches
+ test('nonmatch orbs drop down into the correct place', t => {
      board.orbs = [
          [ 1, 2, 3, 4, 5 ],
          [ 5, 1, 2, 3, 4 ],
@@ -118,7 +41,8 @@ test.skip('gathers data for each match', t=> {
      t.same(_.slice(board.orbs[1], 1, 4), [2, 3, 4]);
  });
  
- test.skip('unaffected orbs are unchanged', t => {
+// still needs to be iterated through all matches
+ test('unaffected orbs are unchanged', t => {
      board.orbs = [
          [ 1, 2, 3, 4, 5 ],
          [ 5, 1, 2, 3, 4 ],
