@@ -291,9 +291,9 @@ export class Board {
         this.orbs[x2][y2] = orbsBefore[x1][y1]
 
         // undo the swap if it did not yeild a match
-        if (findMatches(this.orbs)[0] === null) {
-            this.orbs = orbsBefore
-        }
+        if (!findMatches(this.orbs)[0]) {
+            this.orbs = orbsBefore;
+        };
     }
 
     shuffle() {
