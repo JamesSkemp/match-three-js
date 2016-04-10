@@ -16,7 +16,7 @@
   "scripts": {
     "babel": "babel ./babel/ -d .",
     "test": "ava",
-    "test-es5": "ava test/**"
+    "test-es5": "ava"
   },
   "keywords": [
     "match-three",
