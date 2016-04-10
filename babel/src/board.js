@@ -226,7 +226,7 @@ export class Board {
       * 2. replaces each 'X' and all above orbs with either the orb directly above or a random new orb
       * 3. returns the match data -> [[match1Type, match1Amount], [match2Type, match2Amount], ...]
       */
-    evaluate(matches) {
+    evaluate(matches, dropOptions = [this.types]) {
         let matchData = [];
 
         _.each(matches, match => {
@@ -254,7 +254,7 @@ export class Board {
                         if (z > 0) { //3
                             this.orbs[z][y] = this.orbs[z - 1][y];
                         } else { //4
-                            this.orbs[z][y] = _.sample(this.types);;
+                            this.orbs[z][y] = _.sample(dropOptions);;
                         };
                     };
                 };
@@ -282,6 +282,18 @@ export class Board {
         let flatChunks = _.flattenDepth(chunks, 1);
         let hasWideStyleMatch = _.some(_.map(flatChunks, hasMatchInSingleRow));
         return hasWideStyleMatch || _.some(_.map(chunks), hasMatchInPairOfRows);
+    }
+
+    swap(swapOrbs) {
+        let [[x1, y1], [x2, y2]] = swapOrbs;
+        let orbsBefore = _.cloneDeep(this.orbs);
+        this.orbs[x1][y1] = orbsBefore[x2][y2]
+        this.orbs[x2][y2] = orbsBefore[x1][y1]
+
+        // undo the swap if it did not yeild a match
+        if (findMatches(this.orbs)[0] === null) {
+            this.orbs = orbsBefore
+        }
     }
 
     shuffle() {
