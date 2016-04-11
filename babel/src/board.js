@@ -207,9 +207,7 @@ export class Board {
         this.width = width;
         this.height = height;
         this.types = types;
-        let chooseOrb = () => { return _.sample(types); };
-        let sampleRow = () => { return _.times(width, chooseOrb); };
-        this.orbs = _.zip(..._.times(height, sampleRow));
+        this.shuffle();
         // this.evaluateAll(this.orbs);
     }
 
@@ -296,6 +294,8 @@ export class Board {
     }
 
     shuffle() {
-
+        let chooseOrb = () => { return _.sample(this.types); };
+        let sampleRow = () => { return _.times(this.width, chooseOrb); };
+        this.orbs = _.zip(..._.times(this.height, sampleRow));
     }
 };
