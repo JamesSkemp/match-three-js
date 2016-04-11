@@ -85,9 +85,9 @@ let _iterchunks = (orbs, chunkLimitRange, includePositionInformation, isTranspos
  *   [ [6, 3, 6], [5, 2, 4] ], [ [5, 2, 4], [4, 2, 0] ] ]
  *
  * If you want to also return the position of the first member of the chunk,
- * as X/Y coordinates, pass in `includePositionInformation`. That will return the
+ * as row/col coordinates, pass in `includePositionInformation`. That will return the
  * same data as above, but with a final piece of information, an object with a `position`
- * key that maps to the first and last X/Y coordinates of that chunk.
+ * key that maps to the first and last row/col coordinates of that chunk.
  * [
  *     [
  *         [6, 5, 4], [3, 2, 2],
@@ -231,12 +231,12 @@ export class Board {
 
         _.each(matches, match => {
             // log data
-            let [xx, yy] = match[0];
-            matchData.push([this.orbs[xx][yy], match.length]);
+            let [rowrow, colcol] = match[0];
+            matchData.push([this.orbs[rowrow][colcol], match.length]);
             // replace each coordinate with 'X'
             _.each(match, coord => {
-                let [x, y] = coord;
-                this.orbs[x][y] = 'X'
+                let [row, col] = coord;
+                this.orbs[row][col] = 'X'
             })
         });
 
@@ -247,14 +247,14 @@ export class Board {
           * 3. if the row isn't 0, it takes the orb from above
           * 4. if the row is 0, it creates a random orb
         */
-        _.each(_.range(this.height), x =>{
-            _.each(_.range(this.width), y => { //1
-                if (this.orbs[x][y] == 'X') {
-                    for (var z = x; z >= 0; z--) { //2
+        _.each(_.range(this.height), row =>{
+            _.each(_.range(this.width), col => { //1
+                if (this.orbs[row][col] == 'X') {
+                    for (var z = row; z >= 0; z--) { //2
                         if (z > 0) { //3
-                            this.orbs[z][y] = this.orbs[z - 1][y];
+                            this.orbs[z][col] = this.orbs[z - 1][col];
                         } else { //4
-                            this.orbs[z][y] = _.sample(dropOptions);;
+                            this.orbs[z][col] = _.sample(dropOptions);;
                         };
                     };
                 };
@@ -285,10 +285,10 @@ export class Board {
     }
 
     swap(swapOrbs) {
-        let [[x1, y1], [x2, y2]] = swapOrbs;
+        let [[row1, col1], [row2, col2]] = swapOrbs;
         let orbsBefore = _.cloneDeep(this.orbs);
-        this.orbs[x1][y1] = orbsBefore[x2][y2]
-        this.orbs[x2][y2] = orbsBefore[x1][y1]
+        this.orbs[row1][col1] = orbsBefore[row2][col2]
+        this.orbs[row2][col2] = orbsBefore[row1][col1]
 
         // undo the swap if it did not yeild a match
         if (!findMatches(this.orbs)[0]) {
