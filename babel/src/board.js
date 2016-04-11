@@ -226,7 +226,7 @@ export class Board {
       * 2. replaces each 'X' and all above orbs with either the orb directly above or a random new orb
       * 3. returns the match data -> [[match1Type, match1Amount], [match2Type, match2Amount], ...]
       */
-    evaluate(matches, dropOptions = [this.types]) {
+    evaluate(matches, dropOptions = this.types) {
         let matchData = [];
 
         _.each(matches, match => {
