@@ -207,7 +207,7 @@ export class Board {
         this.width = width;
         this.height = height;
         this.types = types;
-        this.shuffle();
+        this.createValidOrbs();
         // this.evaluateAll(this.orbs);
     }
 
@@ -280,6 +280,10 @@ export class Board {
         let hasWideStyleMatch = _.some(_.map(flatChunks, hasMatchInSingleRow));
         return hasWideStyleMatch || _.some(_.map(chunks), hasMatchInPairOfRows);
     }
+    
+    hasMatchEvent() {
+        if (findMatches(this.orbs)[0]) { return true };
+    }
 
     swap(swapOrbs) {
         let [[row1, col1], [row2, col2]] = swapOrbs;
@@ -288,14 +292,17 @@ export class Board {
         this.orbs[row2][col2] = orbsBefore[row1][col1]
 
         // undo the swap if it did not yeild a match
-        if (!findMatches(this.orbs)[0]) {
+        if (!this.hasMatchEvent()) {
             this.orbs = orbsBefore;
         };
     }
 
-    shuffle() {
-        let chooseOrb = () => { return _.sample(this.types); };
-        let sampleRow = () => { return _.times(this.width, chooseOrb); };
-        this.orbs = _.zip(..._.times(this.height, sampleRow));
+    createValidOrbs() {
+        do {
+            let chooseOrb = () => { return _.sample(this.types); };
+            let sampleRow = () => { return _.times(this.width, chooseOrb); };
+            this.orbs = _.zip(..._.times(this.height, sampleRow));
+        }
+        while (this.hasMatchEvent() || this.needsShuffle());
     }
 };
