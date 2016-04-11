@@ -231,8 +231,7 @@ export class Board {
 
         _.each(matches, match => {
             // log data
-            let [rowrow, colcol] = match[0];
-            matchData.push([this.orbs[rowrow][colcol], match.length]);
+            matchData.push([this.orbs[match[0][0]][match[0][1]], match.length]);
             // replace each coordinate with 'X'
             _.each(match, coord => {
                 let [row, col] = coord;
