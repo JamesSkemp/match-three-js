@@ -285,16 +285,85 @@ export class Board {
         if (findMatches(this.orbs)[0]) { return true };
     }
 
-    swap(swapOrbs) {
+    swap(swapOrbs, playerSwap = true) {
         let [[row1, col1], [row2, col2]] = swapOrbs;
         let orbsBefore = _.cloneDeep(this.orbs);
         this.orbs[row1][col1] = orbsBefore[row2][col2]
         this.orbs[row2][col2] = orbsBefore[row1][col1]
 
         // undo the swap if it did not yeild a match
-        if (!this.hasMatchEvent()) {
+        if (playerSwap && !this.hasMatchEvent()) {
             this.orbs = orbsBefore;
         };
+    }
+    
+    shuffle() {
+        // shuffle the board once here
+        while (this.hasMatchEvent() || this.needsShuffle()) {
+            this._unMatch();
+        }
+    }
+
+    _safeToSwap(row, col, dir) {
+        let neighbors = [];
+        if (dir === 'up' && !_.isUndefined(this.orbs[row - 1])) {
+            if (_.isUndefined(this.orbs[row - 3])) {
+                return true
+            } else {
+                neighbors = [this.orbs[row - 2][col], this.orbs[row - 3][col]]
+            }
+        } else if (dir === 'down' && !_.isUndefined(this.orbs[row + 1])) {
+            if (_.isUndefined(this.orbs[row + 3])) {
+                return true;
+            } else {
+                neighbors = [this.orbs[row + 2][col], this.orbs[row + 3][col]];
+            }
+        } else if (dir === 'left' && !_.isUndefined(this.orbs[row][col - 1])) {
+            if (_.isUndefined(this.orbs[row][col - 3])) {
+                return true
+            } else {
+                neighbors = [this.orbs[row][col - 2], this.orbs[row][col - 3]]
+            }
+        } else if (dir === 'right' && !_.isUndefined(this.orbs[row][col + 1])) {
+            if (_.isUndefined(this.orbs[row][col + 3])) {
+                return true
+            } else {
+                neighbors = [this.orbs[row][col + 2], this.orbs[row][col + 3]]
+            }
+        } else {
+            return false
+        };
+        return !_.includes(neighbors, this.orbs[row][col]);
+    }
+
+    _replaceWithDifferentOrb(row, col) {
+        this.orbs[row][col] = _.sample(_.difference(this.types, this.orbs[row][col]));
+    }
+
+    _unMatch() {
+        let match = combineMatches(findMatches(this.orbs))[0];
+        let [firstRow, firstCol] = match[0];
+        let [secondRow, secondCol] = match[1];
+        let [lastRow, lastCol] = _.last(match);
+        let isHorizontal = (firstRow === secondRow);
+        let isVertical = (firstCol === secondCol);
+        let [rowCoords, colCoords] = _.zip(...match);
+        let isFullColMatch = (_.min(rowCoords) === 0 && _.max(rowCoords) === this.height - 1);
+        let isFullRowMatch = (_.min(colCoords) === 0 && _.max(colCoords) === this.width - 1);
+
+        if (isFullColMatch || isFullRowMatch) {
+            this._replaceWithDifferentOrb(...match[2]);
+        } else if (isHorizontal && this._safeToSwap(firstRow, firstCol, 'left')){
+            this.swap([[firstRow, firstCol], [firstRow, firstCol - 1]], false);
+        } else if (isHorizontal && this._safeToSwap(lastRow, lastCol, 'right')){
+            this.swap([[lastRow, lastCol], [lastRow, lastCol + 1]], false);
+        } else if (isVertical && this._safeToSwap(firstRow, firstCol, 'up')){
+            this.swap([[firstRow, firstCol], [firstRow - 1, firstCol]], false);
+        } else if (isVertical && this._safeToSwap(lastRow, lastCol, 'down')){
+            this.swap([[lastRow, lastCol], [lastRow + 1, lastCol]], false);
+        } else {
+            this._replaceWithDifferentOrb(...match[2]);
+        }
     }
 
     createValidOrbs() {
