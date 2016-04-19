@@ -178,18 +178,28 @@ export function findMatches(orbs) {
 
 };
 
-export function combineMatches(matches) {
-    let combinedMatches = [];
+export function combineMatches(matches, includeRawData = false) {
+    let combinedMatchData = [];
     let unused = matches;
-    let couldMatch, before, currentMatch;
+    let couldMatch;
+    let before;
+    let currentMatch;
+    let rawData;
 
     while (unused[0] != null) {
+        if (includeRawData) {
+            rawData = [unused[0]];
+        };
         currentMatch = new SortedSet(unused[0]);
         unused.shift();
         couldMatch = _.clone(unused);
 
-        _.each(couldMatch, m => { //only union if there is an overlap!
+        _.each(couldMatch, m => {
+            //only union if there is an overlap!
             if (currentMatch.intersection(m).toArray()[0] != null) {
+                if (includeRawData) {
+                    rawData.push(m);
+                };
                 before = currentMatch.toArray();
                 currentMatch.swap(0, currentMatch.length, currentMatch.union(m));
                 if (before != currentMatch.toArray()) {
@@ -197,9 +207,12 @@ export function combineMatches(matches) {
                 }
             }
         });
-        combinedMatches.push(currentMatch.toArray());
+        combinedMatchData.push(currentMatch.toArray());
+        if (includeRawData) {
+            combinedMatchData.push(rawData);
+        };
     }
-    return combinedMatches;
+    return combinedMatchData;
 };
 
 export class Board {
