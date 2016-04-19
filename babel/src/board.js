@@ -178,18 +178,14 @@ export function findMatches(orbs) {
 
 };
 
-export function combineMatches(matches, includeRawData = false) {
-    let combinedMatchData = [];
+export function combineMatches(matches) {
+    let combinedMatches = [];
     let unused = matches;
     let couldMatch;
     let before;
     let currentMatch;
-    let rawData;
 
     while (unused[0] != null) {
-        if (includeRawData) {
-            rawData = [unused[0]];
-        };
         currentMatch = new SortedSet(unused[0]);
         unused.shift();
         couldMatch = _.clone(unused);
@@ -197,9 +193,6 @@ export function combineMatches(matches, includeRawData = false) {
         _.each(couldMatch, m => {
             //only union if there is an overlap!
             if (currentMatch.intersection(m).toArray()[0] != null) {
-                if (includeRawData) {
-                    rawData.push(m);
-                };
                 before = currentMatch.toArray();
                 currentMatch.swap(0, currentMatch.length, currentMatch.union(m));
                 if (before != currentMatch.toArray()) {
@@ -207,12 +200,9 @@ export function combineMatches(matches, includeRawData = false) {
                 }
             }
         });
-        combinedMatchData.push(currentMatch.toArray());
-        if (includeRawData) {
-            combinedMatchData.push(rawData);
-        };
+        combinedMatches.push(currentMatch.toArray());
     }
-    return combinedMatchData;
+    return combinedMatches;
 };
 
 export class Board {
@@ -319,47 +309,63 @@ export class Board {
             if (directions[i] === 'up' && !_.isUndefined(this.orbs[row - 1]) && this.orbs[row - 1][col] !== thisOrb) {
                 this.swap([[row, col], [row - 1, col]], false);
                 swapped = true;
-                console.log('swapped up');
                 break;
             } else if (directions[i] === 'down' && !_.isUndefined(this.orbs[row + 1]) && this.orbs[row + 1][col] !== thisOrb) {
                 this.swap([[row, col], [row + 1, col]], false);
                 swapped = true;
-                console.log('swapped down');
                 break;
             } else if (directions[i] === 'left' && !_.isUndefined(this.orbs[row][col - 1]) && this.orbs[row][col - 1] !== thisOrb) {
                 this.swap([[row, col], [row, col - 1]], false);
                 swapped = true;
-                console.log('swapped left');
                 break;
             } else if (directions[i] === 'right' && !_.isUndefined(this.orbs[row][col + 1]) && this.orbs[row][col + 1] !== thisOrb) {
                 this.swap([[row, col], [row, col + 1]], false);
                 swapped = true;
-                console.log('swapped right');
                 break;
             }
         }
         while (!swapped) {
             let [randomRow, randomCol] = [_.random(this.height - 1), _.random(this.width - 1)];
-            if (!_.includes(match, [randomRow, randomcol]) && this.orbs[randomRow][randomCol] !== thisOrb) {
+            if (!_.includes(match, [randomRow, randomCol]) && this.orbs[randomRow][randomCol] !== thisOrb) {
                 this.swap([[row, col], [randomRow, randomCol]], false);
                 swapped = true;
             }
         }
     }
     
-    shuffle() {
-        this.orbs = _.map(this.orbs, row => _.shuffle(row));
+    unmatch() {
         while (this.hasMatchEvent()) {
+            let intersections = [];
             let match = combineMatches(findMatches(this.orbs))[0];
-            let [firstRow, firstCol] = match[0];
             let [rowCoords, colCoords] = _.zip(...match);
             if (_.uniq(rowCoords).length === 1 || _.uniq(colCoords).length === 1) {
                 this._unmatch(...match[Math.floor(match.length / 2)], []);
             } else {
-                // gather intersections
+                let matchRows = [];
+                let matchCols = [];
+                _.each(_.countBy(rowCoords), (v, k) => {
+                    if (v > 2) {
+                        matchRows.push(_.toInteger(k));
+                    };
+                });
+                _.each(_.countBy(colCoords), (v, k) => {
+                    if (v > 2) {
+                        matchCols.push(_.toInteger(k));
+                    };
+                });
+                _.each(match, coords => {
+                    if (_.includes(matchRows, coords[0]) && _.includes(matchCols, coords[1])) {
+                        intersections.push(coords);
+                    };
+                });
                 this._unmatch(..._.sample(intersections), match);
             };
         };
+    }
+
+    shuffle() {
+        this.orbs = _.map(this.orbs, row => _.shuffle(row));
+        this.unmatch();
         if (this.needsShuffle()) {
             this.shuffle();
         };
