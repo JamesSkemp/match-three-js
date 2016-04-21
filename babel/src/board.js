@@ -285,7 +285,7 @@ export class Board {
     }
     
     hasMatchEvent() {
-        if (findMatches(this.orbs)[0]) { return true };
+        return Boolean(findMatches(this.orbs)[0]);
     }
 
     swap(swapOrbs, playerSwap = true) {
@@ -301,11 +301,12 @@ export class Board {
     }
     
     
-    _unmatch(row, col, match) {
+    _unmatch(row, col, match, skipToRandom = false) {
         let thisOrb = this.orbs[row][col];
         let swapped = false;
         let directions = _.shuffle(['up', 'down', 'left', 'right']);
         for (let i = 0; i < 4; i++) {
+            if (skipToRandom) { break };
             if (directions[i] === 'up' && !_.isUndefined(this.orbs[row - 1]) && this.orbs[row - 1][col] !== thisOrb) {
                 this.swap([[row, col], [row - 1, col]], false);
                 swapped = true;
@@ -339,7 +340,15 @@ export class Board {
             let match = combineMatches(findMatches(this.orbs))[0];
             let [rowCoords, colCoords] = _.zip(...match);
             if (_.uniq(rowCoords).length === 1 || _.uniq(colCoords).length === 1) {
-                this._unmatch(...match[Math.floor(match.length / 2)], []);
+                let midNeighbors;
+                let [midRow, midCol] = match[Math.floor(match.length / 2)];
+                if (_.uniq(rowCoords).length === 1) {
+                    midNeighbors = [this.orbs[midRow][midCol - 1], this.orbs[midRow][midCol + 1]];
+                } else {
+                    midNeighbors = [this.orbs[midRow - 1][midCol], this.orbs[midRow + 1][midCol]];
+                }
+                let isSideBySideMatch = _.includes(midNeighbors, this.orbs[midRow][midCol]);
+                this._unmatch(...match[Math.floor(match.length / 2)], match, isSideBySideMatch);
             } else {
                 let matchRows = [];
                 let matchCols = [];
