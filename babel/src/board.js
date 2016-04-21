@@ -210,8 +210,13 @@ export class Board {
         this.width = width;
         this.height = height;
         this.types = types;
-        this.createValidOrbs();
-        // this.evaluateAll(this.orbs);
+        let chooseOrb = () => { return _.sample(this.types); };
+        let sampleRow = () => { return _.times(this.width, chooseOrb); };
+        this.orbs = _.zip(..._.times(this.height, sampleRow));
+        if (this.hasMatchEvent() || this.needsShuffle()) {
+            this.shuffle();
+        };
+        // this.evaluateAll()
     }
 
     get size() {
@@ -223,8 +228,8 @@ export class Board {
     }
 
     /**
-      * 1. logs data for each match and replaces each orb with 'X'
-      * 2. replaces each 'X' and all above orbs with either the orb directly above or a random new orb
+      * 1. logs data for each match and replaces each orb with '\u241a'
+      * 2. replaces each '\u241a' and all above orbs with either the orb directly above or a random new orb
       * 3. returns the match data -> [[match1Type, match1Amount], [match2Type, match2Amount], ...]
       */
     evaluate(matches, dropOptions = this.types) {
@@ -233,23 +238,23 @@ export class Board {
         _.each(matches, match => {
             // log data
             matchData.push([this.orbs[match[0][0]][match[0][1]], match.length]);
-            // replace each coordinate with 'X'
+            // replace each coordinate with '\u241a'
             _.each(match, coord => {
                 let [row, col] = coord;
-                this.orbs[row][col] = 'X'
+                this.orbs[row][col] = '\u241a'
             })
         });
 
         /**
           * drop down and generate matches
           * 1. reads across starting from the top
-          * 2. when it hits 'X', loops from that position directly up
+          * 2. when it hits '\u241a', loops from that position directly up
           * 3. if the row isn't 0, it takes the orb from above
           * 4. if the row is 0, it creates a random orb
         */
         _.each(_.range(this.height), row =>{
             _.each(_.range(this.width), col => { //1
-                if (this.orbs[row][col] == 'X') {
+                if (this.orbs[row][col] == '\u241a') {
                     for (var z = row; z >= 0; z--) { //2
                         if (z > 0) { //3
                             this.orbs[z][col] = this.orbs[z - 1][col];
@@ -378,14 +383,5 @@ export class Board {
         if (this.needsShuffle()) {
             this.shuffle();
         };
-    }
-
-    createValidOrbs() {
-        do {
-            let chooseOrb = () => { return _.sample(this.types); };
-            let sampleRow = () => { return _.times(this.width, chooseOrb); };
-            this.orbs = _.zip(..._.times(this.height, sampleRow));
-        }
-        while (this.hasMatchEvent() || this.needsShuffle());
     }
 };
