@@ -1,72 +1,86 @@
 import test from 'ava';
 import * as _ from 'lodash';
-import {names} from './data/names';
-import {orbs} from './data/orbs';
-import {testMatchData} from './data/evaluate';
-import {nonMatchDropped} from './data/evaluate';
-import {droppedRandoms} from './data/evaluate';
-import {unaffectedOrbs} from './data/evaluate';
-import {evaluate} from '../src/board';
-import {findMatches} from '../src/board';
-import {combineMatches} from '../src/board';
 import {Board} from '../src/board';
-let board;
-let evaluatedOrbs;
-let matchDatas;
-let name;
+import {boards} from './data/boards';
+let boardInstance = new Board(5, 5);
 
-test.before(() => {
-    board = new Board(5, 5);
-    evaluatedOrbs = [];
-    matchDatas = [];
+/*
 
-    _.each(_.range(orbs.length), i => {
-        board.orbs = orbs[i];
-        let matchData = board.evaluate(combineMatches(findMatches(board.orbs)), [7, 8]);
-        evaluatedOrbs.push(board.orbs);
-        matchDatas.push(matchData);
-    });  
+Collects data for each `board` after evaluation and stores it in `testBoards`.
+This data is then compared to the correct data in `boards` for the tests.
+
+Passing tests could look like this:
+
+testBoards -> {
+    'a simple row match': {
+        'matchData': [
+            [6, 3]
+        ],
+        'evaluatedOrbs': [
+            [ 1, 7, 8, 7, 5 ],
+            [ 5, 2, 3, 4, 4 ],
+            [ 4, 1, 2, 3, 3 ],
+            [ 3, 5, 1, 2, 2 ],
+            [ 2, 3, 4, 5, 1 ]
+        ]
+    },
+    'a simple column match': {
+        'matchData': [
+            [6, 3]
+        ],
+        'evaluatedOrbs': [
+            [ 1, 2, 3, 4, 7 ],
+            [ 5, 1, 2, 3, 8 ],
+            [ 4, 5, 1, 2, 7 ],
+            [ 3, 4, 5, 1, 5 ],
+            [ 2, 3, 4, 5, 4 ]
+        ]
+    },
+    // and so on...
+}
+
+*/
+let testBoards = {};
+_.each(boards, (metadata, name) => {
+    boardInstance.orbs = _.cloneDeep(metadata['orbs']);
+    testBoards[name] = {};
+    testBoards[name]['matchData'] = boardInstance.evaluate(metadata['combinedMatches'], [7, 8]);
+    testBoards[name]['evaluatedOrbs'] = boardInstance.orbs;
 });
 
-_.each(_.range(orbs.length), j => {
-    name = names[j];
-
+_.each(boards, (metadata, name) => {
     test(`gathers data for ${name}`, t => {
-        t.ok(_.isEqual(matchDatas[j], testMatchData[j]));
+        t.true(_.isEqual(testBoards[name]['matchData'], metadata['evaluate']['matchData']));
     });
-
+        
     test(`removes matches and replaces with valid type orbs for ${name}`, t => {
-        _.each(_.flattenDeep(evaluatedOrbs[j]), orb => {
+        _.each(_.flattenDeep(testBoards[name]['evaluatedOrbs']), orb => {
             t.true(_.includes(_.range(9), orb));
-        });
+        });        
     });
-
+    
     test(`nonmatch orbs drop down into the correct place for ${name}`, t => {
-        let dropped = nonMatchDropped[j];
-        _.each(dropped, section => {
+        _.each(metadata['evaluate']['nonMatchDropped'], section => {
             let [sliceData, droppedOrbs] = section;
             let [row, start, end] = sliceData;
-            t.ok(_.isEqual(_.slice(evaluatedOrbs[j][row], start, end), droppedOrbs));
+            t.ok(_.isEqual(_.slice(testBoards[name]['evaluatedOrbs'][row], start, end), droppedOrbs));
         });
     });
-
+    
     test(`orbs from dropOptions fill in the rest of the board for ${name}`, t => {
-        let randoms = droppedRandoms[j];
-        _.each(randoms, sliceData => {
+        _.each(metadata['evaluate']['droppedRandoms'], sliceData => {
             let [row, start, end] = sliceData;
-            _.each(_.slice(evaluatedOrbs[j][row], start, end), orb => {
+            _.each(_.slice(testBoards[name]['evaluatedOrbs'][row], start, end), orb => {
                 t.true(_.includes([7, 8], orb));    
             });
         });
     });
-
+    
     test(`unaffected orbs are unchanged for ${name}`, t => {
-        let unaffected = unaffectedOrbs[j];
-        _.each(unaffected, sliceData => {
+        _.each(metadata['evaluate']['unaffectedOrbs'], sliceData => {
             let [row, start, end] = sliceData;
-            let beforeSlice = _.slice(orbs[j][row], start, end);
-            let evaluatedSlice = _.slice(evaluatedOrbs[j][row], start, end);
-
+            let beforeSlice = _.slice(metadata['orbs'][row], start, end);
+            let evaluatedSlice = _.slice(testBoards[name]['evaluatedOrbs'][row], start, end);
             t.true(_.isEqual(beforeSlice, evaluatedSlice));
         });
     });

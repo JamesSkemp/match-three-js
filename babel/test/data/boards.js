@@ -1,4 +1,4 @@
-export const boardData = {
+export const boards = {
     'a simple row match': {
         'orbs': [
             [ 1, 2, 3, 4, 5 ],
@@ -13,7 +13,7 @@ export const boardData = {
         'combinedMatches': [
             [[3, 1], [3, 2], [3, 3]]
         ],
-        'evaluateData': {
+        'evaluate': {
             'matchData': [
                 [6, 3]
             ],
@@ -40,7 +40,7 @@ export const boardData = {
                 [0, 4, 5]
             ]
         },
-        'swapData': {
+        'swap': {
             // orbs before swap occurs to make a match
             'orbsBeforeSwap': [
                 [ 1, 2, 3, 4, 5 ],
@@ -67,7 +67,7 @@ export const boardData = {
         'combinedMatches': [
             [[2, 4], [3, 4], [4, 4]]
         ],
-        'evaluateData': {
+        'evaluate': {
             'matchData': [
                 [6, 3]
             ],
@@ -88,7 +88,7 @@ export const boardData = {
                 [0, 0, 4],
             ]
         },
-        'swapData': {
+        'swap': {
             'orbsBeforeSwap': [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 2, 3, 4 ],
@@ -114,7 +114,7 @@ export const boardData = {
         'combinedMatches': [
             [[4, 1], [4, 2], [4, 3], [4, 4]]
         ],
-        'evaluateData': {
+        'evaluate': {
             'matchData': [
                 [6, 4]
             ],
@@ -135,7 +135,7 @@ export const boardData = {
                 [0, 0, 1]
             ]
         },
-        'swapData': {
+        'swap': {
             'orbsBeforeSwap': [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 2, 3, 4 ],
@@ -161,7 +161,7 @@ export const boardData = {
         'combinedMatches': [
             [[1, 3], [2, 3], [3, 3], [4, 3]]
         ],
-        'evaluateData': {
+        'evaluate': {
             'matchData': [
                 [6, 4]
             ],
@@ -187,7 +187,7 @@ export const boardData = {
                 [0, 4, 5]
             ]
         },
-        'swapData': {
+        'swap': {
             'orbsBeforeSwap': [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 2, 6, 4 ],
@@ -214,7 +214,7 @@ export const boardData = {
         'combinedMatches': [
             [[2, 0], [2, 1], [2, 2], [2, 3], [2, 4]]
         ],
-        'evaluateData': {
+        'evaluate': {
             'matchData': [
                 [6, 5]
             ],
@@ -230,7 +230,7 @@ export const boardData = {
                 [3, 0, 5]
             ]
         },
-        'swapData': {
+        'swap': {
             'orbsBeforeSwap': [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 6, 3, 4 ],
@@ -257,7 +257,7 @@ export const boardData = {
         'combinedMatches': [
              [[0, 2], [1, 2], [2, 2], [3, 2], [4, 2]]
         ],
-        'evaluateData': {
+        'evaluate': {
             'matchData': [
                 [6, 5]
             ],
@@ -284,7 +284,7 @@ export const boardData = {
                 [0, 3, 5]
             ]
         },
-        'swapData': {
+        'swap': {
             'orbsBeforeSwap': [
                 [ 1, 2, 6, 4, 5 ],
                 [ 5, 1, 6, 3, 4 ],
@@ -310,7 +310,7 @@ export const boardData = {
         'combinedMatches': [
             [[1, 2], [2, 1], [2, 2], [2, 3], [3, 2]]
         ],
-        'evaluateData': {
+        'evaluate': {
             'matchData': [
                 [6, 5]
             ],
@@ -338,7 +338,7 @@ export const boardData = {
                 [0, 4, 5]
             ]
         },
-        'swapData': {
+        'swap': {
             'orbsBeforeSwap': [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 6, 3, 4 ],
@@ -364,7 +364,7 @@ export const boardData = {
         'combinedMatches': [
             [[2, 1], [3, 1], [4, 1], [4, 2], [4, 3]]
         ],
-        'evaluateData': {
+        'evaluate': {
             'matchData': [
                 [6, 5]
             ],
@@ -392,7 +392,7 @@ export const boardData = {
                 [0, 4, 5]
             ]
         },
-        'swapData': {
+        'swap': {
             'orbsBeforeSwap': [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 2, 3, 4 ],
@@ -419,7 +419,7 @@ export const boardData = {
         'combinedMatches': [
             [[2, 0], [2, 1], [2, 2], [2, 3], [3, 2], [4, 2]]
         ],
-        'evaluateData': {
+        'evaluate': {
             'matchData': [
                 [6, 6]
             ],
@@ -446,7 +446,7 @@ export const boardData = {
                 [0, 4, 5]
             ]
         },
-        'swapData': {
+        'swap': {
             'orbsBeforeSwap': [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 6, 3, 4 ],
@@ -473,7 +473,7 @@ export const boardData = {
         'combinedMatches': [
             [[2, 1], [2, 2], [2, 3], [2, 4], [3, 2], [4, 2]]
         ],
-        'evaluateData': {
+        'evaluate': {
             'matchData': [
                 [6, 6]
             ],
@@ -500,7 +500,7 @@ export const boardData = {
                 [0, 0, 1]
             ]
         },
-        'swapData': {
+        'swap': {
             'orbsBeforeSwap': [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 6, 3, 4 ],
@@ -528,7 +528,7 @@ export const boardData = {
         'combinedMatches': [
             [[2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [3, 2], [4, 2]]
         ],
-        'evaluateData': {
+        'evaluate': {
             'matchData': [
                 [6, 7]
             ],
@@ -552,7 +552,7 @@ export const boardData = {
                 [3, 3, 5]
             ]
         },
-        'swapData': {
+        'swap': {
             'orbsBeforeSwap': [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 6, 3, 4 ],
@@ -579,7 +579,7 @@ export const boardData = {
             [[2, 0], [2, 1], [2, 2]],
             [[3, 0], [3, 1], [3, 2]]
         ],
-        'evaluateData': {
+        'evaluate': {
             'matchData': [
                 [6, 3],
                 [6, 3]
@@ -600,7 +600,7 @@ export const boardData = {
                 [0, 3, 5]
             ]
         },
-        'swapData': {
+        'swap': {
             'orbsBeforeSwap': [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 2, 3, 4 ],
@@ -629,7 +629,7 @@ export const boardData = {
             [[1, 3], [2, 3], [3, 3], [4, 3]],
             [[1, 4], [2, 4], [3, 4], [4, 4]]
         ],
-        'evaluateData': {
+        'evaluate': {
             'matchData': [
                 [6, 4],
                 [6, 4]
@@ -651,7 +651,7 @@ export const boardData = {
                 [0, 0, 3]
             ]
         },
-        'swapData': {
+        'swap': {
             'orbsBeforeSwap': [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 2, 6, 6 ],

@@ -1,12 +1,10 @@
 import test from 'ava';
 import * as _ from 'lodash';
-import {names} from './data/names';
 import {combineMatches} from '../src/board';
-import {combinedMatches} from './data/combinedMatches';
-import {foundMatches} from './data/foundMatches';
+import {boards} from './data/boards';
 
-_.each(_.range(foundMatches.length), i => {
-    test(`combines ${names[i]}`, t => {
-        t.ok(_.isEqual(combineMatches(foundMatches[i]), combinedMatches[i]));
+_.each(boards, (metadata, board) => {
+    test(`combines ${board}`, t => {
+        t.true(_.isEqual(combineMatches(metadata['foundMatches']), metadata['combinedMatches']));
     });
 });
