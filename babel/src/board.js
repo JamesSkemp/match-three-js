@@ -216,7 +216,6 @@ export class Board {
         if (this.hasMatchEvent() || this.needsShuffle()) {
             this.shuffle();
         };
-        // this.evaluateAll()
     }
 
     get size() {
@@ -267,13 +266,6 @@ export class Board {
         });
 
         return matchData;
-    }
-
-    evaluateAll() {
-        var matchEvents = [];
-        while (this.hasMatch()) {
-            matchEvents.push(this.evaluate());
-        }
     }
 
     needsShuffle() {
