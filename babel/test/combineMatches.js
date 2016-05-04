@@ -5,6 +5,6 @@ import {boards} from './data/boards';
 
 _.each(boards, (metadata, board) => {
     test(`combines ${board}`, t => {
-        t.true(_.isEqual(combineMatches(metadata['foundMatches']), metadata['combinedMatches']));
+        t.true(_.isEqual(combineMatches(metadata.foundMatches), metadata.combinedMatches));
     });
 });

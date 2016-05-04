@@ -1,10 +1,6 @@
 import test from 'ava';
 import * as _ from 'lodash';
 import {Board} from '../src/board';
-import {combineMatches} from '../src/board';
-import {findMatches} from '../src/board';
-import {orbs} from './data/orbs';
-import {names} from './data/names';
 let i = 100;
 let board5 = new Board(5, 5);
 let board8 = new Board(8, 8);

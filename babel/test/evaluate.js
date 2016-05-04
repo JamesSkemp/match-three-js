@@ -13,10 +13,10 @@ Passing tests could look like this:
 
 testBoards -> {
     'a simple row match': {
-        'matchData': [
+        matchData: [
             [6, 3]
         ],
-        'evaluatedOrbs': [
+        evaluatedOrbs: [
             [ 1, 7, 8, 7, 5 ],
             [ 5, 2, 3, 4, 4 ],
             [ 4, 1, 2, 3, 3 ],
@@ -25,10 +25,10 @@ testBoards -> {
         ]
     },
     'a simple column match': {
-        'matchData': [
+        matchData: [
             [6, 3]
         ],
-        'evaluatedOrbs': [
+        evaluatedOrbs: [
             [ 1, 2, 3, 4, 7 ],
             [ 5, 1, 2, 3, 8 ],
             [ 4, 5, 1, 2, 7 ],
@@ -42,45 +42,45 @@ testBoards -> {
 */
 let testBoards = {};
 _.each(boards, (metadata, name) => {
-    boardInstance.orbs = _.cloneDeep(metadata['orbs']);
+    boardInstance.orbs = _.cloneDeep(metadata.orbs);
     testBoards[name] = {};
-    testBoards[name]['matchData'] = boardInstance.evaluate(metadata['combinedMatches'], [7, 8]);
-    testBoards[name]['evaluatedOrbs'] = boardInstance.orbs;
+    testBoards[name].matchData = boardInstance.evaluate(metadata.combinedMatches, [7, 8]);
+    testBoards[name].evaluatedOrbs = boardInstance.orbs;
 });
 
 _.each(boards, (metadata, name) => {
     test(`gathers data for ${name}`, t => {
-        t.true(_.isEqual(testBoards[name]['matchData'], metadata['evaluate']['matchData']));
+        t.true(_.isEqual(testBoards[name].matchData, metadata.evaluate.matchData));
     });
         
     test(`removes matches and replaces with valid type orbs for ${name}`, t => {
-        _.each(_.flattenDeep(testBoards[name]['evaluatedOrbs']), orb => {
+        _.each(_.flattenDeep(testBoards[name].evaluatedOrbs), orb => {
             t.true(_.includes(_.range(9), orb));
         });        
     });
     
     test(`nonmatch orbs drop down into the correct place for ${name}`, t => {
-        _.each(metadata['evaluate']['nonMatchDropped'], section => {
+        _.each(metadata.evaluate.nonMatchDropped, section => {
             let [sliceData, droppedOrbs] = section;
             let [row, start, end] = sliceData;
-            t.ok(_.isEqual(_.slice(testBoards[name]['evaluatedOrbs'][row], start, end), droppedOrbs));
+            t.ok(_.isEqual(_.slice(testBoards[name].evaluatedOrbs[row], start, end), droppedOrbs));
         });
     });
     
     test(`orbs from dropOptions fill in the rest of the board for ${name}`, t => {
-        _.each(metadata['evaluate']['droppedRandoms'], sliceData => {
+        _.each(metadata.evaluate.droppedRandoms, sliceData => {
             let [row, start, end] = sliceData;
-            _.each(_.slice(testBoards[name]['evaluatedOrbs'][row], start, end), orb => {
+            _.each(_.slice(testBoards[name].evaluatedOrbs[row], start, end), orb => {
                 t.true(_.includes([7, 8], orb));    
             });
         });
     });
     
     test(`unaffected orbs are unchanged for ${name}`, t => {
-        _.each(metadata['evaluate']['unaffectedOrbs'], sliceData => {
+        _.each(metadata.evaluate.unaffectedOrbs, sliceData => {
             let [row, start, end] = sliceData;
-            let beforeSlice = _.slice(metadata['orbs'][row], start, end);
-            let evaluatedSlice = _.slice(testBoards[name]['evaluatedOrbs'][row], start, end);
+            let beforeSlice = _.slice(metadata.orbs[row], start, end);
+            let evaluatedSlice = _.slice(testBoards[name].evaluatedOrbs[row], start, end);
             t.true(_.isEqual(beforeSlice, evaluatedSlice));
         });
     });

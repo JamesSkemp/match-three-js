@@ -1,34 +1,34 @@
 export const boards = {
     'a simple row match': {
-        'orbs': [
+        orbs: [
             [ 1, 2, 3, 4, 5 ],
             [ 5, 1, 2, 3, 4 ],
             [ 4, 5, 1, 2, 3 ],
             [ 3, 6, 6, 6, 2 ],
             [ 2, 3, 4, 5, 1 ]
         ],
-        'foundMatches': [
+        foundMatches: [
             [[3, 1], [3, 2], [3, 3]]
         ],
-        'combinedMatches': [
+        combinedMatches: [
             [[3, 1], [3, 2], [3, 3]]
         ],
-        'evaluate': {
-            'matchData': [
+        evaluate: {
+            matchData: [
                 [6, 3]
             ],
             // data for 'nonmatch orbs drop down into the correct place'
             //   -> [[row, sliceStart, sliceEnd], [droppedOrbs]]
-            'nonMatchDropped': [
+            nonMatchDropped: [
                 [[3, 1, 4], [5, 1, 2]]
             ],
             // data for 'orbs from dropOptions fill in the rest of the board'
             //   -> [[row, sliceStart, sliceEnd]] -> each should be included in dropOptions
-            'droppedRandoms': [
+            droppedRandoms: [
                 [0, 1, 4]
             ],
             // data for 'unaffected orbs are unchanged'
-            'unaffectedOrbs': [
+            unaffectedOrbs: [
                 [4, 0, 5],
                 [3, 0, 1],
                 [3, 4, 5],
@@ -40,9 +40,9 @@ export const boards = {
                 [0, 4, 5]
             ]
         },
-        'swap': {
+        swap: {
             // orbs before swap occurs to make a match
-            'orbsBeforeSwap': [
+            orbsBeforeSwap: [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 2, 3, 4 ],
                 [ 4, 5, 6, 2, 3 ],
@@ -50,37 +50,37 @@ export const boards = {
                 [ 2, 3, 4, 5, 1 ]
             ],
             // pairs of coordinates to be swapped in the form [[row1, col1], [row2, col2]]
-            'swapOrbs': [[2, 2], [3, 2]]
+            swapOrbs: [[2, 2], [3, 2]]
         }
     },
     'a simple column match': {
-        'orbs': [
+        orbs: [
             [ 1, 2, 3, 4, 5 ],
             [ 5, 1, 2, 3, 4 ],
             [ 4, 5, 1, 2, 6 ],
             [ 3, 4, 5, 1, 6 ],
             [ 2, 3, 4, 5, 6 ]
         ],
-        'foundMatches': [
+        foundMatches: [
             [[2, 4], [3, 4], [4, 4]]
         ],
-        'combinedMatches': [
+        combinedMatches: [
             [[2, 4], [3, 4], [4, 4]]
         ],
-        'evaluate': {
-            'matchData': [
+        evaluate: {
+            matchData: [
                 [6, 3]
             ],
-            'nonMatchDropped': [
+            nonMatchDropped: [
                 [[4, 4, 5], [4]],
                 [[3, 4, 5], [5]]
             ],
-            'droppedRandoms': [
+            droppedRandoms: [
                 [2, 4, 5],
                 [1, 4, 5],
                 [0, 4, 5]
             ],
-            'unaffectedOrbs': [
+            unaffectedOrbs: [
                 [4, 0, 4],
                 [3, 0, 4],
                 [2, 0, 4],
@@ -88,46 +88,46 @@ export const boards = {
                 [0, 0, 4],
             ]
         },
-        'swap': {
-            'orbsBeforeSwap': [
+        swap: {
+            orbsBeforeSwap: [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 2, 3, 4 ],
                 [ 4, 5, 1, 2, 6 ],
                 [ 3, 4, 5, 1, 6 ],
                 [ 2, 3, 4, 6, 5 ]
             ],
-            'swapOrbs': [[4, 3], [4, 4]]
+            swapOrbs: [[4, 3], [4, 4]]
         }
     },
     'a simple row four-match': {
-        'orbs': [
+        orbs: [
             [ 1, 2, 3, 4, 5 ],
             [ 5, 1, 2, 3, 4 ],
             [ 4, 5, 1, 2, 3 ],
             [ 3, 4, 5, 1, 2 ],
             [ 2, 6, 6, 6, 6 ]
         ],
-        'foundMatches': [
+        foundMatches: [
             [[4, 1], [4, 2], [4, 3]],
             [[4, 2], [4, 3], [4, 4]]
         ],
-        'combinedMatches': [
+        combinedMatches: [
             [[4, 1], [4, 2], [4, 3], [4, 4]]
         ],
-        'evaluate': {
-            'matchData': [
+        evaluate: {
+            matchData: [
                 [6, 4]
             ],
-            'nonMatchDropped': [
+            nonMatchDropped: [
                 [[4, 1, 5], [4, 5, 1, 2]],
                 [[3, 1, 5], [5, 1, 2, 3]],
                 [[2, 1, 5], [1, 2, 3, 4]],
                 [[1, 1, 5], [2, 3, 4, 5]]
             ],
-            'droppedRandoms': [
+            droppedRandoms: [
                 [0, 1, 5]
             ],
-            'unaffectedOrbs': [
+            unaffectedOrbs: [
                 [4, 0, 1],
                 [3, 0, 1],
                 [2, 0, 1],
@@ -135,46 +135,46 @@ export const boards = {
                 [0, 0, 1]
             ]
         },
-        'swap': {
-            'orbsBeforeSwap': [
+        swap: {
+            orbsBeforeSwap: [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 2, 3, 4 ],
                 [ 4, 5, 1, 2, 3 ],
                 [ 3, 4, 5, 6, 2 ],
                 [ 2, 6, 6, 1, 6 ]
             ],
-            'swapOrbs': [[3, 3], [4, 3]]
+            swapOrbs: [[3, 3], [4, 3]]
         }
     },
     'a simple column four-match': {
-        'orbs': [
+        orbs: [
             [ 1, 2, 3, 4, 5 ],
             [ 5, 1, 2, 6, 4 ],
             [ 4, 5, 1, 6, 3 ],
             [ 3, 4, 5, 6, 2 ],
             [ 2, 3, 4, 6, 1 ]
         ],
-        'foundMatches': [
+        foundMatches: [
             [[1, 3], [2, 3], [3, 3]],
             [[2, 3], [3, 3], [4, 3]]
         ],
-        'combinedMatches': [
+        combinedMatches: [
             [[1, 3], [2, 3], [3, 3], [4, 3]]
         ],
-        'evaluate': {
-            'matchData': [
+        evaluate: {
+            matchData: [
                 [6, 4]
             ],
-            'nonMatchDropped': [
+            nonMatchDropped: [
                 [[4, 3, 4], [4]]
             ],
-            'droppedRandoms': [
+            droppedRandoms: [
                 [3, 3, 4],
                 [2, 3, 4],
                 [1, 3, 4],
                 [0, 3, 4]
             ],
-            'unaffectedOrbs': [
+            unaffectedOrbs: [
                 [4, 0, 3],
                 [4, 4, 5],
                 [3, 0, 3],
@@ -187,91 +187,91 @@ export const boards = {
                 [0, 4, 5]
             ]
         },
-        'swap': {
-            'orbsBeforeSwap': [
+        swap: {
+            orbsBeforeSwap: [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 2, 6, 4 ],
                 [ 4, 5, 1, 6, 3 ],
                 [ 3, 4, 5, 2, 6 ],
                 [ 2, 3, 4, 6, 1 ]
             ],
-            'swapOrbs': [[3, 3], [3, 4]]
+            swapOrbs: [[3, 3], [3, 4]]
         }
     },
     'a simple row five-match': {
-        'orbs': [
+        orbs: [
             [ 1, 2, 3, 4, 5 ],
             [ 5, 1, 2, 3, 4 ],
             [ 6, 6, 6, 6, 6 ],
             [ 3, 4, 5, 1, 2 ],
             [ 2, 3, 4, 5, 1 ]
         ],
-        'foundMatches': [
+        foundMatches: [
             [[2, 0], [2, 1], [2, 2]],
             [[2, 1], [2, 2], [2, 3]],
             [[2, 2], [2, 3], [2, 4]]
         ],
-        'combinedMatches': [
+        combinedMatches: [
             [[2, 0], [2, 1], [2, 2], [2, 3], [2, 4]]
         ],
-        'evaluate': {
-            'matchData': [
+        evaluate: {
+            matchData: [
                 [6, 5]
             ],
-            'nonMatchDropped': [
+            nonMatchDropped: [
                 [[2, 0, 5], [5, 1, 2, 3, 4]],
                 [[1, 0, 5], [1, 2, 3, 4, 5]]
             ],
-            'droppedRandoms': [
+            droppedRandoms: [
                 [0, 0, 5]
             ],
-            'unaffectedOrbs': [
+            unaffectedOrbs: [
                 [4, 0, 5],
                 [3, 0, 5]
             ]
         },
-        'swap': {
-            'orbsBeforeSwap': [
+        swap: {
+            orbsBeforeSwap: [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 6, 3, 4 ],
                 [ 6, 6, 2, 6, 6 ],
                 [ 3, 4, 5, 1, 2 ],
                 [ 2, 3, 4, 5, 1 ]
             ],
-            'swapOrbs': [[1, 2], [2, 2]]
+            swapOrbs: [[1, 2], [2, 2]]
         }
     },
     'a simple column five-match': {
-        'orbs': [
+        orbs: [
             [ 1, 2, 6, 4, 5 ],
             [ 5, 1, 6, 3, 4 ],
             [ 4, 5, 6, 2, 3 ],
             [ 3, 4, 6, 1, 2 ],
             [ 2, 3, 6, 5, 1 ]
         ],
-        'foundMatches': [
+        foundMatches: [
             [[0, 2], [1, 2], [2, 2]],
             [[1, 2], [2, 2], [3, 2]],
             [[2, 2], [3, 2], [4, 2]]
         ],
-        'combinedMatches': [
+        combinedMatches: [
              [[0, 2], [1, 2], [2, 2], [3, 2], [4, 2]]
         ],
-        'evaluate': {
-            'matchData': [
+        evaluate: {
+            matchData: [
                 [6, 5]
             ],
-            'nonMatchDropped': [
+            nonMatchDropped: [
                 [[0, 0, 0], []]
             ],
-            'droppedRandoms': [
+            droppedRandoms: [
                 [4, 2, 3],
                 [3, 2, 3],
                 [2, 2, 3],
                 [1, 2, 3],
                 [0, 2, 3]
             ],
-            'unaffectedOrbs': [
+            unaffectedOrbs: [
                 [4, 0, 2],
                 [4, 3, 5],
                 [3, 0, 2],
@@ -284,49 +284,49 @@ export const boards = {
                 [0, 3, 5]
             ]
         },
-        'swap': {
-            'orbsBeforeSwap': [
+        swap: {
+            orbsBeforeSwap: [
                 [ 1, 2, 6, 4, 5 ],
                 [ 5, 1, 6, 3, 4 ],
                 [ 4, 5, 2, 6, 3 ],
                 [ 3, 4, 6, 1, 2 ],
                 [ 2, 3, 6, 5, 1 ]
             ],
-            'swapOrbs': [[2, 2], [2, 3]]
+            swapOrbs: [[2, 2], [2, 3]]
         }
     },
     'a cross-match': {
-        'orbs': [
+        orbs: [
             [ 1, 2, 3, 4, 5 ],
             [ 5, 1, 6, 3, 4 ],
             [ 4, 6, 6, 6, 3 ],
             [ 3, 4, 6, 1, 2 ],
             [ 2, 3, 4, 5, 1 ]
         ],
-        'foundMatches': [
+        foundMatches: [
             [[2, 1], [2, 2], [2, 3]],
             [[1, 2], [2, 2], [3, 2]]
         ],
-        'combinedMatches': [
+        combinedMatches: [
             [[1, 2], [2, 1], [2, 2], [2, 3], [3, 2]]
         ],
-        'evaluate': {
-            'matchData': [
+        evaluate: {
+            matchData: [
                 [6, 5]
             ],
-            'nonMatchDropped': [
+            nonMatchDropped: [
                 [[3, 2, 3], [3]],
                 [[2, 1, 2], [1]],
                 [[2, 3, 4], [3]],
                 [[1, 1, 2], [2]],
                 [[1, 3, 4], [4]]
             ],
-            'droppedRandoms': [
+            droppedRandoms: [
                 [2, 2, 3],
                 [1, 2, 3],
                 [0, 1, 4]
             ],
-            'unaffectedOrbs': [
+            unaffectedOrbs: [
                 [4, 0, 5],
                 [3, 0, 2],
                 [3, 3, 5],
@@ -338,48 +338,48 @@ export const boards = {
                 [0, 4, 5]
             ]
         },
-        'swap': {
-            'orbsBeforeSwap': [
+        swap: {
+            orbsBeforeSwap: [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 6, 3, 4 ],
                 [ 4, 4, 6, 6, 3 ],
                 [ 3, 6, 6, 1, 2 ],
                 [ 2, 3, 4, 5, 1 ]
             ],
-            'swapOrbs': [[2, 1], [3, 1]]
+            swapOrbs: [[2, 1], [3, 1]]
         }
     },
     'an L cross-match': {
-        'orbs': [
+        orbs: [
             [ 1, 2, 3, 4, 5 ],
             [ 5, 1, 2, 3, 4 ],
             [ 4, 6, 1, 2, 3 ],
             [ 3, 6, 5, 1, 2 ],
             [ 2, 6, 6, 6, 1 ]
         ],
-        'foundMatches': [
+        foundMatches: [
             [[4, 1], [4, 2], [4, 3]],
             [[2, 1], [3, 1], [4, 1]]
         ],
-        'combinedMatches': [
+        combinedMatches: [
             [[2, 1], [3, 1], [4, 1], [4, 2], [4, 3]]
         ],
-        'evaluate': {
-            'matchData': [
+        evaluate: {
+            matchData: [
                 [6, 5]
             ],
-            'nonMatchDropped': [
+            nonMatchDropped: [
                 [[4, 1, 4], [1, 5, 1]],
                 [[3, 1, 4], [2, 1, 2]],
                 [[2, 2, 4], [2, 3]],
                 [[1, 2, 4], [3, 4]]
             ],
-            'droppedRandoms': [
+            droppedRandoms: [
                 [2, 1, 2],
                 [1, 1, 2],
                 [0, 1, 4]
             ],
-            'unaffectedOrbs': [
+            unaffectedOrbs: [
                 [4, 0, 1],
                 [4, 4, 5],
                 [3, 0, 1],
@@ -392,38 +392,38 @@ export const boards = {
                 [0, 4, 5]
             ]
         },
-        'swap': {
-            'orbsBeforeSwap': [
+        swap: {
+            orbsBeforeSwap: [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 2, 3, 4 ],
                 [ 4, 6, 1, 2, 3 ],
                 [ 3, 6, 5, 1, 2 ],
                 [ 6, 2, 6, 6, 1 ]
             ],
-            'swapOrbs': [[4, 0], [4, 1]]
+            swapOrbs: [[4, 0], [4, 1]]
         }
     },
     'a four match plus corner match': {
-        'orbs': [
+        orbs: [
             [ 1, 2, 3, 4, 5 ],
             [ 5, 1, 2, 3, 4 ],
             [ 6, 6, 6, 6, 3 ],
             [ 3, 4, 6, 1, 2 ],
             [ 2, 3, 6, 5, 1 ]
         ],
-        'foundMatches': [
+        foundMatches: [
             [[2, 0], [2, 1], [2, 2]],
             [[2, 1], [2, 2], [2, 3]],
             [[2, 2], [3, 2], [4, 2]]
         ],
-        'combinedMatches': [
+        combinedMatches: [
             [[2, 0], [2, 1], [2, 2], [2, 3], [3, 2], [4, 2]]
         ],
-        'evaluate': {
-            'matchData': [
+        evaluate: {
+            matchData: [
                 [6, 6]
             ],
-            'nonMatchDropped': [
+            nonMatchDropped: [
                 [[4, 2, 3], [2]],
                 [[3, 2, 3], [3]],
                 [[2, 0, 2], [5, 1]],
@@ -431,12 +431,12 @@ export const boards = {
                 [[1, 0, 2], [1, 2]],
                 [[1, 3, 4], [4]]
             ],
-            'droppedRandoms': [
+            droppedRandoms: [
                 [2, 2, 3],
                 [1, 2, 3],
                 [0, 0, 4]
             ],
-            'unaffectedOrbs': [
+            unaffectedOrbs: [
                 [4, 0, 2],
                 [4, 3, 5],
                 [3, 0, 2],
@@ -446,38 +446,38 @@ export const boards = {
                 [0, 4, 5]
             ]
         },
-        'swap': {
-            'orbsBeforeSwap': [
+        swap: {
+            orbsBeforeSwap: [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 6, 3, 4 ],
                 [ 6, 6, 2, 6, 3 ],
                 [ 3, 4, 6, 1, 2 ],
                 [ 2, 3, 6, 5, 1 ]
             ],
-            'swapOrbs': [[1, 2], [2, 2]]
+            swapOrbs: [[1, 2], [2, 2]]
         }
     },
     'a four match plus corner match (inverted)': {
-        'orbs': [
+        orbs: [
             [ 1, 2, 3, 4, 5 ],
             [ 5, 1, 2, 3, 4 ],
             [ 4, 6, 6, 6, 6 ],
             [ 3, 4, 6, 1, 2 ],
             [ 2, 3, 6, 5, 1 ]
         ],
-        'foundMatches': [
+        foundMatches: [
             [[2, 1], [2, 2], [2, 3]],
             [[2, 2], [2, 3], [2, 4]],
             [[2, 2], [3, 2], [4, 2]]
         ],
-        'combinedMatches': [
+        combinedMatches: [
             [[2, 1], [2, 2], [2, 3], [2, 4], [3, 2], [4, 2]]
         ],
-        'evaluate': {
-            'matchData': [
+        evaluate: {
+            matchData: [
                 [6, 6]
             ],
-            'nonMatchDropped': [
+            nonMatchDropped: [
                 [[4, 2, 3], [2]],
                 [[3, 2, 3], [3]],
                 [[2, 1, 2], [1]],
@@ -485,12 +485,12 @@ export const boards = {
                 [[1, 1, 2], [2]],
                 [[1, 3, 5], [4, 5]]
             ],
-            'droppedRandoms': [
+            droppedRandoms: [
                 [2, 2, 3],
                 [1, 2, 3],
                 [0, 1, 5]
             ],
-            'unaffectedOrbs': [
+            unaffectedOrbs: [
                 [4, 0, 2],
                 [4, 3, 5],
                 [3, 0, 2],
@@ -500,39 +500,39 @@ export const boards = {
                 [0, 0, 1]
             ]
         },
-        'swap': {
-            'orbsBeforeSwap': [
+        swap: {
+            orbsBeforeSwap: [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 6, 3, 4 ],
                 [ 4, 6, 2, 6, 6 ],
                 [ 3, 4, 6, 1, 2 ],
                 [ 2, 3, 6, 5, 1 ]
             ],
-            'swapOrbs': [[1, 2], [2, 2]]
+            swapOrbs: [[1, 2], [2, 2]]
         }
     },
     'a seven match': {
-        'orbs': [
+        orbs: [
             [ 1, 2, 3, 4, 5 ],
             [ 5, 1, 2, 3, 4 ],
             [ 6, 6, 6, 6, 6 ],
             [ 3, 4, 6, 1, 2 ],
             [ 2, 3, 6, 5, 1 ]
         ],
-        'foundMatches': [
+        foundMatches: [
             [[2, 0], [2, 1], [2, 2]],
             [[2, 1], [2, 2], [2, 3]],
             [[2, 2], [2, 3], [2, 4]],
             [[2, 2], [3, 2], [4, 2]]
         ],
-        'combinedMatches': [
+        combinedMatches: [
             [[2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [3, 2], [4, 2]]
         ],
-        'evaluate': {
-            'matchData': [
+        evaluate: {
+            matchData: [
                 [6, 7]
             ],
-            'nonMatchDropped': [
+            nonMatchDropped: [
                 [[4, 2, 3], [2]],
                 [[3, 2, 3], [3]],
                 [[2, 0, 2], [5, 1]],
@@ -540,59 +540,59 @@ export const boards = {
                 [[1, 0, 2], [1, 2]],
                 [[1, 3, 5], [4, 5]]
             ],
-            'droppedRandoms': [
+            droppedRandoms: [
                 [2, 2, 3],
                 [1, 2, 3],
                 [0, 0, 5]
             ],
-            'unaffectedOrbs': [
+            unaffectedOrbs: [
                 [4, 0, 2],
                 [4, 3, 5],
                 [3, 0, 2],
                 [3, 3, 5]
             ]
         },
-        'swap': {
-            'orbsBeforeSwap': [
+        swap: {
+            orbsBeforeSwap: [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 6, 3, 4 ],
                 [ 6, 6, 2, 6, 6 ],
                 [ 3, 4, 6, 1, 2 ],
                 [ 2, 3, 6, 5, 1 ]
             ],
-            'swapOrbs': [[1, 2], [2, 2]]
+            swapOrbs: [[1, 2], [2, 2]]
         }
     },
     'two matches of three': {
-        'orbs': [
+        orbs: [
             [ 1, 2, 3, 4, 5 ],
             [ 5, 1, 2, 3, 4 ],
             [ 6, 6, 6, 2, 3 ],
             [ 6, 6, 6, 1, 2 ],
             [ 2, 3, 4, 5, 1 ]
         ],
-        'foundMatches': [
+        foundMatches: [
             [[2, 0], [2, 1], [2, 2]],
             [[3, 0], [3, 1], [3, 2]]
         ],
-        'combinedMatches': [
+        combinedMatches: [
             [[2, 0], [2, 1], [2, 2]],
             [[3, 0], [3, 1], [3, 2]]
         ],
-        'evaluate': {
-            'matchData': [
+        evaluate: {
+            matchData: [
                 [6, 3],
                 [6, 3]
             ],
-            'nonMatchDropped': [
+            nonMatchDropped: [
                 [[3, 0, 3], [5, 1, 2]],
                 [[2, 0, 3], [1, 2, 3]]
             ],
-            'droppedRandoms': [
+            droppedRandoms: [
                 [1, 0, 3],
                 [0, 0, 3]
             ],
-            'unaffectedOrbs': [
+            unaffectedOrbs: [
                 [4, 0, 5],
                 [3, 3, 5],
                 [2, 3, 5],
@@ -600,50 +600,50 @@ export const boards = {
                 [0, 3, 5]
             ]
         },
-        'swap': {
-            'orbsBeforeSwap': [
+        swap: {
+            orbsBeforeSwap: [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 2, 3, 4 ],
                 [ 6, 6, 6, 2, 3 ],
                 [ 6, 3, 6, 1, 2 ],
                 [ 2, 6, 4, 5, 1 ]
             ],
-            'swapOrbs': [[3, 1], [4, 1]]
+            swapOrbs: [[3, 1], [4, 1]]
         }
     },
     'two matches of four': {
-        'orbs': [
+        orbs: [
             [ 1, 2, 3, 4, 5 ],
             [ 5, 1, 2, 6, 6 ],
             [ 4, 5, 1, 6, 6 ],
             [ 3, 4, 5, 6, 6 ],
             [ 2, 3, 4, 6, 6 ]
         ],
-        'foundMatches': [
+        foundMatches: [
             [[1, 3], [2, 3], [3, 3]],
             [[2, 3], [3, 3], [4, 3]],
             [[1, 4], [2, 4], [3, 4]],
             [[2, 4], [3, 4], [4, 4]]
         ],
-        'combinedMatches': [
+        combinedMatches: [
             [[1, 3], [2, 3], [3, 3], [4, 3]],
             [[1, 4], [2, 4], [3, 4], [4, 4]]
         ],
-        'evaluate': {
-            'matchData': [
+        evaluate: {
+            matchData: [
                 [6, 4],
                 [6, 4]
             ],
-            'nonMatchDropped': [
+            nonMatchDropped: [
                 [[4, 3, 5], [4, 5]]
             ],
-            'droppedRandoms': [
+            droppedRandoms: [
                 [3, 3, 5],
                 [2, 3, 5],
                 [1, 3, 5],
                 [0, 3, 5]
             ],
-            'unaffectedOrbs': [
+            unaffectedOrbs: [
                 [4, 0, 3],
                 [3, 0, 3],
                 [2, 0, 3],
@@ -651,15 +651,15 @@ export const boards = {
                 [0, 0, 3]
             ]
         },
-        'swap': {
-            'orbsBeforeSwap': [
+        swap: {
+            orbsBeforeSwap: [
                 [ 1, 2, 3, 4, 5 ],
                 [ 5, 1, 2, 6, 6 ],
                 [ 4, 5, 6, 1, 6 ],
                 [ 3, 4, 5, 6, 6 ],
                 [ 2, 3, 4, 6, 6 ]
             ],
-            'swapOrbs': [[2, 2], [2, 3]]
+            swapOrbs: [[2, 2], [2, 3]]
         }
     }
 };
