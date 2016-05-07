@@ -2,8 +2,6 @@
 import test from 'ava';
 import * as _ from 'lodash';
 import {Board} from '../src/board';
-import {combineMatches} from '../src/board';
-import {findMatches} from '../src/board';
 let board;
 
 test.before(() => {
@@ -21,6 +19,9 @@ test('creates seven different types of orbs', t => {
     t.same(board.availableTypes, _.range(7));
 });
 
-test.skip('should have at least one possible match set by default', t => {
-    t.ok(board.hasMatch());
+test('should have at least one possible match set and should not have a match event by default', t => {
+    _.each(_.range(100), i => {
+        board = new Board();
+        t.ok(board.hasMatch() && !board.hasMatchEvent());
+    });
 });

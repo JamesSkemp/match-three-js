@@ -93,7 +93,7 @@ export var orbsBeforeSwap = [
     ]
 ];
 
-// pairs of coordinates to be swapped in the form [[x1, y1], [x2, y2]]
+// pairs of coordinates to be swapped in the form [[row1, col1], [row2, col2]]
 export var swapOrbs = [
     [[2, 2], [3, 2]],
     [[4, 3], [4, 4]],

@@ -85,9 +85,9 @@ let _iterchunks = (orbs, chunkLimitRange, includePositionInformation, isTranspos
  *   [ [6, 3, 6], [5, 2, 4] ], [ [5, 2, 4], [4, 2, 0] ] ]
  *
  * If you want to also return the position of the first member of the chunk,
- * as X/Y coordinates, pass in `includePositionInformation`. That will return the
+ * as row/col coordinates, pass in `includePositionInformation`. That will return the
  * same data as above, but with a final piece of information, an object with a `position`
- * key that maps to the first and last X/Y coordinates of that chunk.
+ * key that maps to the first and last row/col coordinates of that chunk.
  * [
  *     [
  *         [6, 5, 4], [3, 2, 2],
@@ -181,14 +181,17 @@ export function findMatches(orbs) {
 export function combineMatches(matches) {
     let combinedMatches = [];
     let unused = matches;
-    let couldMatch, before, currentMatch;
+    let couldMatch;
+    let before;
+    let currentMatch;
 
     while (unused[0] != null) {
         currentMatch = new SortedSet(unused[0]);
         unused.shift();
         couldMatch = _.clone(unused);
 
-        _.each(couldMatch, m => { //only union if there is an overlap!
+        _.each(couldMatch, m => {
+            //only union if there is an overlap!
             if (currentMatch.intersection(m).toArray()[0] != null) {
                 before = currentMatch.toArray();
                 currentMatch.swap(0, currentMatch.length, currentMatch.union(m));
@@ -207,10 +210,12 @@ export class Board {
         this.width = width;
         this.height = height;
         this.types = types;
-        let chooseOrb = () => { return _.sample(types); };
-        let sampleRow = () => { return _.times(width, chooseOrb); };
-        this.orbs = _.zip(..._.times(height, sampleRow));
-        // this.evaluateAll(this.orbs);
+        let chooseOrb = () => { return _.sample(this.types); };
+        let sampleRow = () => { return _.times(this.width, chooseOrb); };
+        this.orbs = _.zip(..._.times(this.height, sampleRow));
+        if (this.hasMatchEvent() || this.needsShuffle()) {
+            this.shuffle();
+        };
     }
 
     get size() {
@@ -222,39 +227,38 @@ export class Board {
     }
 
     /**
-      * 1. logs data for each match and replaces each orb with 'X'
-      * 2. replaces each 'X' and all above orbs with either the orb directly above or a random new orb
+      * 1. logs data for each match and replaces each orb with '\u241a'
+      * 2. replaces each '\u241a' and all above orbs with either the orb directly above or a random new orb
       * 3. returns the match data -> [[match1Type, match1Amount], [match2Type, match2Amount], ...]
       */
-    evaluate(matches, dropOptions = [this.types]) {
+    evaluate(matches, dropOptions = this.types) {
         let matchData = [];
 
         _.each(matches, match => {
             // log data
-            let [xx, yy] = match[0];
-            matchData.push([this.orbs[xx][yy], match.length]);
-            // replace each coordinate with 'X'
+            matchData.push([this.orbs[match[0][0]][match[0][1]], match.length]);
+            // replace each coordinate with '\u241a'
             _.each(match, coord => {
-                let [x, y] = coord;
-                this.orbs[x][y] = 'X'
+                let [row, col] = coord;
+                this.orbs[row][col] = '\u241a'
             })
         });
 
         /**
           * drop down and generate matches
           * 1. reads across starting from the top
-          * 2. when it hits 'X', loops from that position directly up
+          * 2. when it hits '\u241a', loops from that position directly up
           * 3. if the row isn't 0, it takes the orb from above
           * 4. if the row is 0, it creates a random orb
         */
-        _.each(_.range(this.height), x =>{
-            _.each(_.range(this.width), y => { //1
-                if (this.orbs[x][y] == 'X') {
-                    for (var z = x; z >= 0; z--) { //2
+        _.each(_.range(this.height), row =>{
+            _.each(_.range(this.width), col => { //1
+                if (this.orbs[row][col] == '\u241a') {
+                    for (var z = row; z >= 0; z--) { //2
                         if (z > 0) { //3
-                            this.orbs[z][y] = this.orbs[z - 1][y];
+                            this.orbs[z][col] = this.orbs[z - 1][col];
                         } else { //4
-                            this.orbs[z][y] = _.sample(dropOptions);;
+                            this.orbs[z][col] = _.sample(dropOptions);;
                         };
                     };
                 };
@@ -262,13 +266,6 @@ export class Board {
         });
 
         return matchData;
-    }
-
-    evaluateAll() {
-        var matchEvents = [];
-        while (this.hasMatch()) {
-            matchEvents.push(this.evaluate());
-        }
     }
 
     needsShuffle() {
@@ -283,20 +280,142 @@ export class Board {
         let hasWideStyleMatch = _.some(_.map(flatChunks, hasMatchInSingleRow));
         return hasWideStyleMatch || _.some(_.map(chunks), hasMatchInPairOfRows);
     }
+    
+    hasMatchEvent() {
+        return Boolean(findMatches(this.orbs)[0]);
+    }
 
-    swap(swapOrbs) {
-        let [[x1, y1], [x2, y2]] = swapOrbs;
+    swap(swapOrbs, playerSwap = true) {
+        let [[row1, col1], [row2, col2]] = swapOrbs;
         let orbsBefore = _.cloneDeep(this.orbs);
-        this.orbs[x1][y1] = orbsBefore[x2][y2]
-        this.orbs[x2][y2] = orbsBefore[x1][y1]
+        this.orbs[row1][col1] = orbsBefore[row2][col2]
+        this.orbs[row2][col2] = orbsBefore[row1][col1]
 
         // undo the swap if it did not yeild a match
-        if (!findMatches(this.orbs)[0]) {
+        if (playerSwap && !this.hasMatchEvent()) {
             this.orbs = orbsBefore;
+        };
+    }
+    
+    /**
+      * @private
+      * @description Does the dirty work for unmatch by taking a given orb and swapping with a neighbor
+      * of a different type, or a random orb on the board if there are no valid neighbors.
+      * @see unmatch
+      */
+    _unmatch(row, col, match, skipToRandom = false) {
+        let thisOrb = this.orbs[row][col];
+        let swapped = false;
+        let directions = _.shuffle(['up', 'down', 'left', 'right']);
+        for (let i = 0; i < 4; i++) {
+            // abandons the process and jumps to swapping a random orb
+            if (skipToRandom) { break };
+            if (directions[i] === 'up' && !_.isUndefined(this.orbs[row - 1]) && this.orbs[row - 1][col] !== thisOrb) {
+                this.swap([[row, col], [row - 1, col]], false);
+                swapped = true;
+                break;
+            } else if (directions[i] === 'down' && !_.isUndefined(this.orbs[row + 1]) && this.orbs[row + 1][col] !== thisOrb) {
+                this.swap([[row, col], [row + 1, col]], false);
+                swapped = true;
+                break;
+            } else if (directions[i] === 'left' && !_.isUndefined(this.orbs[row][col - 1]) && this.orbs[row][col - 1] !== thisOrb) {
+                this.swap([[row, col], [row, col - 1]], false);
+                swapped = true;
+                break;
+            } else if (directions[i] === 'right' && !_.isUndefined(this.orbs[row][col + 1]) && this.orbs[row][col + 1] !== thisOrb) {
+                this.swap([[row, col], [row, col + 1]], false);
+                swapped = true;
+                break;
+            }
+        }
+        while (!swapped) {
+            let [randomRow, randomCol] = [_.random(this.height - 1), _.random(this.width - 1)];
+            if (!_.includes(match, [randomRow, randomCol]) && this.orbs[randomRow][randomCol] !== thisOrb) {
+                this.swap([[row, col], [randomRow, randomCol]], false);
+                swapped = true;
+            }
+        }
+    }
+    
+    /**
+      * @description Removes all match events one at a time by swapping a median or intersecting orb
+      * with its neighbor or a random orb if necessary. 
+      *
+      * Intersectiions only occur if the match is not a simple match, i.e. it only spans one
+      * column or one row.
+      *
+      * @example A simple match could go from 
+      *         [ 1, 2, 3, 4 ],             [ 1, 2, 5, 4 ],
+      *         [ 2, 5, 5, 5 ],             [ 2, 5, 3, 5 ],
+      *         [ 3, 4, 1, 2 ],     to      [ 3, 4, 1, 2 ],
+      *         [ 4, 1, 2, 3 ]              [ 4, 1, 2, 3 ]
+      *
+      * @example A multidimensional match could go from 
+      *         [ 1, 2, 3, 4 ],             [ 1, 5, 3, 4 ],
+      *         [ 2, 5, 5, 5 ],             [ 2, 2, 5, 5 ],
+      *         [ 3, 5, 1, 2 ],     to      [ 3, 5, 1, 2 ],     this.orbs[1][1] was the
+      *         [ 4, 5, 2, 3 ]              [ 4, 5, 2, 3 ]      intersection swapped
+      *
+      * @example A side-by-side match could go from 
+      *         [ 1, 5, 5, 5 ],             [ 1, 5, 4, 5 ],                 [ 1, 5, 4, 5 ],
+      *         [ 2, 5, 5, 5 ],             [ 2, 5, 5, 5 ],                 [ 2, 5, 1, 5 ],
+      *         [ 3, 4, 1, 2 ],     to      [ 3, 4, 1, 2 ],    and then     [ 3, 4, 5, 2 ],
+      *         [ 4, 1, 2, 3 ]              [ 5, 1, 2, 3 ]                  [ 5, 1, 2, 3 ]
+      */
+    unmatch() {
+        while (this.hasMatchEvent()) {
+            let intersections = [];
+            let match = combineMatches(findMatches(this.orbs))[0];
+            // it is a simple match if all of the coords have only 1 rowCoord or 1 colCoord
+            let [rowCoords, colCoords] = _.zip(...match);
+            let isSimpleMatch = _.uniq(rowCoords).length === 1 || _.uniq(colCoords).length === 1;
+            if (isSimpleMatch) {
+                // finds the median orb in the match
+                let median = Math.floor(match.length / 2);
+                let [midRow, midCol] = match[median];
+
+                // Checks for a side-by-side match, which could cause and endless loop.
+                // In that case, the skipToRandom argument in _unmatch is triggered.
+                let midNeighbors;
+                if (_.uniq(rowCoords).length === 1) {
+                    midNeighbors = [this.orbs[midRow][midCol - 1], this.orbs[midRow][midCol + 1]];
+                } else {
+                    midNeighbors = [this.orbs[midRow - 1][midCol], this.orbs[midRow + 1][midCol]];
+                }
+                let isSideBySideMatch = _.includes(midNeighbors, this.orbs[midRow][midCol]);
+
+                this._unmatch(...match[median], match, isSideBySideMatch);
+            } else {
+                // collects which rows and columns have matches in them
+                let matchRows = [];
+                let matchCols = [];
+                _.each(_.countBy(rowCoords), (v, k) => {
+                    if (v > 2) {
+                        matchRows.push(_.toInteger(k));
+                    };
+                });
+                _.each(_.countBy(colCoords), (v, k) => {
+                    if (v > 2) {
+                        matchCols.push(_.toInteger(k));
+                    };
+                });
+                // if a coordinate is in a row match and a column match, it is an intersection
+                _.each(match, coords => {
+                    if (_.includes(matchRows, coords[0]) && _.includes(matchCols, coords[1])) {
+                        intersections.push(coords);
+                    };
+                });
+                // chooses a random intersection to unmatch 
+                this._unmatch(..._.sample(intersections), match);
+            };
         };
     }
 
     shuffle() {
-
+        this.orbs = _.map(this.orbs, row => _.shuffle(row));
+        this.unmatch();
+        if (this.needsShuffle()) {
+            this.shuffle();
+        };
     }
 };
