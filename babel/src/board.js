@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 let SortedSet = require('collections/sorted-set');
 
 // checks for one row of the iterchunk board for a match like [0010].
-export function hasMatchInSingleRow (row) {
+export function hasPotentialMatchInSingleRow (row) {
     return _.max(_.values(_.countBy(row))) > 2;
 };
 
@@ -20,7 +20,7 @@ export function indexOfAll (list, value) {
 
 // checks across both rows for a match, like [0101]
 //                                           [2031]
-export function hasMatchInPairOfRows (pairOfRows) {
+export function hasPotentialMatchInPairOfRows (pairOfRows) {
     let allValues = _.uniq(_.flatten(pairOfRows));
     let allMatches = _.map(allValues, value => {
         return _.uniq([...indexOfAll(pairOfRows[0], value),
@@ -40,7 +40,7 @@ export function hasMatchInPairOfRows (pairOfRows) {
  * @private
  * @description Used to provide more granularity to functions that need to call iterchunks
  * on a non-transposed set of orbs, as well as a transposed set of orbs.
- * @see findMatches
+ * @see findTriples
  */
 let _iterchunks = (orbs, chunkLimitRange, includePositionInformation, isTransposed) => {
     let chunks = [];
@@ -135,8 +135,8 @@ export function iterchunks (orbs, chunkLimitRange = [4, 2], includePositionInfor
     ]
 };
 
-let _findMatches = (chunks, isTransposed) => {
-    let matches = [];
+let _findTriples = (chunks, isTransposed) => {
+    let triples = [];
 
     _.each(chunks, chunk => {
         let orbs = _.first(chunk);
@@ -160,20 +160,24 @@ let _findMatches = (chunks, isTransposed) => {
                 secondOrb,
                 thirdOrb
             ];
-            matches.push(absolutePositions);
+            triples.push(absolutePositions);
         }
     });
 
-    return matches;
+    return triples;
 };
 
-export function findMatches(orbs) {
+/**
+  * @description Gathers all triples, which are the coordinates for all instances of 
+  * three consecutive matching orbs, first in rows, then in columns.
+  */
+export function findTriples(orbs) {
     let chunksOriginal = _iterchunks(orbs, [3, 1], true);
     let chunksTransposed = _iterchunks(_.zip(...orbs), [3, 1], true, true);
 
     return [
-            ..._findMatches(chunksOriginal, false),
-            ..._findMatches(chunksTransposed, true)
+            ..._findTriples(chunksOriginal, false),
+            ..._findTriples(chunksTransposed, true)
     ];
 
 };
@@ -213,7 +217,7 @@ export class Board {
         let chooseOrb = () => { return _.sample(this.types); };
         let sampleRow = () => { return _.times(this.width, chooseOrb); };
         this.orbs = _.zip(..._.times(this.height, sampleRow));
-        if (this.hasMatchEvent() || this.needsShuffle()) {
+        if (this.hasMatch() || this.needsShuffle()) {
             this.shuffle();
         };
     }
@@ -269,20 +273,20 @@ export class Board {
     }
 
     needsShuffle() {
-        return !this.hasMatch();
+        return !this.hasPotentialMatch();
     }
 
-    hasMatch() {
+    hasPotentialMatch() {
         let chunks = iterchunks(this.orbs);
         // [[[1, 2, 3], [2, 3, 4]], [[3, 4, 5], [4, 5, 6]]] becomes
         //  [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]]
         let flatChunks = _.flattenDepth(chunks, 1);
-        let hasWideStyleMatch = _.some(_.map(flatChunks, hasMatchInSingleRow));
-        return hasWideStyleMatch || _.some(_.map(chunks), hasMatchInPairOfRows);
+        let hasWideStyleMatch = _.some(_.map(flatChunks, hasPotentialMatchInSingleRow));
+        return hasWideStyleMatch || _.some(_.map(chunks), hasPotentialMatchInPairOfRows);
     }
     
-    hasMatchEvent() {
-        return Boolean(findMatches(this.orbs)[0]);
+    hasMatch() {
+        return Boolean(findTriples(this.orbs)[0]);
     }
 
     swap(swapOrbs, playerSwap = true) {
@@ -292,7 +296,7 @@ export class Board {
         this.orbs[row2][col2] = orbsBefore[row1][col1]
 
         // undo the swap if it did not yeild a match
-        if (playerSwap && !this.hasMatchEvent()) {
+        if (playerSwap && !this.hasMatch()) {
             this.orbs = orbsBefore;
         };
     }
@@ -363,9 +367,9 @@ export class Board {
       *         [ 4, 1, 2, 3 ]              [ 5, 1, 2, 3 ]                  [ 5, 1, 2, 3 ]
       */
     unmatch() {
-        while (this.hasMatchEvent()) {
+        while (this.hasMatch()) {
             let intersections = [];
-            let match = combineMatches(findMatches(this.orbs))[0];
+            let match = combineMatches(findTriples(this.orbs))[0];
             // it is a simple match if all of the coords have only 1 rowCoord or 1 colCoord
             let [rowCoords, colCoords] = _.zip(...match);
             let isSimpleMatch = _.uniq(rowCoords).length === 1 || _.uniq(colCoords).length === 1;
