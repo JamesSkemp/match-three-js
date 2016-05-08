@@ -1,6 +1,8 @@
 'use strict';
 import * as _ from 'lodash';
 import iterchunks from './tools/iterchunks';
+import hasPotentialMatchInSingleRow from './getMatches/hasPotentialMatch';
+import hasPotentialMatchInPairOfRows from './getMatches/hasPotentialMatch';
 import evaluate as affectOrbs.evaluate from './affectOrbs/evaluate';
 import unmatch as affectOrbs.unmatch from './affectOrbs/unmatch';
 // import './affectOrbs';
