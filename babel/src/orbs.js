@@ -1,3 +1,80 @@
+import indexOfAll from '../tools/indexOfAll';
+//import iterchunks
+
+// checks for one row of the iterchunk board for a potential match like [0010].
+export function hasPotentialMatchInSingleRow (row) {
+    return _.max(_.values(_.countBy(row))) > 2;
+};
+
+// checks across both rows for a potential match, like [0101]
+//                                                     [2031]
+export function hasPotentialMatchInPairOfRows (pairOfRows) {
+    let allValues = _.uniq(_.flatten(pairOfRows));
+    let allMatches = _.map(allValues, value => {
+        return _.uniq([...indexOfAll(pairOfRows[0], value),
+                       ...indexOfAll(pairOfRows[1], value)]).sort();
+    });
+
+    return _.some(allMatches, match => {
+        return _.some([
+            _.isEqual(match, [0, 1, 2]),
+            _.isEqual(match, [1, 2, 3]),
+            _.isEqual(match, [0, 1, 2, 3]),
+        ]);
+    });
+};
+
+export function hasPotentialMatch (orbs) {
+    let chunks = iterchunks(orbs);
+    // [[[1, 2, 3], [2, 3, 4]], [[3, 4, 5], [4, 5, 6]]] becomes
+    //  [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]]
+    let flatChunks = _.flattenDepth(chunks, 1);
+    let hasWideStyleMatch = _.some(_.map(flatChunks, hasPotentialMatchInSingleRow));
+    return hasWideStyleMatch || _.some(_.map(chunks), hasPotentialMatchInPairOfRows);
+};
+
+/**
+  * 1. logs data for each match and replaces each orb with '\u241a'
+  * 2. replaces each '\u241a' and all above orbs with either the orb directly above or a random new orb
+  * 3. returns the match data -> [[match1Type, match1Amount], [match2Type, match2Amount], ...]
+  */
+export function evaluate(orbs, height, width, matches, dropOptions) {
+    let matchData = [];
+
+    _.each(matches, match => {
+        // log data
+        matchData.push([orbs[match[0][0]][match[0][1]], match.length]);
+        // replace each coordinate with '\u241a'
+        _.each(match, coord => {
+            let [row, col] = coord;
+            orbs[row][col] = '\u241a'
+        })
+    });
+
+    /**
+      * drop down and generate matches
+      * 1. reads across starting from the top
+      * 2. when it hits '\u241a', loops from that position directly up
+      * 3. if the row isn't 0, it takes the orb from above
+      * 4. if the row is 0, it creates a random orb
+      */
+    _.each(_.range(height), row =>{
+        _.each(_.range(width), col => { //1
+            if (orbs[row][col] == '\u241a') {
+                for (var z = row; z >= 0; z--) { //2
+                    if (z > 0) { //3
+                        orbs[z][col] = orbs[z - 1][col];
+                    } else { //4
+                        orbs[z][col] = _.sample(dropOptions);;
+                    };
+                };
+            };
+        });
+    });
+
+    return [orbs, matchData];
+};
+
 /**
   * @private
   * @description Does the dirty work for unmatch by taking a given orb and swapping with a neighbor

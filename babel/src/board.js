@@ -3,11 +3,8 @@ import * as _ from 'lodash';
 import iterchunks from './tools/iterchunks';
 import hasPotentialMatchInSingleRow from './getMatches/hasPotentialMatch';
 import hasPotentialMatchInPairOfRows from './getMatches/hasPotentialMatch';
-import evaluate as affectOrbs.evaluate from './affectOrbs/evaluate';
-import unmatch as affectOrbs.unmatch from './affectOrbs/unmatch';
-// import './affectOrbs';
-import findTriples from './getMatches/findTriples';
-import combineTriples from './getMatches/combineTriples';
+import * as orbs from './orbs';
+import * as triples from './triples';
 let SortedSet = require('collections/sorted-set');
 
 export class Board {
@@ -32,15 +29,15 @@ export class Board {
     }
     
     get triples() {
-        return findTriples(this.orbs);
+        return triples.find(this.orbs);
     }
     
     get matches() {
-        return combineTriples(this.triples);
+        return triples.combine(this.triples);
     }
 
     evaluate(dropOptions = this.types) {
-        let evaluation = affectOrbs.evaluate(this.orbs, this.height, this.width, this.matches, dropOptions)
+        let evaluation = orbs.evaluate(this.orbs, this.height, this.width, this.matches, dropOptions)
         let [newOrbs, matchData] = evaluation;
         this.orbs = newOrbs;
         return matchData;
@@ -52,16 +49,11 @@ export class Board {
     }
 
     hasPotentialMatch() {
-        let chunks = iterchunks(this.orbs);
-        // [[[1, 2, 3], [2, 3, 4]], [[3, 4, 5], [4, 5, 6]]] becomes
-        //  [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]]
-        let flatChunks = _.flattenDepth(chunks, 1);
-        let hasWideStyleMatch = _.some(_.map(flatChunks, hasPotentialMatchInSingleRow));
-        return hasWideStyleMatch || _.some(_.map(chunks), hasPotentialMatchInPairOfRows);
+        return orbs.hasPotentialMatch(this.orbs);
     }
     
     hasMatch() {
-        return Boolean(findTriples(this.orbs)[0]);
+        return Boolean(triples.find(this.orbs)[0]);
     }
 
     swap(swapOrbs, playerSwap = true) {
@@ -77,7 +69,7 @@ export class Board {
     
     unmatch() {
         while(this.hasMatch()) {
-            this.orbs = affectOrbs.unmatch(this.orbs);
+            this.orbs = orbs.unmatch(this.orbs);
         }
     }
 
