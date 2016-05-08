@@ -1,7 +1,7 @@
 import test from 'ava';
 import * as _ from 'lodash';
-import {hasMatchInSingleRow} from '../src/board';
-import {hasMatchInPairOfRows} from '../src/board';
+import {hasPotentialMatchInSingleRow} from '../src/board';
+import {hasPotentialMatchInPairOfRows} from '../src/board';
 import {indexOfAll} from '../src/board';
 import {Board} from '../src/board';
 let board;
@@ -11,20 +11,20 @@ test.before(() => {
 });
 
 test('finds potential matches in valid single rows', t => {
-    let validRowMatches = [
+    let validRowPotentialMatches = [
         [1, 0, 0, 0],
         [0, 1, 0, 0],
         [0, 0, 1, 0],
         [0, 0, 0, 1]
     ];
 
-    _.each(validRowMatches, validRowMatch => {
-        t.ok(hasMatchInSingleRow(validRowMatch));
+    _.each(validRowPotentialMatches, validRowPotentialMatch => {
+        t.ok(hasPotentialMatchInSingleRow(validRowPotentialMatch));
     });
 });
 
 test('does not find potential matches in invalid single row', t => {
-    t.notOk(hasMatchInSingleRow([1, 1, 0, 0]));
+    t.notOk(hasPotentialMatchInSingleRow([1, 1, 0, 0]));
 });
 
 test('reports all indexes of a certain value in a list', t => {
@@ -64,7 +64,7 @@ test('finds potential matches in valid row pairs', t => {
     ];
 
     _.each(validRowPairs, validRowPair => {
-        t.ok(hasMatchInPairOfRows(validRowPair));
+        t.ok(hasPotentialMatchInPairOfRows(validRowPair));
     });
 });
 
@@ -85,7 +85,7 @@ test('does not find potential matches in invalid row pairs', t => {
     ];
 
     _.each(invalidRowPairs, invalidRowPair => {
-        t.notOk(hasMatchInPairOfRows(invalidRowPair));
+        t.notOk(hasPotentialMatchInPairOfRows(invalidRowPair));
     });
 });
 
@@ -101,10 +101,10 @@ test('needs shuffle for entire board', t => {
         [ 1, 2, 3, 4, 5, 6, 7, 0 ]
     ];
     t.ok(board.needsShuffle());
-    t.notOk(board.hasMatch());
+    t.notOk(board.hasPotentialMatch());
 });
 
-test('has match for single row', t => {
+test('has potential match for single row', t => {
     board.orbs = [
         [ 0, 1, 2, 3, 4, 5, 6, 7 ],
         [ 7, 0, 1, 2, 3, 4, 5, 6 ],
@@ -116,10 +116,10 @@ test('has match for single row', t => {
         [ 1, 2, 3, 4, 8, 6, 8, 8 ]
     ];
     t.notOk(board.needsShuffle());
-    t.ok(board.hasMatch());
+    t.ok(board.hasPotentialMatch());
 });
 
-test('has match for single column', t => {
+test('has potential match for single column', t => {
     board.orbs = [
         [ 0, 1, 2, 3, 4, 5, 6, 7 ],
         [ 7, 0, 1, 2, 3, 4, 5, 6 ],
@@ -131,10 +131,10 @@ test('has match for single column', t => {
         [ 1, 2, 3, 4, 5, 6, 7, 8 ]
     ];
     t.notOk(board.needsShuffle());
-    t.ok(board.hasMatch());
+    t.ok(board.hasPotentialMatch());
 });
 
-test('has match for two rows', t => {
+test('has potential match for two rows', t => {
     board.orbs = [
         [ 0, 1, 2, 3, 4, 5, 6, 7 ],
         [ 7, 0, 1, 2, 3, 4, 5, 6 ],
@@ -146,10 +146,10 @@ test('has match for two rows', t => {
         [ 1, 2, 3, 4, 5, 6, 8, 8 ]
     ];
     t.notOk(board.needsShuffle());
-    t.ok(board.hasMatch());
+    t.ok(board.hasPotentialMatch());
 });
 
-test('has match for two columns', t => {
+test('has potential match for two columns', t => {
     board.orbs = [
         [ 0, 1, 2, 3, 4, 5, 6, 7 ],
         [ 7, 0, 1, 2, 3, 4, 5, 6 ],
@@ -161,10 +161,10 @@ test('has match for two columns', t => {
         [ 1, 2, 3, 4, 5, 6, 7, 8 ]
     ];
     t.notOk(board.needsShuffle());
-    t.ok(board.hasMatch());
+    t.ok(board.hasPotentialMatch());
 });
 
-test('has match for rows and columns', t => {
+test('has potential match for rows and columns', t => {
     board.orbs = [
         [ 0, 1, 2, 3, 4, 5, 6, 7 ],
         [ 7, 0, 1, 2, 3, 4, 5, 6 ],
@@ -176,5 +176,5 @@ test('has match for rows and columns', t => {
         [ 1, 2, 3, 4, 5, 6, 7, 0 ]
     ];
     t.notOk(board.needsShuffle());
-    t.ok(board.hasMatch());
+    t.ok(board.hasPotentialMatch());
 });

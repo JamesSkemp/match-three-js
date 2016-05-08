@@ -19,7 +19,7 @@ _.each(_.range(orbs.length), j => {
     test(`unmatches ${names[j]}`, t => {
         board.orbs = orbs[j];
         board.unmatch();
-        t.false(board.hasMatchEvent());
+        t.false(board.hasMatch());
     });
 });
 
@@ -32,5 +32,5 @@ test('unmatches a 3x3 nine-match', t => {
         [5, 1, 2, 3, 4]
     ];
     board.unmatch();
-    t.false(board.hasMatchEvent());
+    t.false(board.hasMatch());
 })

@@ -1,5 +1,5 @@
-// orbs after findMatches(orbs)
-export var foundMatches = [
+// orbs after findTriples(orbs)
+export var triples = [
     [
         [[3, 1], [3, 2], [3, 3]]
     ],

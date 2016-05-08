@@ -9,20 +9,20 @@ let board12 = new Board(12, 12);
 test(`shuffles and unmatches a 5x5 board ${i} times`, t => {
     _.each(_.range(i), j => {
         board5.shuffle();
-        t.true(!(board5.needsShuffle() || board5.hasMatchEvent()))
+        t.true(!(board5.needsShuffle() || board5.hasMatch()))
     });
 });
 
 test(`shuffles and unmatches an 8x8 board ${i} times`, t => {
     _.each(_.range(i), j => {
         board8.shuffle();
-        t.true(!(board8.needsShuffle() || board8.hasMatchEvent()))
+        t.true(!(board8.needsShuffle() || board8.hasMatch()))
     });
 });
 
 test(`shuffles and unmatches a 12x12 board ${i} times`, t => {
     _.each(_.range(i), j => {
         board12.shuffle();
-        t.true(!(board12.needsShuffle() || board12.hasMatchEvent()))
+        t.true(!(board12.needsShuffle() || board12.hasMatch()))
     });
 });

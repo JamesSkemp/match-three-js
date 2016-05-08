@@ -22,6 +22,6 @@ test('creates seven different types of orbs', t => {
 test('should have at least one possible match set and should not have a match event by default', t => {
     _.each(_.range(100), i => {
         board = new Board();
-        t.ok(board.hasMatch() && !board.hasMatchEvent());
+        t.ok(board.hasPotentialMatch() && !board.hasMatch());
     });
 });
