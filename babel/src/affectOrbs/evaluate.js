@@ -3,7 +3,7 @@
   * 2. replaces each '\u241a' and all above orbs with either the orb directly above or a random new orb
   * 3. returns the match data -> [[match1Type, match1Amount], [match2Type, match2Amount], ...]
   */
-export function evaluate(orbs, matches, dropOptions = this.types) {
+export function evaluate(orbs, height, width, matches, dropOptions) {
     let matchData = [];
 
     _.each(matches, match => {
@@ -23,8 +23,8 @@ export function evaluate(orbs, matches, dropOptions = this.types) {
       * 3. if the row isn't 0, it takes the orb from above
       * 4. if the row is 0, it creates a random orb
       */
-    _.each(_.range(this.height), row =>{
-        _.each(_.range(this.width), col => { //1
+    _.each(_.range(height), row =>{
+        _.each(_.range(width), col => { //1
             if (orbs[row][col] == '\u241a') {
                 for (var z = row; z >= 0; z--) { //2
                     if (z > 0) { //3
@@ -37,5 +37,5 @@ export function evaluate(orbs, matches, dropOptions = this.types) {
         });
     });
 
-    return matchData;
-}
+    return [orbs, matchData];
+};

@@ -1,5 +1,5 @@
-export function combineMatches(matches) {
-    let combinedMatches = [];
+export function combineTriples(matches) {
+    let matches = [];
     let unused = matches;
     let couldMatch;
     let before;
@@ -20,7 +20,7 @@ export function combineMatches(matches) {
                 }
             }
         });
-        combinedMatches.push(currentMatch.toArray());
+        matches.push(currentMatch.toArray());
     }
-    return combinedMatches;
+    return matches;
 };

@@ -44,5 +44,4 @@ export function findTriples(orbs) {
             ..._findTriples(chunksOriginal, false),
             ..._findTriples(chunksTransposed, true)
     ];
-
 };

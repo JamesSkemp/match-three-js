@@ -1,3 +1,5 @@
+import indexOfAll from '../tools/indexOfAll';
+
 // checks for one row of the iterchunk board for a potential match like [0010].
 export function hasPotentialMatchInSingleRow (row) {
     return _.max(_.values(_.countBy(row))) > 2;
