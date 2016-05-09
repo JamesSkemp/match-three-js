@@ -52,20 +52,13 @@ export class Board {
         return Boolean(triples.find(this.orbs)[0]);
     }
 
-    swap(swapOrbs, playerSwap = true) {
-        let [[row1, col1], [row2, col2]] = swapOrbs;
-        let orbsBefore = _.cloneDeep(this.orbs);
-        this.orbs[row1][col1] = orbsBefore[row2][col2]
-        this.orbs[row2][col2] = orbsBefore[row1][col1]
-        // undo the swap if it did not yeild a match
-        if (playerSwap && !this.hasMatch()) {
-            this.orbs = orbsBefore;
-        };
+    swap(swapOrbs) {
+        orbs.swap(this.orbs, swapOrbs)
     }
     
     unmatch() {
         while(this.hasMatch()) {
-            this.orbs = orbs.unmatch(this.orbs);
+            this.orbs = orbs.unmatch(this.orbs, this.height, this.width, this.matches[0]);
         }
     }
 

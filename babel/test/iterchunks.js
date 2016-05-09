@@ -1,7 +1,7 @@
 'use strict';
 import test from 'ava';
 import * as _ from 'lodash';
-import {iterchunks} from '../src/board';
+import * as tools from '../src/tools';
 let orbs;
 let chunks;
 let chunksWithPositionInformation;
@@ -11,8 +11,8 @@ test.before(() => {
               [ 3, 2, 2, 5 ],
               [ 3, 3, 4, 2 ],
               [ 6, 4, 0, 6 ] ];
-    chunks = iterchunks(orbs);
-    chunksWithPositionInformation = iterchunks(orbs, [4, 2], true);
+    chunks = tools.iterchunks(orbs);
+    chunksWithPositionInformation = tools.iterchunks(orbs, [4, 2], true);
 });
 
 test('has the correct length', t => {

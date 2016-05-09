@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import * as tools from './tools';
 
 // checks for one row of the iterchunk board for a potential match like [0010].
@@ -32,7 +33,7 @@ export function hasPotentialMatch (orbs) {
     return hasWideStyleMatch || _.some(_.map(chunks), hasPotentialMatchInPairOfRows);
 };
 
-export function swap(orbs, swapOrbs, playerSwap = true) {
+export function swap(orbs, swapOrbs) {
     let [[row1, col1], [row2, col2]] = swapOrbs;
     let orbsBefore = _.cloneDeep(orbs);
     orbs[row1][col1] = orbsBefore[row2][col2]
@@ -88,7 +89,7 @@ export function evaluate(orbs, height, width, matches, dropOptions) {
   * of a different type, or a random orb on the board if there are no valid neighbors.
   * @see unmatch
   */
-let _unmatch = (row, col, match, skipToRandom = false) => {
+let _unmatch = (orbs, row, col, match, skipToRandom = false, height, width) => {
     let thisOrb = orbs[row][col];
     let swapped = false;
     let directions = _.shuffle(['up', 'down', 'left', 'right']);
@@ -96,27 +97,27 @@ let _unmatch = (row, col, match, skipToRandom = false) => {
         // abandons the process and jumps to swapping a random orb
         if (skipToRandom) { break };
         if (directions[i] === 'up' && !_.isUndefined(orbs[row - 1]) && orbs[row - 1][col] !== thisOrb) {
-            this.swap([[row, col], [row - 1, col]], false);
+            swap(orbs, [[row, col], [row - 1, col]], false);
             swapped = true;
             break;
         } else if (directions[i] === 'down' && !_.isUndefined(orbs[row + 1]) && orbs[row + 1][col] !== thisOrb) {
-            this.swap([[row, col], [row + 1, col]], false);
+            swap(orbs, [[row, col], [row + 1, col]], false);
             swapped = true;
             break;
         } else if (directions[i] === 'left' && !_.isUndefined(orbs[row][col - 1]) && orbs[row][col - 1] !== thisOrb) {
-            this.swap([[row, col], [row, col - 1]], false);
+            swap(orbs, [[row, col], [row, col - 1]], false);
             swapped = true;
             break;
         } else if (directions[i] === 'right' && !_.isUndefined(orbs[row][col + 1]) && orbs[row][col + 1] !== thisOrb) {
-            this.swap([[row, col], [row, col + 1]], false);
+            swap(orbs, [[row, col], [row, col + 1]], false);
             swapped = true;
             break;
         }
     }
     while (!swapped) {
-        let [randomRow, randomCol] = [_.random(this.height - 1), _.random(this.width - 1)];
+        let [randomRow, randomCol] = [_.random(height - 1), _.random(width - 1)];
         if (!_.includes(match, [randomRow, randomCol]) && orbs[randomRow][randomCol] !== thisOrb) {
-            this.swap([[row, col], [randomRow, randomCol]], false);
+            swap(orbs, [[row, col], [randomRow, randomCol]], false);
             swapped = true;
         }
     }
@@ -147,9 +148,9 @@ let _unmatch = (row, col, match, skipToRandom = false) => {
   *         [ 3, 4, 1, 2 ],     to      [ 3, 4, 1, 2 ],    and then     [ 3, 4, 5, 2 ],
   *         [ 4, 1, 2, 3 ]              [ 5, 1, 2, 3 ]                  [ 5, 1, 2, 3 ]
   */
-export function unmatch(orbs) {
+export function unmatch(orbs, height, width, firstMatch) {
     let intersections = [];
-    let match = combineMatches(findTriples(orbs))[0];
+    let match = firstMatch;
     // it is a simple match if all of the coords have only 1 rowCoord or 1 colCoord
     let [rowCoords, colCoords] = _.zip(...match);
     let isSimpleMatch = _.uniq(rowCoords).length === 1 || _.uniq(colCoords).length === 1;
@@ -168,7 +169,7 @@ export function unmatch(orbs) {
         }
         let isSideBySideMatch = _.includes(midNeighbors, orbs[midRow][midCol]);
 
-        this._unmatch(...match[median], match, isSideBySideMatch);
+        _unmatch(orbs, ...match[median], match, isSideBySideMatch, height, width);
     } else {
         // collects which rows and columns have matches in them
         let matchRows = [];
@@ -190,7 +191,7 @@ export function unmatch(orbs) {
             };
         });
         // chooses a random intersection to unmatch 
-        this._unmatch(..._.sample(intersections), match);
+        _unmatch(orbs, ..._.sample(intersections), match, height, width);
     };    
     return orbs;
 };

@@ -1,4 +1,5 @@
-import {_iterchunks} from '../tools/iterchunks';
+import * as _ from 'lodash';
+import * as tools from './tools';
 let SortedSet = require('collections/sorted-set');
 
 let _findTriples = (chunks, isTransposed) => {
@@ -38,8 +39,8 @@ let _findTriples = (chunks, isTransposed) => {
   * three consecutive matching orbs, first in rows, then in columns.
   */
 export function find(orbs) {
-    let chunksOriginal = _iterchunks(orbs, [3, 1], true);
-    let chunksTransposed = _iterchunks(_.zip(...orbs), [3, 1], true, true);
+    let chunksOriginal = tools._iterchunks(orbs, [3, 1], true);
+    let chunksTransposed = tools._iterchunks(_.zip(...orbs), [3, 1], true, true);
 
     return [
             ..._findTriples(chunksOriginal, false),
@@ -47,9 +48,9 @@ export function find(orbs) {
     ];
 };
 
-export function combine(matches) {
+export function combine(triples) {
     let matches = [];
-    let unused = matches;
+    let unused = triples;
     let couldMatch;
     let before;
     let currentMatch;

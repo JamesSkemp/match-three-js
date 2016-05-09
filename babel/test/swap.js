@@ -23,9 +23,3 @@ _.each(_.range(orbs.length), i => {
        t.ok(_.isEqual(swappedOrbs[i], orbs[i]));
     });
 });
-
-test('keeps board.orbs the same if the swap does not yeild a match', t => {
-    board.orbs = _.cloneDeep(orbsBeforeSwap[0]);
-    board.swap([[3, 2], [4, 2]]);
-    t.ok(_.isEqual(board.orbs, orbsBeforeSwap[0]));
-});

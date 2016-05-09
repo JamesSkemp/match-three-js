@@ -44,7 +44,7 @@ let testBoards = {};
 _.each(boards, (metadata, name) => {
     boardInstance.orbs = _.cloneDeep(metadata.orbs);
     testBoards[name] = {};
-    testBoards[name].matchData = boardInstance.evaluate(metadata.combinedMatches, [7, 8]);
+    testBoards[name].matchData = boardInstance.evaluate([7, 8]);
     testBoards[name].evaluatedOrbs = boardInstance.orbs;
 });
 
