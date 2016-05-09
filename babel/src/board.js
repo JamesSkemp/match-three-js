@@ -1,11 +1,7 @@
 'use strict';
 import * as _ from 'lodash';
-import iterchunks from './tools/iterchunks';
-import hasPotentialMatchInSingleRow from './getMatches/hasPotentialMatch';
-import hasPotentialMatchInPairOfRows from './getMatches/hasPotentialMatch';
 import * as orbs from './orbs';
 import * as triples from './triples';
-let SortedSet = require('collections/sorted-set');
 
 export class Board {
     constructor (width = 8, height = 8, types = _.range(7)) {

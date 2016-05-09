@@ -1,5 +1,4 @@
-import indexOfAll from '../tools/indexOfAll';
-//import iterchunks
+import * as tools from './tools';
 
 // checks for one row of the iterchunk board for a potential match like [0010].
 export function hasPotentialMatchInSingleRow (row) {
@@ -11,8 +10,8 @@ export function hasPotentialMatchInSingleRow (row) {
 export function hasPotentialMatchInPairOfRows (pairOfRows) {
     let allValues = _.uniq(_.flatten(pairOfRows));
     let allMatches = _.map(allValues, value => {
-        return _.uniq([...indexOfAll(pairOfRows[0], value),
-                       ...indexOfAll(pairOfRows[1], value)]).sort();
+        return _.uniq([...tools.indexOfAll(pairOfRows[0], value),
+                       ...tools.indexOfAll(pairOfRows[1], value)]).sort();
     });
 
     return _.some(allMatches, match => {
@@ -25,12 +24,20 @@ export function hasPotentialMatchInPairOfRows (pairOfRows) {
 };
 
 export function hasPotentialMatch (orbs) {
-    let chunks = iterchunks(orbs);
+    let chunks = tools.iterchunks(orbs);
     // [[[1, 2, 3], [2, 3, 4]], [[3, 4, 5], [4, 5, 6]]] becomes
     //  [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]]
     let flatChunks = _.flattenDepth(chunks, 1);
     let hasWideStyleMatch = _.some(_.map(flatChunks, hasPotentialMatchInSingleRow));
     return hasWideStyleMatch || _.some(_.map(chunks), hasPotentialMatchInPairOfRows);
+};
+
+export function swap(orbs, swapOrbs, playerSwap = true) {
+    let [[row1, col1], [row2, col2]] = swapOrbs;
+    let orbsBefore = _.cloneDeep(orbs);
+    orbs[row1][col1] = orbsBefore[row2][col2]
+    orbs[row2][col2] = orbsBefore[row1][col1]
+    return orbs;
 };
 
 /**

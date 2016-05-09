@@ -1,4 +1,5 @@
 import {_iterchunks} from '../tools/iterchunks';
+let SortedSet = require('collections/sorted-set');
 
 let _findTriples = (chunks, isTransposed) => {
     let triples = [];
