@@ -1,8 +1,7 @@
 import test from 'ava';
 import * as _ from 'lodash';
-import {hasPotentialMatchInSingleRow} from '../src/board';
-import {hasPotentialMatchInPairOfRows} from '../src/board';
-import {indexOfAll} from '../src/board';
+import * as orbs from '../src/orbs';
+import * as tools from '../src/tools';
 import {Board} from '../src/board';
 let board;
 
@@ -19,20 +18,20 @@ test('finds potential matches in valid single rows', t => {
     ];
 
     _.each(validRowPotentialMatches, validRowPotentialMatch => {
-        t.ok(hasPotentialMatchInSingleRow(validRowPotentialMatch));
+        t.ok(orbs.hasPotentialMatchInSingleRow(validRowPotentialMatch));
     });
 });
 
 test('does not find potential matches in invalid single row', t => {
-    t.notOk(hasPotentialMatchInSingleRow([1, 1, 0, 0]));
+    t.notOk(orbs.hasPotentialMatchInSingleRow([1, 1, 0, 0]));
 });
 
 test('reports all indexes of a certain value in a list', t => {
     let row = [3, 3, 5, 8];
-    t.same(indexOfAll(row, 3), [0, 1]);
-    t.same(indexOfAll(row, 5), [2]);
-    t.same(indexOfAll(row, 8), [3]);
-    t.same(indexOfAll(row, 9), []);
+    t.same(tools.indexOfAll(row, 3), [0, 1]);
+    t.same(tools.indexOfAll(row, 5), [2]);
+    t.same(tools.indexOfAll(row, 8), [3]);
+    t.same(tools.indexOfAll(row, 9), []);
 });
 
 test('finds potential matches in valid row pairs', t => {
@@ -64,7 +63,7 @@ test('finds potential matches in valid row pairs', t => {
     ];
 
     _.each(validRowPairs, validRowPair => {
-        t.ok(hasPotentialMatchInPairOfRows(validRowPair));
+        t.ok(orbs.hasPotentialMatchInPairOfRows(validRowPair));
     });
 });
 
@@ -85,7 +84,7 @@ test('does not find potential matches in invalid row pairs', t => {
     ];
 
     _.each(invalidRowPairs, invalidRowPair => {
-        t.notOk(hasPotentialMatchInPairOfRows(invalidRowPair));
+        t.notOk(orbs.hasPotentialMatchInPairOfRows(invalidRowPair));
     });
 });
 
