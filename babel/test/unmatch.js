@@ -1,36 +1,25 @@
 import test from 'ava';
 import * as _ from 'lodash';
-import {names} from './data/names';
-import {orbs} from './data/orbs';
+import {boards} from './data/boards';
 import {Board} from '../src/board';
-let board = new Board(5, 5);
-test.skip.before(() => {
-    let board = new Board(5, 5);
-    let unmatchedOrbs = [];
-    
-    _.each(_.range(orbs.length), i => {
-        board.orbs = orbs[i];
-        board.unmatch();
-        unmatchedOrbs.push(board.orbs);
-    });
-});
+let boardInstance = new Board(5, 5);
 
-_.each(_.range(orbs.length), j => {
-    test(`unmatches ${names[j]}`, t => {
-        board.orbs = orbs[j];
-        board.unmatch();
-        t.false(board.hasMatch());
+_.each(boards, (metadata, name) => {
+    test(`unmatches ${name}`, t => {
+        boardInstance.orbs = metadata.orbs;
+        boardInstance.unmatch();
+        t.false(boardInstance.hasMatch());
     });
 });
 
 test('unmatches a 3x3 nine-match', t => {
-    board.orbs = [
+    boardInstance.orbs = [
         [1, 2, 3, 4, 5],
         [2, 0, 0, 0, 1],
         [3, 0, 0, 0, 2],
         [4, 0, 0, 0, 3],
         [5, 1, 2, 3, 4]
     ];
-    board.unmatch();
-    t.false(board.hasMatch());
+    boardInstance.unmatch();
+    t.false(boardInstance.hasMatch());
 })
