@@ -26,11 +26,25 @@ _.each(_.range(b.orbs.length), row => {
 let selectedOrbs = [];
 global.selectOrb = function(row, col) {
     selectedOrbs.push([row, col]);
-    let id = row + ' ' + col;
-    let td = document.getElementById(id);
-    td.style.border = '2px solid white';
-    if (selectedOrbs.length === 2 && demotools.areNeighbors(selectedOrbs)) {
+
+    // if it's the first selected orb, put a border around it
+    // if it's a valid move, make the move
+    // if both selected orbs are the same, deselect
+    // if the two orbs aren't neighbors, throw error and reset choices
+    if (selectedOrbs.length === 1) {
+        demotools.addBorder(row, col);
+        return;
+    } else if (demotools.areNeighbors(selectedOrbs)) {
         demotools.makeMove(b, selectedOrbs);
+        selectedOrbs = [];
+    } else if (demotools.twoSelectedOrbsAreEqual(selectedOrbs)) {
+        selectedOrbs = [];
+        demotools.removeBorder(row, col);
+    } else {
+        alert("You must choose two neighboring orbs!");
+        _.each(selectedOrbs, orb => {
+            demotools.removeBorder(orb[0], orb[1]);
+        })
         selectedOrbs = [];
     }
 } 
