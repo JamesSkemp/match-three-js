@@ -34,3 +34,14 @@ header {
     border-radius: 25px;
     margin: 20px;
 }
+#scoreboard {
+    width: 300px;
+    border: 1px solid black;
+    float: left;
+    margin: auto;
+}
+#scoreboard tr td {
+    height: 30px;
+    text-align: center;
+}
+

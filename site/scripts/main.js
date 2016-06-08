@@ -23,6 +23,21 @@ _.each(_.range(b.orbs.length), row => {
     demoBoard.appendChild(tr);
 });
 
+// create a scoreboard for each orb type
+let scoreboard = document.getElementById('scoreboard')
+_.each(colors, color => {
+    let tr = document.createElement('tr');
+    let td1 = document.createElement('td');
+    td1.style.backgroundColor = color;
+    let td2 = document.createElement('td');
+    let id = color + ' points';
+    td2.setAttribute('id', id);
+    //td2.innerHTML = 0;
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    scoreboard.appendChild(tr);
+})
+
 let selectedOrbs = [];
 global.selectOrb = function(row, col) {
     selectedOrbs.push([row, col]);
@@ -35,7 +50,12 @@ global.selectOrb = function(row, col) {
         demotools.addBorder(row, col);
         return;
     } else if (demotools.areNeighbors(selectedOrbs)) {
-        demotools.makeMove(b, selectedOrbs);
+        let matchDatas = demotools.makeMove(b, selectedOrbs);
+        _.each(matchDatas, matchData => {
+            _.each(matchData, match => {
+                demotools.updateScore(match);
+            })
+        });
         selectedOrbs = [];
     } else if (demotools.twoSelectedOrbsAreEqual(selectedOrbs)) {
         selectedOrbs = [];

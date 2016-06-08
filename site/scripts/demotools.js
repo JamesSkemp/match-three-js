@@ -25,10 +25,10 @@ exports.makeMove = function(board, swapOrbs) {
         // evaluate the board
         // save data for matches to be implemented soon
         // catch for matches after the evaluation drops new orbs down
-        let matches = [];
+        let matchDatas = [];
         while (board.hasMatch()) {
             let matchData = board.evaluate();
-            matches.push(matchData);
+            matchDatas.push(matchData);
         }
         
         // catch if there are no possible matches left
@@ -37,6 +37,8 @@ exports.makeMove = function(board, swapOrbs) {
          
         // repopulate the board in html
         exports.repopulate(board);
+        
+        return matchDatas;
     }
 };
 
@@ -70,4 +72,18 @@ exports.twoSelectedOrbsAreEqual = function(selectedOrbs) {
     let orb1 = selectedOrbs[0];
     let orb2 = selectedOrbs[1];
     return orb1[0] === orb2[0];
+};
+
+exports.updateScore = function(matchData) {
+    let type = matchData[0];
+    let length = matchData[1];
+    let id = type + ' points';
+    let scoreCard = document.getElementById(id);
+    let currentPoints = parseInt(scoreCard.innerHTML);
+    if (isNaN(currentPoints)) {
+        currentPoints = 0;
+    };
+    let newPoints = currentPoints + length;
+    scoreCard.innerHTML = newPoints;
+    console.log('You got a ' + type + ' match of ' + length + '!');
 };
