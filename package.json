@@ -17,6 +17,7 @@
   },
   "scripts": {
     "start": "scripts/server.js",
+    "deploy": "git subtree push --prefix site origin gh-pages",
     "babel": "babel ./babel/ -d .",
     "browserify": "browserify site/scripts/main.js > site/bundle.js",
     "test": "ava",
