@@ -20,6 +20,12 @@ browserSync.watch('site/scripts/main.js', (event) => {
     }
 });
 
+browserSync.watch('site/scripts/demotools.js', (event) => {
+    if (event === 'change') {
+        execSync('npm run browserify', { stdio: [0, 1, 2] });
+    }
+});
+
 browserSync.watch('babel/src/*.js', (event) => {
     if (event === 'change') {
         execSync('npm run babel', { stdio: [0, 1, 2] });
