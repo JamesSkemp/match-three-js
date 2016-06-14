@@ -19,7 +19,8 @@ header {
     margin-right: 50px;
 }
 .content {
-    margin: 0px 250px;
+    margin: auto;
+    width: 60%;
 }
 #board {
     background-color: black;
@@ -43,5 +44,9 @@ header {
 #scoreboard tr td {
     height: 30px;
     text-align: center;
+}
+object {
+    width: 100%;
+    height: 100%;
 }
 
