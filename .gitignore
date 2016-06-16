@@ -1,4 +1,4 @@
 src/*
 test/*
 node_modules/
-site/bundle.js
+site-gh-pages/

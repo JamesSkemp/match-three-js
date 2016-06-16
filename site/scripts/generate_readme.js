@@ -8,4 +8,4 @@ var markdownReadMe = md.render(readMe);
 // add link to stylesheet
 markdownReadMe += '<link rel="stylesheet" type="text/css" href="stylesheet.css">';
 
-fs.writeFileSync('./site/README.html', markdownReadMe);
+fs.writeFileSync('./site-gh-pages/README.html', markdownReadMe);
