@@ -24,18 +24,17 @@ _.each(_.range(b.orbs.length), row => {
 });
 
 // create a scoreboard for each orb type
-let scoreboard = document.getElementById('scoreboard')
+let types = document.getElementById('types');
+let points = document.getElementById('points');
 _.each(colors, color => {
-    let tr = document.createElement('tr');
     let td1 = document.createElement('td');
     td1.style.backgroundColor = color;
     let td2 = document.createElement('td');
     let id = color + ' points';
     td2.setAttribute('id', id);
     //td2.innerHTML = 0;
-    tr.appendChild(td1);
-    tr.appendChild(td2);
-    scoreboard.appendChild(tr);
+    types.appendChild(td1);
+    points.appendChild(td2);
 })
 
 let selectedOrbs = [];

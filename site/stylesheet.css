@@ -16,12 +16,29 @@ header {
 }
 .right {
     float: right;
-    margin-right: 50px;
+    text-align: left;
+    margin-top: 100px;
+    margin-right: 4%;
+    width: 15%;
+    color: black;
+    font-family: Georgia;
+    font-size: 18px;
+}
+.right a, #sidebar a:visited {
+    color: inherit;
+    text-decoration: inherit;
+    
 }
 .content {
-    margin: 0px 250px;
+    margin: auto;
+    width: 60%;
+    text-align: center;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
 }
 #board {
+    margin:inherit;
+    width: 60%;
     background-color: black;
     padding: 10px;
     border-radius: 15px;
@@ -36,12 +53,17 @@ header {
 }
 #scoreboard {
     width: 300px;
-    border: 1px solid black;
-    float: left;
     margin: auto;
 }
 #scoreboard tr td {
     height: 30px;
+    min-width: 20px;
     text-align: center;
 }
-
+object {
+    overflow: visible
+    margin-top: 40px;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}

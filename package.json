@@ -13,13 +13,14 @@
     "babel-plugin-transform-es2015-destructuring": "^6.6.5",
     "babel-preset-es2015": "^6.6.0",
     "browser-sync": "^2.12.10",
-    "browserify": "^13.0.1"
+    "browserify": "^13.0.1",
+    "remarkable": "^1.6.2"
   },
   "scripts": {
     "start": "scripts/server.js",
-    "deploy": "npm run babel && npm run browserify && git subtree push --prefix site origin gh-pages",
+    "deploy": "npm run babel && npm run browserify && node site/scripts/generateReadme.js && cp ./site/*.html ./site-gh-pages && cp ./site/*.css ./site-gh-pages && cd site-gh-pages && git add . && git commit -m \"Update gh-pages\" && git push origin gh-pages && cd ..",
     "babel": "babel ./babel/ -d .",
-    "browserify": "browserify site/scripts/main.js > site/bundle.js",
+    "browserify": "browserify site/scripts/main.js > site-gh-pages/bundle.js",
     "test": "ava",
     "test-es5": "ava"
   },
