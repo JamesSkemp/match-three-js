@@ -5,7 +5,7 @@ const execSync = require('child_process').execSync;
 
 let browserSync = require('browser-sync').create();
 
-execSync('npm run babel; npm run browserify; node site/scripts/generate_readme.js', { stdio: [0, 1, 2] });
+execSync('npm run babel; npm run browserify; node site/scripts/generateReadme.js', { stdio: [0, 1, 2] });
 
 browserSync.init({
     server: 'site',
@@ -33,8 +33,14 @@ browserSync.watch('babel/src/*.js', (event) => {
     }
 });
 
-browserSync.watch('site/scripts/generate_readme.js', (event) => {
+browserSync.watch('site/scripts/generateReadme.js', (event) => {
     if (event === 'change') {
-        execSync('node site/scripts/generate_readme.js', { stdio: [0, 1, 2] });
+        execSync('node site/scripts/generateReadme.js', { stdio: [0, 1, 2] });
+    }
+});
+
+browserSync.watch('README.md', (event) => {
+    if (event === 'change') {
+        execSync('node site/scripts/generateReadme.js', { stdio: [0, 1, 2] });
     }
 });

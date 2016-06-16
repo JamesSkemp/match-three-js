@@ -18,7 +18,7 @@
   },
   "scripts": {
     "start": "scripts/server.js",
-    "deploy": "npm run babel && npm run browserify && node site/scripts/generate_readme.js && cp ./site/*.html ./site-gh-pages && cp ./site/*.css ./site-gh-pages && cd site-gh-pages && git add . && git commit -m \"Update gh-pages\" && git push origin gh-pages && cd ..",
+    "deploy": "npm run babel && npm run browserify && node site/scripts/generateReadme.js && cp ./site/*.html ./site-gh-pages && cp ./site/*.css ./site-gh-pages && cd site-gh-pages && git add . && git commit -m \"Update gh-pages\" && git push origin gh-pages && cd ..",
     "babel": "babel ./babel/ -d .",
     "browserify": "browserify site/scripts/main.js > site-gh-pages/bundle.js",
     "test": "ava",
