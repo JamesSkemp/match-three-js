@@ -10,17 +10,14 @@ let b = new board.Board(8, 8, colors);
 // create the board and append it to 'board' div
 let demoBoard = document.getElementById('board');
 _.each(_.range(b.orbs.length), row => {
-    let tr = document.createElement('tr');
-    tr.setAttribute('id', 'row ' + row);
     _.each(_.range(b.orbs[row].length), col => {
-        let td = document.createElement('td');
-        td.setAttribute('id', row + ' ' + col);
+        let orbDiv = document.createElement('div');
+        orbDiv.setAttribute('id', row + ' ' + col);
         let onclick = 'selectOrb(' + row + ', ' + col + ');';
-        td.setAttribute('onclick', onclick);
-        td.style.backgroundColor = b.orbs[row][col];
-        tr.appendChild(td);
+        orbDiv.setAttribute('onclick', onclick);
+        orbDiv.style.backgroundColor = b.orbs[row][col];
+        demoBoard.appendChild(orbDiv);
     });
-    demoBoard.appendChild(tr);
 });
 
 // create a scoreboard for each orb type
