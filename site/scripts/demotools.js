@@ -4,8 +4,8 @@ let _ = require('lodash');
 
 exports.makeMove = function(board, swapOrbs) {
     let [[r1, c1], [r2, c2]] = swapOrbs;
-    let first = document.getElementById(r1 + ' ' + c1);
-    let second = document.getElementById(r2 + ' ' + c2);
+    let first = document.getElementById('main ' + r1 + ' ' + c1);
+    let second = document.getElementById('main ' + r2 + ' ' + c2);
 
     // remove the white borders
     first.style.border = 'none';
@@ -45,7 +45,7 @@ exports.makeMove = function(board, swapOrbs) {
 exports.repopulate = function(board) {
     _.each(_.range(board.orbs.length), row => {
         _.each(_.range(board.orbs[row].length), col => {
-            let td = document.getElementById(row + ' ' + col);
+            let td = document.getElementById('main ' + row + ' ' + col);
             td.style.backgroundColor = board.orbs[row][col];
         })
     })
@@ -57,13 +57,13 @@ exports.areNeighbors = function(orbs) {
 };
 
 exports.addBorder = function(row, col) {
-    let id = row + ' ' + col;
+    let id = 'main ' + row + ' ' + col;
     let td = document.getElementById(id);
     td.style.border = '2px solid white';
 };
 
 exports.removeBorder = function(row, col) {
-    let id = row + ' ' + col;
+    let id = 'main ' + row + ' ' + col;
     let td = document.getElementById(id);
     td.style.border = 'none';
 };
@@ -87,3 +87,18 @@ exports.updateScore = function(matchData) {
     scoreCard.innerHTML = newPoints;
     console.log('You got a ' + type + ' match of ' + length + '!');
 };
+
+exports.createHTMLBoard = function(board, div, name) {
+    _.each(_.range(board.orbs.length), row => {
+        _.each(_.range(board.orbs[row].length), col => {
+            let orbDiv = document.createElement('div');
+            orbDiv.setAttribute('id', name + ' ' + row + ' ' + col);
+            if (name == 'main') {
+                let onclick = 'selectOrb(' + row + ', ' + col + ');';
+                orbDiv.setAttribute('onclick', onclick);
+            };
+            orbDiv.style.backgroundColor = board.orbs[row][col];
+            div.appendChild(orbDiv);
+        });
+    });
+}

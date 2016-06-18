@@ -1,5 +1,6 @@
 body {
     font-family: Georgia;
+    min-width: 920px;
 }
 header {
     margin-top: 20px;
@@ -16,13 +17,15 @@ header {
 }
 .right {
     float: right;
-    text-align: left;
+    text-align: center;
     margin-top: 100px;
     margin-right: 4%;
     width: 15%;
+    min-width: 100px;
     color: black;
     font-family: Georgia;
     font-size: 18px;
+    position: relative;
 }
 .right a, #sidebar a:visited {
     color: inherit;
@@ -32,13 +35,14 @@ header {
 .content {
     margin: auto;
     width: 60%;
-    min-width: 500px;
+    min-width: 550px;
     text-align: center;
     border-right: 1px solid black;
     border-left: 1px solid black;
 }
 #board {
     margin:inherit;
+    position: relative;
     height: 448px;
     width: 448px;
     background-color: black;
