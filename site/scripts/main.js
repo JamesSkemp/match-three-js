@@ -7,9 +7,14 @@ let _ = require('lodash');
 let colors = ['red', 'blue', 'green', 'aquamarine', 'yellow', 'brown', 'purple', 'orange'];
 let b = new board.Board(8, 8, colors);
 
-// create the board and append it to 'board' div
+// create the main board and append it to 'board' div
 let demoBoard = document.getElementById('board');
 demotools.createHTMLBoard(b, demoBoard, 'main');
+
+// create the attic board and append it to 'attic' div
+let a = new board.Board(8, 8, colors);
+let atticBoard = document.getElementById('attic');
+demotools.createHTMLBoard(a, atticBoard, 'attic');
 
 // create a scoreboard for each orb type
 let types = document.getElementById('types');

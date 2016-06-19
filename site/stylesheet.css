@@ -11,6 +11,8 @@ header {
     font-family: Georgia;
     font-size: 35pt;
     border-bottom: 1px solid black;
+    position: relative;
+    z-index: 1;
 }
 #match3:visited {
     color: inherit;
@@ -40,7 +42,26 @@ header {
     border-right: 1px solid black;
     border-left: 1px solid black;
 }
+h2 {
+    position: relative;
+    z-index: 1;
+}
+#cover {
+    background-color: white;
+    margin: auto;
+    position: relative;
+    top: -1008px;
+    height: 504px;
+    width: 504px;
+}
+#attic {
+    top: -504px;
+}
 #board {
+    top: -1008px;
+}
+#board, #attic {
+    
     margin:inherit;
     position: relative;
     height: 448px;
@@ -51,7 +72,7 @@ header {
     border-radius: 15px;
     box-shadow:inset 0px 0px 0px 10px white;
 }
-#board div {
+#board div, #attic div {
     height: 50px;
     width: 50px;
     position: relative;
