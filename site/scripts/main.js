@@ -28,7 +28,7 @@ _.each(colors, color => {
     //td2.innerHTML = 0;
     types.appendChild(td1);
     points.appendChild(td2);
-})
+});
 
 let selectedOrbs = [];
 global.selectOrb = function(row, col) {
@@ -59,4 +59,16 @@ global.selectOrb = function(row, col) {
         })
         selectedOrbs = [];
     }
-} 
+}
+
+// practice the movements
+global.move = function() {
+    let matchOrb = document.getElementById('main 7 0');
+    matchOrb.style.opacity = '0';
+    _.each(_.range(8), row => {
+        let orb = document.getElementById('main ' + row + ' 0');
+        orb.style.webkitTransform = 'translate(0, 56px)';
+    })
+    let atticOrb = document.getElementById('attic 7 0');
+    atticOrb.style.webkitTransform = 'translate(0, 112px)';
+}
