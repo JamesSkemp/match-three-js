@@ -12,7 +12,7 @@ header {
     font-size: 35pt;
     border-bottom: 1px solid black;
     position: relative;
-    z-index: 1;
+    z-index: 3;
 }
 #match3:visited {
     color: inherit;
@@ -41,36 +41,39 @@ header {
     text-align: center;
     border-right: 1px solid black;
     border-left: 1px solid black;
+    background-color: none;
 }
 h2 {
     position: relative;
-    z-index: 1;
+    z-index: 3;
 }
 #cover {
     background-color: white;
     margin: auto;
     position: relative;
-    top: -1008px;
+    top: -908px;
     height: 504px;
-    width: 504px;
+    width: 100%;
     z-index: 2;
-}
-#attic {
-    top: -504px;
-}
-#board {
-    top: -1008px;
 }
 #board, #attic {
     margin:inherit;
     position: relative;
     height: 448px;
     width: 448px;
+}
+#attic {
+    top: -404px;
+}
+#board {
+    border: 8px solid darkgray;
     background-color: black;
-    border: 8px solid black;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow:inset 0px 0px 0px 10px white;
+    padding: 5px;
+    top: -908px;
+    padding-top: 0px;
+    border-top: none;
+    border-radius: 0 0 15px 15px;
+    /*box-shadow:inset 0px 0px 0px 10px white;*/
 }
 #board div, #attic div {
     height: 50px;
@@ -87,12 +90,12 @@ h2 {
 #scoreboard {
     width: 300px;
     margin: auto;
-    margin-top: 20px;
 }
 #scoreboard tr td {
     height: 30px;
     min-width: 20px;
     text-align: center;
+    top: -1008px;
 }
 object {
     overflow: visible

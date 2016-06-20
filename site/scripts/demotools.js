@@ -92,13 +92,41 @@ exports.createHTMLBoard = function(board, div, name) {
     _.each(_.range(board.orbs.length), row => {
         _.each(_.range(board.orbs[row].length), col => {
             let orbDiv = document.createElement('div');
-            orbDiv.setAttribute('id', name + ' ' + row + ' ' + col);
             if (name == 'main') {
+                orbDiv.setAttribute('id', name + ' ' + row + ' ' + col);
                 let onclick = 'selectOrb(' + row + ', ' + col + ');';
                 orbDiv.setAttribute('onclick', onclick);
             };
+            if (name == 'attic') {
+                orbDiv.setAttribute('class', name + ' ' + col);
+            }
             orbDiv.style.backgroundColor = board.orbs[row][col];
             div.appendChild(orbDiv);
+        });
+    });
+}
+
+exports.pullDownOrbs = function(colData) {
+    _.each(colData, (data, col) => {
+        // set the number of pixels the orbs should move down
+        let pixels = 56 * data.orbCount;
+        // remove the orbs from the match
+        _.each(_.range(data.orbCount), adder => {
+            let id = 'main ' + (data.topRow + adder)  + ' ' + col;
+            let orbToRemove = document.getElementById(id);
+            orbToRemove.style.opacity = '0';
+        });
+        
+        // pull down unaffected orbs in main board above the match
+        _.each(_.rangeRight(data.topRow), rowToMove => {
+            let orbToMove = document.getElementById('main ' + rowToMove + ' ' + col);
+            orbToMove.style.webkitTransform = 'translate(0, ' + pixels + 'px)';
+        });
+        
+        // pull down orbs from the attic board (pull down the whole column);
+        let atticOrbs = document.getElementsByClassName('attic ' + col);
+        _.each(atticOrbs, atticOrb => {
+            atticOrb.style.webkitTransform = 'translate(0, ' + (pixels) + 'px)';
         });
     });
 }

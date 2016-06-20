@@ -72,3 +72,17 @@ global.move = function() {
     let atticOrb = document.getElementById('attic 7 0');
     atticOrb.style.webkitTransform = 'translate(0, 112px)';
 }
+
+// working backwards, here is the example output from the new-to-be Board.evaluate()
+// - a horizontal simple match of three on the bottom left corner of an 8x8 board
+let example = {
+    4: {
+        orbCount: 3,
+        topRow: 2
+    },
+};
+
+// call the example (for now this is just moving the orbs in html and nothing else)
+global.moveMatch = function() {
+    demotools.pullDownOrbs(example, b.height);
+}
