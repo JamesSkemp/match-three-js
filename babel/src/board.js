@@ -4,7 +4,7 @@ import * as orbs from './orbs';
 import * as triples from './triples';
 
 export class Board {
-    constructor (width = 8, height = 8, types = _.range(7), atticOrbs = null) {
+    constructor (width = 8, height = 8, types = _.range(7), atticOrbs = undefined) {
         this.width = width;
         this.height = height;
         this.types = types;
@@ -17,8 +17,7 @@ export class Board {
         if (atticOrbs) {
             this.atticOrbs = atticOrbs;
         } else {
-            let attic = new Board(this.width, this.height, this.types, true);
-            this.atticOrbs = _.cloneDeep(attic.orbs);
+            this.atticOrbs = _.cloneDeep(new Board(this.width, this.height, this.types, true).orbs);
         };
     }
 
