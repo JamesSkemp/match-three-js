@@ -75,14 +75,20 @@ global.move = function() {
 
 // working backwards, here is the example output from the new-to-be Board.evaluate()
 // - a horizontal simple match of three on the bottom left corner of an 8x8 board
-let example = {
-    4: {
-        orbCount: 3,
-        topRow: 2
-    },
+let exampleOrbCounts = {
+    1: 1,
+    2: 1,
+    3: 1
 };
+let exampleMatches = [
+    [[1, 1], [1, 2], [1, 3]]
+];
 
 // call the example (for now this is just moving the orbs in html and nothing else)
+global.swap = function() {
+    demotools.swap(b, [4, 5], [5, 5]);
+}
+
 global.moveMatch = function() {
-    demotools.pullDownOrbs(example, b.height);
+    demotools.pullDownOrbs(b, exampleMatches, exampleOrbCounts);
 }
