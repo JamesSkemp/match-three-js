@@ -12,16 +12,12 @@ exports.makeMove = function(board, swapOrbs) {
     second.style.border = 'none';
     
     // make the swap
-    board.swap(swapOrbs);
+    board.orbs = exports.swap(board, ...swapOrbs);
     if (!board.hasMatch()) {
         // unswaps in the board instance and leave the html unchanged
-        board.swap(swapOrbs)
+        board.orbs = exports.swap(board, ...swapOrbs);
         alert('That\'s not a valid move, you fool!');
     } else {
-        // make the swap in the html
-        first.style.backgroundColor = board.orbs[r1][c1];
-        second.style.backgroundColor = board.orbs[r2][c2];
-        
         // evaluate the board
         // save data for matches to be implemented soon
         // catch for matches after the evaluation drops new orbs down
@@ -30,14 +26,11 @@ exports.makeMove = function(board, swapOrbs) {
             let matchData = board.evaluate();
             matchDatas.push(matchData);
         }
-        
         // catch if there are no possible matches left
-        if (board.needsShuffle()) { board.shuffle() };
-        
-         
-        // repopulate the board in html
-        exports.repopulate(board);
-        
+        if (board.needsShuffle()) { 
+            board.shuffle();
+            exports.repopulate(board);
+        };
         return matchDatas;
     }
 };
@@ -111,7 +104,6 @@ exports.repopulate = function(board) {
     while (HTMLBoard.firstChild) {
         HTMLBoard.removeChild(HTMLBoard.firstChild);
     };
-    
     // build the board back from scratch with the new board
     exports.createHTMLBoard(board, HTMLBoard, 'main');
 }
@@ -159,15 +151,14 @@ exports.swap = function (board, firstOrb, secondOrb) {
     };
     _swap(firstOrb, firstDirection);
     _swap(secondOrb, secondDirection);
-    
+
     // make the same swap happen in the js board instance
     board.swap([firstOrb, secondOrb]);
-    
+
     // repopulate the board in html to reset IDs
-    let holdOn = function() {
-        exports.repopulate(board);
-    };
     setTimeout(function() { exports.repopulate(board); }, 1000);
+
+    return board.orbs;
 }
 
 exports.pullDownOrbs = function(board, matches, orbCounts) {
@@ -193,7 +184,7 @@ exports.pullDownOrbs = function(board, matches, orbCounts) {
                 let isBlankBelow = orbBelow.style.opacity === '0';
                 if (isBlankBelow) {
                     console.log('found a blank');
-                    exports.swap(board, [currentRow, col], [rowBelow, col]);
+                    board.orbs = exports.swap(board, [currentRow, col], [rowBelow, col]);
                     currentRow += 1;
                     rowBelow += 1;
                 } else {
@@ -210,29 +201,4 @@ exports.pullDownOrbs = function(board, matches, orbCounts) {
             atticOrb.style.webkitTransform = 'translate(0, ' + 56 + 'px)';
         });
     })
-}
-
-exports.pullDownOrbsOld = function(colData) {
-    _.each(colData, (data, col) => {
-        // set the number of pixels the orbs should move down
-        let pixels = 56 * data.orbCount;
-        // remove the orbs from the match
-        _.each(_.range(data.orbCount), adder => {
-            let id = 'main ' + (data.topRow + adder)  + ' ' + col;
-            let orbToRemove = document.getElementById(id);
-            orbToRemove.style.opacity = '0';
-        });
-        
-        // pull down unaffected orbs in main board above the match
-        _.each(_.rangeRight(data.topRow), rowToMove => {
-            let orbToMove = document.getElementById('main ' + rowToMove + ' ' + col);
-            orbToMove.style.webkitTransform = 'translate(0, ' + pixels + 'px)';
-        });
-        
-        // pull down orbs from the attic board (pull down the whole column);
-        let atticOrbs = document.getElementsByClassName('attic ' + col);
-        _.each(atticOrbs, atticOrb => {
-            atticOrb.style.webkitTransform = 'translate(0, ' + (pixels) + 'px)';
-        });
-    });
 }
