@@ -58,7 +58,7 @@ export class Board {
     }
 
     swap(swapOrbs) {
-        orbs.swap(this.orbs, swapOrbs)
+        this.orbs = orbs.swap(this.orbs, swapOrbs);
     }
     
     unmatch() {
