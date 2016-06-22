@@ -7,21 +7,14 @@ let _ = require('lodash');
 let colors = ['red', 'blue', 'green', 'aquamarine', 'yellow', 'brown', 'purple', 'orange'];
 let b = new board.Board(8, 8, colors);
 
-// create the board and append it to 'board' div
+// create the main board and append it to 'board' div
 let demoBoard = document.getElementById('board');
-_.each(_.range(b.orbs.length), row => {
-    let tr = document.createElement('tr');
-    tr.setAttribute('id', 'row ' + row);
-    _.each(_.range(b.orbs[row].length), col => {
-        let td = document.createElement('td');
-        td.setAttribute('id', row + ' ' + col);
-        let onclick = 'selectOrb(' + row + ', ' + col + ');';
-        td.setAttribute('onclick', onclick);
-        td.style.backgroundColor = b.orbs[row][col];
-        tr.appendChild(td);
-    });
-    demoBoard.appendChild(tr);
-});
+demotools.createHTMLBoard(b, demoBoard, 'main');
+
+// create the attic board and append it to 'attic' div
+let a = new board.Board(8, 8, colors);
+let atticBoard = document.getElementById('attic');
+demotools.createHTMLBoard(a, atticBoard, 'attic');
 
 // create a scoreboard for each orb type
 let types = document.getElementById('types');
@@ -35,7 +28,7 @@ _.each(colors, color => {
     //td2.innerHTML = 0;
     types.appendChild(td1);
     points.appendChild(td2);
-})
+});
 
 let selectedOrbs = [];
 global.selectOrb = function(row, col) {
@@ -66,4 +59,34 @@ global.selectOrb = function(row, col) {
         })
         selectedOrbs = [];
     }
-} 
+}
+
+// practice the movements
+global.move = function() {
+    let matchOrb = document.getElementById('main 7 0');
+    matchOrb.style.opacity = '0';
+    _.each(_.range(8), row => {
+        let orb = document.getElementById('main ' + row + ' 0');
+        orb.style.webkitTransform = 'translate(0, 56px)';
+    })
+    let atticOrb = document.getElementById('attic 7 0');
+    atticOrb.style.webkitTransform = 'translate(0, 112px)';
+}
+
+// working backwards, here is the example output from the new-to-be Board.evaluate()
+let exampleOrbCounts = {
+    1: 1,
+    2: 1,
+    3: 1
+};
+let exampleMatches = [
+    [[1, 1], [1, 2], [1, 3]]
+];
+
+global.swap = function() {
+    demotools.swap(b, [4, 5], [5, 5]);
+}
+
+global.moveMatch = function() {
+    demotools.pullDownOrbs(b, exampleMatches, exampleOrbCounts);
+}

@@ -4,7 +4,7 @@ import * as orbs from './orbs';
 import * as triples from './triples';
 
 export class Board {
-    constructor (width = 8, height = 8, types = _.range(7)) {
+    constructor (width = 8, height = 8, types = _.range(7), atticOrbs = undefined) {
         this.width = width;
         this.height = height;
         this.types = types;
@@ -13,6 +13,11 @@ export class Board {
         this.orbs = _.zip(..._.times(this.height, sampleRow));
         if (this.hasMatch() || this.needsShuffle()) {
             this.shuffle();
+        };
+        if (atticOrbs) {
+            this.atticOrbs = atticOrbs;
+        } else {
+            this.atticOrbs = _.cloneDeep(new Board(this.width, this.height, this.types, true).orbs);
         };
     }
 
@@ -53,7 +58,7 @@ export class Board {
     }
 
     swap(swapOrbs) {
-        orbs.swap(this.orbs, swapOrbs)
+        this.orbs = orbs.swap(this.orbs, swapOrbs);
     }
     
     unmatch() {
