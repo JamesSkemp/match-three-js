@@ -37,9 +37,8 @@ export class Board {
         return triples.combine(this.triples);
     }
 
-    evaluate(dropOptions = this.types) {
-        let evaluation = orbs.evaluate(this.orbs, this.height, this.width, this.matches, dropOptions)
-        let [newOrbs, matchData] = evaluation;
+    evaluate() {
+        let [newOrbs, matchData] = orbs.evaluate(this.orbs, this.height, this.width, this.matches, this.atticOrbs);
         this.orbs = newOrbs;
         return matchData;
 

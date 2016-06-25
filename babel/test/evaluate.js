@@ -2,6 +2,7 @@ import test from 'ava';
 import * as _ from 'lodash';
 import {Board} from '../src/board';
 import {boards} from './data/boards';
+import * as attic from './data/attic';
 let boardInstance = new Board(5, 5);
 
 /*
@@ -43,8 +44,9 @@ testBoards -> {
 let testBoards = {};
 _.each(boards, (metadata, name) => {
     boardInstance.orbs = _.cloneDeep(metadata.orbs);
+    boardInstance.atticOrbs = _.cloneDeep(attic.orbs);
     testBoards[name] = {};
-    testBoards[name].matchData = boardInstance.evaluate([7, 8]);
+    testBoards[name].matchData = boardInstance.evaluate();
     testBoards[name].evaluatedOrbs = boardInstance.orbs;
 });
 
@@ -55,7 +57,7 @@ _.each(boards, (metadata, name) => {
         
     test(`removes matches and replaces with valid type orbs for ${name}`, t => {
         _.each(_.flattenDeep(testBoards[name].evaluatedOrbs), orb => {
-            t.true(_.includes(_.range(9), orb));
+            t.true(_.includes(_.range(10), orb));
         });        
     });
     
@@ -67,12 +69,11 @@ _.each(boards, (metadata, name) => {
         });
     });
     
-    test(`orbs from dropOptions fill in the rest of the board for ${name}`, t => {
-        _.each(metadata.evaluate.droppedRandoms, sliceData => {
+    test(`orbs from atticOrbs drop down to fill in the rest of the board for ${name}`, t => {
+        _.each(metadata.evaluate.atticOrbsDropped, section => {
+            let [sliceData, droppedAtticOrbs] = section;
             let [row, start, end] = sliceData;
-            _.each(_.slice(testBoards[name].evaluatedOrbs[row], start, end), orb => {
-                t.true(_.includes([7, 8], orb));    
-            });
+            t.ok(_.isEqual(_.slice(testBoards[name].evaluatedOrbs[row], start, end), droppedAtticOrbs));
         });
     });
     
