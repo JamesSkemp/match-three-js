@@ -55,7 +55,7 @@ export function swap(orbs, swapOrbs) {
   *
   * @example
   *     [
-  *         [0, 1, 2, 3, 4],                blankCount = {
+  *         [0, 1, 2, 3, 4],                blanksBelow = {
   *         [1, X, X, X, 0],                    '0 1': 1,
   *         [2, 3, 4, 0, 1],    -->             '0 2': 1,
   *         [3, 4, 0, 1, 2],                    '0 3': 1

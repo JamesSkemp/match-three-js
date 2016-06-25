@@ -24,7 +24,7 @@ exports.updateScore = function(matchData) {
     console.log('You got a ' + type + ' match of ' + length + '!');
 };
 
-exports.createHTMLBoard = function(board, div, name) {
+exports.createHTMLBoardOld = function(board, div, name) {
     _.each(_.range(board.orbs.length), row => {
         _.each(_.range(board.orbs[row].length), col => {
             let orbDiv = document.createElement('div');
@@ -38,6 +38,32 @@ exports.createHTMLBoard = function(board, div, name) {
             }
             orbDiv.style.backgroundColor = board.orbs[row][col];
             div.appendChild(orbDiv);
+        });
+    });
+};
+
+exports.createHTMLBoard = function(orbs) {
+    let HTMLBoard = document.getElementById('board');
+    _.each(_.range(orbs.length), row => {
+        _.each(_.range(orbs[row].length), col => {
+            let orbDiv = document.createElement('div');
+            orbDiv.setAttribute('id', 'main ' + row + ' ' + col);
+            let onclick = 'selectOrb(' + row + ', ' + col + ');';
+            orbDiv.setAttribute('onclick', onclick);
+            orbDiv.style.backgroundColor = orbs[row][col];
+            HTMLBoard.appendChild(orbDiv);
+        });
+    });
+};
+
+exports.createHTMLAttic = function(atticOrbs) {
+    let atticBoard = document.getElementById('attic');
+    _.each(_.range(atticOrbs.length), row => {
+        _.each(_.range(atticOrbs[row].length), col => {
+            let orbDiv = document.createElement('div');
+            orbDiv.setAttribute('class', 'attic ' + col);
+            orbDiv.style.backgroundColor = atticOrbs[row][col];
+            atticBoard.appendChild(orbDiv);
         });
     });
 };
@@ -76,7 +102,15 @@ exports.repopulate = function(board) {
         HTMLBoard.removeChild(HTMLBoard.firstChild);
     };
     // build the board back from scratch with the new board
-    exports.createHTMLBoard(board, HTMLBoard, 'main');
+    exports.createHTMLBoard(board.orbs);
+    
+    // tear down the attic
+    let attic = document.getElementById('attic');
+    while (attic.firstChild) {
+        attic.removeChild(attic.firstChild);
+    };
+    // build the attic back from scratch with the new board
+    exports.createHTMLAttic(board.atticOrbs);
 };
 
 exports.swap = function (board, firstOrb, secondOrb) {

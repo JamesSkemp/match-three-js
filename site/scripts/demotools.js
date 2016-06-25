@@ -22,9 +22,16 @@ exports.makeMove = function(board, swapOrbs) {
         setTimeout(function() { animate.repopulate(board); }, 1000);
         let matches = board.matches;
         let orbCounts = getOrbCounts(matches);
-        setTimeout(function() { animate.eraseMatches(matches); }, 2000);
-        setTimeout(function() { animate.activateGravity(board); }, 3000);
-        setTimeout(function() { animate.releaseAttic(orbCounts); }, 4000);
+        setTimeout(function() { animate.eraseMatches(matches); }, 1200);
+        setTimeout(function() { animate.activateGravity(board); }, 1500);
+        setTimeout(function() { animate.releaseAttic(orbCounts); }, 2000);
+        
+        setTimeout(function() { 
+            let matchData = board.evaluate();
+            animate.repopulate(board);
+            return matchData;
+        }, 3000);
+
         /*
         // evaluate the board
         // save data for matches to be implemented soon
