@@ -46,6 +46,6 @@ test('attic orbs can be set manually', t => {
         [0, 1, 2, 3, 4, 5, 6, 7],
         [0, 1, 2, 3, 4, 5, 6, 7]
     ];
-    board = new Board(8, 8, _.range(8), testAttic);
-    t.is(board.atticOrbs, testAttic);
+    let atticBoard = new Board(8, 8, _.range(8), testAttic);
+    t.is(atticBoard.atticOrbs, testAttic);
 });

@@ -42,99 +42,154 @@ export function swap(orbs, swapOrbs) {
 };
 
 /**
-  * 1. logs data for each match and replaces each orb with '\u241a'
-  * 2. replaces each '\u241a' and all above orbs with either the orb directly above or a random new orb
-  * 3. returns the match data -> [[match1Type, match1Amount], [match2Type, match2Amount], ...]
+  * @description Returns an object that tells how many 'blanks' are below each coordinate.
+  * It only records the data if there is at least one blank below that coordinate. A blank
+  * is just an orb that was a part of a match and has subsequently been marked with a value
+  * of '\u241a'.
+  *
+  * The format is this:
+  *
+  *     blanksBelow = {
+  *         'row col': blankCount
+  *     }
+  *
+  * @example
+  *     [
+  *         [0, 1, 2, 3, 4],                blanksBelow = {
+  *         [1, X, X, X, 0],                    '0 1': 1,
+  *         [2, 3, 4, 0, 1],    -->             '0 2': 1,
+  *         [3, 4, 0, 1, 2],                    '0 3': 1
+  *         [4, 0, 1, 2, 3]                 }
+  *     ]
   */
-export function evaluate2(orbs, height, width, matches, dropOptions) {
-    let [markedOrbs, matchData, colData] = _markMatches(orbs, matches);
-    orbs = _.cloneDeep(markedOrbs);
-
-    /**
-      * drop down and generate matches
-      * 1. reads across starting from the top
-      * 2. when it hits '\u241a', loops from that position directly up
-      * 3. if the row isn't 0, it takes the orb from above
-      * 4. if the row is 0, it creates a random orb
-      */
-    _.each(_.range(height), row =>{
-        _.each(_.range(width), col => { //1
-            if (orbs[row][col] == '\u241a') {
-                for (var z = row; z >= 0; z--) { //2
-                    if (z > 0) { //3
-                        orbs[z][col] = orbs[z - 1][col];
-                    } else { //4
-                        orbs[z][col] = _.sample(dropOptions);;
-                    };
+export function getBlanksBelow(orbs) {
+    let blanksBelow = {};
+    let height = orbs[0].length;
+    let width = orbs.length
+    _.each(_.rangeRight(width - 1), row => {
+        _.each(_.range(height), col => {
+            let blankCount = 0
+            _.each(_.range(1, height - row), adder => {
+                if (orbs[row + adder][col] === '\u241a') {
+                    blankCount += 1;
                 };
+            });
+            if (blankCount > 0) {
+                blanksBelow[[row, col]] = blankCount;
             };
         });
     });
-
-    return [orbs, matchData];
+    return blanksBelow;
 };
 
-let _markMatches = (orbs, matches) => {
-    let matchData = [];
-    let colData = {};
+/**
+  * @description Drops down unaffected orbs into their new post-evaluated position.
+  * NOTE: The orbs in the top rows that will be replaced with atticOrbs are left unchanged
+  * by this function.
+  */
+export function activateGravity(orbs) {
+    let orbsBefore = _.cloneDeep(orbs);
+    _.each(getBlanksBelow(orbs), (count, coord) => {
+        let [row, col] = _.map(coord.split(','), _.toInteger);
+        orbs[row + count][col] = orbsBefore[row][col];
+    })
+    return orbs
+};
+
+/**
+  * @description Returns an array of orb values that are to be dropped down, starting
+  * with the bottom-most atticOrb and working up.
+  *
+  * @see releaseAttic
+  */
+export function atticOrbsToDropDown(atticOrbs, col, count) {
+    let lastRow = atticOrbs.length;
+    let atticOrbsToDropDown = [];
+    _.each(_.range(count), n => {
+        atticOrbsToDropDown.push(atticOrbs[lastRow - 1 - n][col])
+    });
+    return atticOrbsToDropDown;
+};
+
+/**
+  * @description Drops down the necessary orbs from the attic into the main orb set.
+  */
+export function releaseAttic(orbs, atticOrbs, orbCounts) {
+    _.each(orbCounts, (count, col) => {
+        let dropdowns = atticOrbsToDropDown(atticOrbs, col, count);
+        _.each(_.range(count), row => {
+            orbs[row][col] = dropdowns.pop()
+        });
+    });
+    return orbs
+};
+/**
+  * @description Gets the orbCounts object based on a board's matches.
+  *
+  * The orbCounts object tells how many orbs from the matches are in each column.
+  * This is necessary data for the releaseAttic function.
+  *
+  * @see releaseAttic
+  */
+export function getOrbCounts(matches) {
+    let orbCounts = {};
     _.each(matches, match => {
-        // log data
+        _.each(match, coord => {
+            if (orbCounts[coord[1]]) {
+                orbCounts[coord[1]] += 1;
+            } else {
+                orbCounts[coord[1]] = 1;
+            };
+        });
+    });
+    return orbCounts;
+};
+
+export function getMatchData(orbs, matches) {
+    let matchData = [];
+    _.each(matches, match => {
         matchData.push([orbs[match[0][0]][match[0][1]], match.length]);
+    })
+    return matchData;
+}
+
+/**
+  * @description Replaces the value of each orb from the matches with a new value
+  * of '\u241a'
+  */
+export function markMatches(orbs, matches) {
+    let matchData = [];
+    _.each(matches, match => {
         _.each(match, coord => {
             let [row, col] = coord;
             // replace each coordinate with '\u241a'
             orbs[row][col] = '\u241a'
-            
-            // log the data for colData
-            if (!colData[col]) {
-                colData[col] = {
-                    orbCount: 1,
-                    topRow: row
-                };
-            } else {
-                colData[col].orbCount += 1;
-                // NOTE: the first orb for the row will always contain the topRow
-                //       because the triples are found from left-to-right & top-down
-            }
         })
     });
-    return [orbs, matchData, colData];
+    return orbs;
 }
 
-export function evaluate(orbs, height, width, matches, dropOptions) {
-    let matchData = [];
-
-    _.each(matches, match => {
-        // log data
-        matchData.push([orbs[match[0][0]][match[0][1]], match.length]);
-        // replace each coordinate with '\u241a'
-        _.each(match, coord => {
-            let [row, col] = coord;
-            orbs[row][col] = '\u241a'
-        })
-    });
-
-    /**
-      * drop down and generate matches
-      * 1. reads across starting from the top
-      * 2. when it hits '\u241a', loops from that position directly up
-      * 3. if the row isn't 0, it takes the orb from above
-      * 4. if the row is 0, it creates a random orb
-      */
-    _.each(_.range(height), row =>{
-        _.each(_.range(width), col => { //1
-            if (orbs[row][col] == '\u241a') {
-                for (var z = row; z >= 0; z--) { //2
-                    if (z > 0) { //3
-                        orbs[z][col] = orbs[z - 1][col];
-                    } else { //4
-                        orbs[z][col] = _.sample(dropOptions);;
-                    };
-                };
-            };
-        });
-    });
-
+/**
+  * @description Takes a post-swap set of orbs, gathers the match data for each of the matches,
+  * marks each orb in the match with '\u241a', pulls down non-match orbs over the 'marked' orbs,
+  * and pulls down new orbs from the attic to fill in the rest of the board.
+  *
+  * @example
+  *                 [5, 6, 7, 8, 9],               
+  *                 [6, 7, 8, 9, 5],
+  *     atticOrbs   [7, 8, 9, 5, 6],
+  *                 [8, 9, 5, 6, 7],
+  *                 [9, 5, 6, 7, 8]                    new orbs
+  *                                                                             matchData
+  *                 [0, 1, 2, 3, 4],                [0, 5, 6, 7, 4],         [type, length]
+  *                 [1, 2, 3, 4, 0],     returns    [1, 1, 2, 3, 0],     
+  *     orbs        [2, 0, 0, 0, 1],       -->      [2, 2, 3, 4, 1],     and     [0, 3]
+  *                 [3, 4, 0, 1, 2],                [3, 4, 0, 1, 2],    
+  *                 [4, 0, 1, 2, 3]                 [4, 0, 1, 2, 3]
+  */
+export function evaluate(orbs, height, width, matches, atticOrbs) {
+    let matchData = getMatchData(orbs, matches);
+    orbs = releaseAttic(activateGravity(markMatches(orbs, matches)), atticOrbs, getOrbCounts(matches));
     return [orbs, matchData];
 };
 

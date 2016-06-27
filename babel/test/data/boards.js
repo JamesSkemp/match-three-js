@@ -22,10 +22,10 @@ export const boards = {
             nonMatchDropped: [
                 [[3, 1, 4], [5, 1, 2]]
             ],
-            // data for 'orbs from dropOptions fill in the rest of the board'
-            //   -> [[row, sliceStart, sliceEnd]] -> each should be included in dropOptions
-            droppedRandoms: [
-                [0, 1, 4]
+            // data for 'orbs from atticOrbs drop down to fill in the rest of the board'
+            //   -> [[row, sliceStart, sliceEnd], [droppedAtticOrbs]]
+            atticOrbsDropped: [
+                [[0, 1, 4], [5, 6, 7]]
             ],
             // data for 'unaffected orbs are unchanged'
             unaffectedOrbs: [
@@ -75,10 +75,10 @@ export const boards = {
                 [[4, 4, 5], [4]],
                 [[3, 4, 5], [5]]
             ],
-            droppedRandoms: [
-                [2, 4, 5],
-                [1, 4, 5],
-                [0, 4, 5]
+            atticOrbsDropped: [
+                [[2, 4, 5], [8]],
+                [[1, 4, 5], [7]],
+                [[0, 4, 5], [6]]
             ],
             unaffectedOrbs: [
                 [4, 0, 4],
@@ -124,8 +124,8 @@ export const boards = {
                 [[2, 1, 5], [1, 2, 3, 4]],
                 [[1, 1, 5], [2, 3, 4, 5]]
             ],
-            droppedRandoms: [
-                [0, 1, 5]
+            atticOrbsDropped: [
+                [[0, 1, 5], [5, 6, 7, 8]]
             ],
             unaffectedOrbs: [
                 [4, 0, 1],
@@ -168,11 +168,11 @@ export const boards = {
             nonMatchDropped: [
                 [[4, 3, 4], [4]]
             ],
-            droppedRandoms: [
-                [3, 3, 4],
-                [2, 3, 4],
-                [1, 3, 4],
-                [0, 3, 4]
+            atticOrbsDropped: [
+                [[3, 3, 4], [7]],
+                [[2, 3, 4], [6]],
+                [[1, 3, 4], [5]],
+                [[0, 3, 4], [9]]
             ],
             unaffectedOrbs: [
                 [4, 0, 3],
@@ -222,8 +222,8 @@ export const boards = {
                 [[2, 0, 5], [5, 1, 2, 3, 4]],
                 [[1, 0, 5], [1, 2, 3, 4, 5]]
             ],
-            droppedRandoms: [
-                [0, 0, 5]
+            atticOrbsDropped: [
+                [[0, 0, 5], [9, 5, 6, 7, 8]]
             ],
             unaffectedOrbs: [
                 [4, 0, 5],
@@ -264,12 +264,12 @@ export const boards = {
             nonMatchDropped: [
                 [[0, 0, 0], []]
             ],
-            droppedRandoms: [
-                [4, 2, 3],
-                [3, 2, 3],
-                [2, 2, 3],
-                [1, 2, 3],
-                [0, 2, 3]
+            atticOrbsDropped: [
+                [[4, 2, 3], [6]],
+                [[3, 2, 3], [5]],
+                [[2, 2, 3], [9]],
+                [[1, 2, 3], [8]],
+                [[0, 2, 3], [7]]
             ],
             unaffectedOrbs: [
                 [4, 0, 2],
@@ -321,10 +321,10 @@ export const boards = {
                 [[1, 1, 2], [2]],
                 [[1, 3, 4], [4]]
             ],
-            droppedRandoms: [
-                [2, 2, 3],
-                [1, 2, 3],
-                [0, 1, 4]
+            atticOrbsDropped: [
+                [[2, 2, 3], [6]],
+                [[1, 2, 3], [5]],
+                [[0, 1, 4], [5, 9, 7]]
             ],
             unaffectedOrbs: [
                 [4, 0, 5],
@@ -374,10 +374,10 @@ export const boards = {
                 [[2, 2, 4], [2, 3]],
                 [[1, 2, 4], [3, 4]]
             ],
-            droppedRandoms: [
-                [2, 1, 2],
-                [1, 1, 2],
-                [0, 1, 4]
+            atticOrbsDropped: [
+                [[2, 1, 2], [5]],
+                [[1, 1, 2], [9]],
+                [[0, 1, 4], [8, 6, 7]]
             ],
             unaffectedOrbs: [
                 [4, 0, 1],
@@ -431,10 +431,10 @@ export const boards = {
                 [[1, 0, 2], [1, 2]],
                 [[1, 3, 4], [4]]
             ],
-            droppedRandoms: [
-                [2, 2, 3],
-                [1, 2, 3],
-                [0, 0, 4]
+            atticOrbsDropped: [
+                [[2, 2, 3], [6]],
+                [[1, 2, 3], [5]],
+                [[0, 0, 4], [9, 5, 9, 7]]
             ],
             unaffectedOrbs: [
                 [4, 0, 2],
@@ -485,10 +485,10 @@ export const boards = {
                 [[1, 1, 2], [2]],
                 [[1, 3, 5], [4, 5]]
             ],
-            droppedRandoms: [
-                [2, 2, 3],
-                [1, 2, 3],
-                [0, 1, 5]
+            atticOrbsDropped: [
+                [[2, 2, 3], [6]],
+                [[1, 2, 3], [5]],
+                [[0, 1, 5], [5, 9, 7, 8]]
             ],
             unaffectedOrbs: [
                 [4, 0, 2],
@@ -540,10 +540,10 @@ export const boards = {
                 [[1, 0, 2], [1, 2]],
                 [[1, 3, 5], [4, 5]]
             ],
-            droppedRandoms: [
-                [2, 2, 3],
-                [1, 2, 3],
-                [0, 0, 5]
+            atticOrbsDropped: [
+                [[2, 2, 3], [6]],
+                [[1, 2, 3], [5]],
+                [[0, 0, 5], [9, 5, 9, 7, 8]]
             ],
             unaffectedOrbs: [
                 [4, 0, 2],
@@ -588,9 +588,9 @@ export const boards = {
                 [[3, 0, 3], [5, 1, 2]],
                 [[2, 0, 3], [1, 2, 3]]
             ],
-            droppedRandoms: [
-                [1, 0, 3],
-                [0, 0, 3]
+            atticOrbsDropped: [
+                [[1, 0, 3], [9, 5, 6]],
+                [[0, 0, 3], [8, 9, 5]]
             ],
             unaffectedOrbs: [
                 [4, 0, 5],
@@ -637,11 +637,11 @@ export const boards = {
             nonMatchDropped: [
                 [[4, 3, 5], [4, 5]]
             ],
-            droppedRandoms: [
-                [3, 3, 5],
-                [2, 3, 5],
-                [1, 3, 5],
-                [0, 3, 5]
+            atticOrbsDropped: [
+                [[3, 3, 5], [7, 8]],
+                [[2, 3, 5], [6, 7]],
+                [[1, 3, 5], [5, 6]],
+                [[0, 3, 5], [9, 5]]
             ],
             unaffectedOrbs: [
                 [4, 0, 3],

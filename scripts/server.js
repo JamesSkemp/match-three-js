@@ -14,13 +14,7 @@ browserSync.init({
     ]
 });
 
-browserSync.watch('site/scripts/main.js', (event) => {
-    if (event === 'change') {
-        execSync('npm run browserify', { stdio: [0, 1, 2] });
-    }
-});
-
-browserSync.watch('site/scripts/demotools.js', (event) => {
+browserSync.watch('site/scripts/*.js', (event) => {
     if (event === 'change') {
         execSync('npm run browserify', { stdio: [0, 1, 2] });
     }

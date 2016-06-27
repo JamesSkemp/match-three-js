@@ -1,55 +1,119 @@
 'use strict';
 
 let _ = require('lodash');
+let animate = require('./animationHelpers');
+
+function whichTransitionEvent() {
+    var t;
+    var el = document.createElement('fakeelement');
+    var transitions = {
+      'transition':'transitionend',
+      'OTransition':'oTransitionEnd',
+      'MozTransition':'transitionend',
+      'WebkitTransition':'webkitTransitionEnd'
+    }
+
+    for(t in transitions){
+        if( el.style[t] !== undefined ){
+            return transitions[t];
+        }
+    }
+}
+
+function evaluate(board) {
+    console.log('evaluating');
+    let transitionEvent = whichTransitionEvent();
+    // gather one element for each animation
+    let matches;
+    let orbCounts;
+    let matchData;
+    let orbs = _.cloneDeep(board.orbs);
+    // gather the rest of the necessary information
+    matches = _.cloneDeep(board.matches);
+    let matchEl = document.getElementById(`main ${matches[0][0][0]} ${matches[0][0][1]}`);
+    let allMatchCoords = _.flattenDepth(matches, 1);
+    let unaffectedEl = false;
+    let unMatchedAbove;
+    _.each(allMatchCoords, coord => {
+        let orbAbove = [coord[0] - 1, coord[1]];
+        // check if the orb above will be dropped down with activate gravity
+        if (orbAbove[0] >= 0 && !_.includes(allMatchCoords, orbAbove)) {
+            unaffectedEl = document.getElementById(`main ${orbAbove[0]} ${orbAbove[1]}`);
+            return false
+        }
+    })
+    orbCounts = getOrbCounts(matches);
+    let atticEl = document.getElementsByClassName(`attic ${Object.keys(orbCounts)[0]}`)[0];
+
+    // first, erase the matches
+    animate.eraseMatches(matches);
+    // update the score (and evaluate the js board!)
+    let matchDatas = board.evaluate();
+    _.each(matchDatas, matchData => {
+        animate.updateScore(matchData);
+    });
+    // after the match has been erased, call the activate gravity animation
+    // TO BE INVESTIGATED: For some reason, the opacity change in eraseMatches is not causing
+    // a transition in CSS and therefore the event listener isn't work. Hence the setTimeout
+    setTimeout(function() {
+        animate.activateGravity(orbs);
+    });
+    // after gravity has been activated, call the release attic animation
+    unaffectedEl && unaffectedEl.addEventListener(transitionEvent, function() {
+        animate.releaseAttic(orbCounts);
+    });
+    // after the attic has been released, update the js board and repopulate
+    atticEl.addEventListener(transitionEvent, function() {
+        board.resetAttic();
+        animate.repopulate(board.orbs, board.atticOrbs);
+        if (board.hasMatch()) {
+            evaluate(board);
+        }
+    });
+}
 
 exports.makeMove = function(board, swapOrbs) {
     let [[r1, c1], [r2, c2]] = swapOrbs;
-    let first = document.getElementById('main ' + r1 + ' ' + c1);
-    let second = document.getElementById('main ' + r2 + ' ' + c2);
 
     // remove the white borders
-    first.style.border = 'none';
-    second.style.border = 'none';
+    animate.removeBorder(r1, c1);
+    animate.removeBorder(r2, c2);
     
     // make the swap
-    board.orbs = exports.swap(board, ...swapOrbs);
+    board.swap(swapOrbs);
     if (!board.hasMatch()) {
         // unswaps in the board instance and leave the html unchanged
-        board.orbs = exports.swap(board, ...swapOrbs);
+        board.swap(swapOrbs);
         alert('That\'s not a valid move, you fool!');
     } else {
-        // evaluate the board
-        // save data for matches to be implemented soon
-        // catch for matches after the evaluation drops new orbs down
-        let matchDatas = [];
-        while (board.hasMatch()) {
-            let matchData = board.evaluate();
-            matchDatas.push(matchData);
-        }
-        // catch if there are no possible matches left
-        if (board.needsShuffle()) { 
-            board.shuffle();
-            exports.repopulate(board);
-        };
-        return matchDatas;
+        // animate the swap
+        animate.swap(board, ...swapOrbs);
+        // after the swap is done, evaluate the board
+        let swapEl = document.getElementById(`main ${swapOrbs[0][0]} ${swapOrbs[0][1]}`);
+        swapEl.addEventListener(whichTransitionEvent(), function() {
+            animate.repopulate(board.orbs, board.atticOrbs);
+            evaluate(board);
+        });
     }
 };
+
+let getOrbCounts = function(matches) {
+    let orbCounts = {};
+    _.each(matches, match => {
+        _.each(match, coord => {
+            if (orbCounts[coord[1]]) {
+                orbCounts[coord[1]] += 1;
+            } else {
+                orbCounts[coord[1]] = 1;
+            };
+        });
+    });
+    return orbCounts;
+}
     
 exports.areNeighbors = function(orbs) {
     let [[r1, c1], [r2, c2]] = orbs;
     return (r1 == r2 && Math.abs(c1 - c2) == 1) || (c1 == c2 && Math.abs(r1 - r2) == 1)
-};
-
-exports.addBorder = function(row, col) {
-    let id = 'main ' + row + ' ' + col;
-    let td = document.getElementById(id);
-    td.style.border = '2px solid white';
-};
-
-exports.removeBorder = function(row, col) {
-    let id = 'main ' + row + ' ' + col;
-    let td = document.getElementById(id);
-    td.style.border = 'none';
 };
 
 exports.twoSelectedOrbsAreEqual = function(selectedOrbs) {
@@ -58,147 +122,3 @@ exports.twoSelectedOrbsAreEqual = function(selectedOrbs) {
     return orb1[0] === orb2[0];
 };
 
-exports.updateScore = function(matchData) {
-    let type = matchData[0];
-    let length = matchData[1];
-    let id = type + ' points';
-    let scoreCard = document.getElementById(id);
-    let currentPoints = parseInt(scoreCard.innerHTML);
-    if (isNaN(currentPoints)) {
-        currentPoints = 0;
-    };
-    let newPoints = currentPoints + length;
-    scoreCard.innerHTML = newPoints;
-    console.log('You got a ' + type + ' match of ' + length + '!');
-};
-
-exports.createHTMLBoard = function(board, div, name) {
-    _.each(_.range(board.orbs.length), row => {
-        _.each(_.range(board.orbs[row].length), col => {
-            let orbDiv = document.createElement('div');
-            if (name == 'main') {
-                orbDiv.setAttribute('id', name + ' ' + row + ' ' + col);
-                let onclick = 'selectOrb(' + row + ', ' + col + ');';
-                orbDiv.setAttribute('onclick', onclick);
-            };
-            if (name == 'attic') {
-                orbDiv.setAttribute('class', name + ' ' + col);
-            }
-            orbDiv.style.backgroundColor = board.orbs[row][col];
-            div.appendChild(orbDiv);
-        });
-    });
-}
-
-/**
-  * @description Resets the entire board in the html behind the scenes. This function should
-  * not be visible in the browser. It resets what is in the browser so that orbs can be collected
-  * appropriately in future demotools function calls.
-  * 
-  * More specifically, it tears down the entire main board (in html) and then recreates it immediately.
-  */
-exports.repopulate = function(board) {
-    console.log('repopulating');
-    // tear down the board
-    let HTMLBoard = document.getElementById('board');
-    while (HTMLBoard.firstChild) {
-        HTMLBoard.removeChild(HTMLBoard.firstChild);
-    };
-    // build the board back from scratch with the new board
-    exports.createHTMLBoard(board, HTMLBoard, 'main');
-}
-
-let _swap = function(orb, direction) {
-    let orbToMove = document.getElementById('main ' + orb[0] + ' ' + orb[1]);
-    let pixels = 56;
-    switch (direction) {
-        case 'up':
-            orbToMove.style.webkitTransform = 'translate(0, ' + (-pixels) + 'px)';
-            break;
-        case 'down':
-            orbToMove.style.webkitTransform = 'translate(0, ' + (pixels) + 'px)';
-            break;
-        case 'left':
-            orbToMove.style.webkitTransform = 'translate(' + (-pixels) + 'px, 0)';
-            break;
-        case 'right':
-            orbToMove.style.webkitTransform = 'translate(' + (pixels) + 'px, 0)';
-            break;
-    }
-}
-
-exports.swap = function (board, firstOrb, secondOrb) {
-    // make the swap appear in the html/css
-    console.log('swapping');
-    let firstDirection;
-    let secondDirection
-    if (firstOrb[0] === secondOrb[0]) {
-        if (firstOrb[1] > secondOrb[1]) {
-            firstDirection = 'left';
-            secondDirection = 'right';
-        } else {
-            firstDirection = 'right';
-            secondDirection = 'left';
-        }
-    } else {
-        if (firstOrb[0] > secondOrb[0]) {
-            firstDirection = 'up';
-            secondDirection = 'down';
-        } else {
-            firstDirection = 'down';
-            secondDirection = 'up';
-        };
-    };
-    _swap(firstOrb, firstDirection);
-    _swap(secondOrb, secondDirection);
-
-    // make the same swap happen in the js board instance
-    board.swap([firstOrb, secondOrb]);
-
-    // repopulate the board in html to reset IDs
-    setTimeout(function() { exports.repopulate(board); }, 1000);
-
-    return board.orbs;
-}
-
-exports.pullDownOrbs = function(board, matches, orbCounts) {
-    // set opacity for all orbs in matches to 0 (erase them)
-    _.each(matches, match => {
-        _.each(match, coord => {
-            let row = coord[0];
-            let col = coord[1];
-            let orbToRemove = document.getElementById('main ' + row + ' ' + col);
-            orbToRemove.style.opacity = '0';
-        });
-    });
-    
-    // Going left to right and bottom-up, loop through each orb.
-    // If the orb below is blank, swap down until the orb below is not blank,
-    // or the bottom is reached
-    _.each(_.rangeRight(board.height - 1), row => {
-        _.each(_.range(board.width), col => {
-            let currentRow = row;
-            let rowBelow = row + 1;
-            while (rowBelow < board.height) {
-                let orbBelow = document.getElementById('main ' + rowBelow + ' ' + col);
-                let isBlankBelow = orbBelow.style.opacity === '0';
-                if (isBlankBelow) {
-                    console.log('found a blank');
-                    board.orbs = exports.swap(board, [currentRow, col], [rowBelow, col]);
-                    currentRow += 1;
-                    rowBelow += 1;
-                } else {
-                    break;
-                };
-            };
-        });
-    });
-    
-    // Pull down orbs from the attic
-    _.each(orbCounts, (count, col) => {
-        let atticOrbs = document.getElementsByClassName('attic ' + col);
-        _.each(atticOrbs, atticOrb => {
-            atticOrb.style.webkitTransform = 'translate(0, ' + 56 + 'px)';
-        });
-    })
-}
