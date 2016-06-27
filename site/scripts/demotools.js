@@ -64,6 +64,7 @@ function evaluate(board) {
     });
     // after the attic has been released, update the js board and repopulate
     atticEl.addEventListener(transitionEvent, function() {
+        board.resetAttic();
         animate.repopulate(board.orbs, board.atticOrbs);
         if (board.hasMatch()) {
             evaluate(board);
