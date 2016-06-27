@@ -42,7 +42,7 @@ export class Board {
     }
     
     resetAttic(types = this.types) {
-        this.atticOrbs = this.generateOrbs(types);
+        this.atticOrbs = _.cloneDeep(new Board(this.width, this.height, types, true).orbs);
     }
 
     evaluate() {
