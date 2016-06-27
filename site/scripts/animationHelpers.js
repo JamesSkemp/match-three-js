@@ -95,7 +95,6 @@ let moveOrb = function(row, col, direction, distance = 1) {
   * More specifically, it tears down the entire main board (in html) and then recreates it immediately.
   */
 exports.repopulate = function(orbs, atticOrbs) {
-    console.log('repopulating');
     // tear down the board
     let HTMLBoard = document.getElementById('board');
     while (HTMLBoard.firstChild) {
@@ -115,7 +114,6 @@ exports.repopulate = function(orbs, atticOrbs) {
 
 exports.swap = function (board, firstOrb, secondOrb) {
     // make the swap appear in the html/css
-    console.log('swapping');
     let firstDirection;
     let secondDirection
     if (firstOrb[0] === secondOrb[0]) {
@@ -142,7 +140,6 @@ exports.swap = function (board, firstOrb, secondOrb) {
 };
 
 let eraseMatches = function(matches) {
-    console.log('erasing', matches);
     _.each(matches, match => {
         _.each(match, coord => {
             let row = coord[0];
@@ -182,7 +179,6 @@ let blanksBelow = function(width, height) {
 };
 
 let activateGravity = function(orbs) {
-    console.log('activating gravity');
     _.each(blanksBelow(orbs[0].length, orbs.length), (count, coord) => {
         let intCoord = _.map(coord.split(','), _.toInteger);
         moveOrb(intCoord[0], intCoord[1], 'down', count);

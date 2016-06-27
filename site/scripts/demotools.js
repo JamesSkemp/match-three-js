@@ -20,16 +20,16 @@ function whichTransitionEvent() {
     }
 }
 
-function evaluate(board, swapOrbs) {
+function evaluate(board) {
+    console.log('evaluating');
     let transitionEvent = whichTransitionEvent();
     // gather one element for each animation
     let matches;
     let orbCounts;
     let matchData;
-    let orbs = _.cloneDeep(board.orbs);        
-    // gather the rest of the necessary information 
+    let orbs = _.cloneDeep(board.orbs);
+    // gather the rest of the necessary information
     matches = _.cloneDeep(board.matches);
-    console.log(`main ${matches[0][0][0]} ${matches[0][0][1]}`);
     let matchEl = document.getElementById(`main ${matches[0][0][0]} ${matches[0][0][1]}`);
     let allMatchCoords = _.flattenDepth(matches, 1);
     let unaffectedEl = false;
@@ -44,26 +44,30 @@ function evaluate(board, swapOrbs) {
     })
     orbCounts = getOrbCounts(matches);
     let atticEl = document.getElementsByClassName(`attic ${Object.keys(orbCounts)[0]}`)[0];
-    
+
     // first, erase the matches
-    animate.eraseMatches(matches);  
+    animate.eraseMatches(matches);
+    // update the score (and evaluate the js board!)
+    let matchDatas = board.evaluate();
+    _.each(matchDatas, matchData => {
+        animate.updateScore(matchData);
+    });
     // after the match has been erased, call the activate gravity animation
     // TO BE INVESTIGATED: For some reason, the opacity change in eraseMatches is not causing
     // a transition in CSS and therefore the event listener isn't work. Hence the setTimeout
     setTimeout(function() {
         animate.activateGravity(orbs);
-    });  
+    });
     // after gravity has been activated, call the release attic animation
     unaffectedEl && unaffectedEl.addEventListener(transitionEvent, function() {
         animate.releaseAttic(orbCounts);
     });
     // after the attic has been released, update the js board and repopulate
     atticEl.addEventListener(transitionEvent, function() {
-        let matchDatas = board.evaluate();
         animate.repopulate(board.orbs, board.atticOrbs);
-        _.each(matchDatas, matchData => {
-            animate.updateScore(matchData);
-        })        
+        if (board.hasMatch()) {
+            evaluate(board);
+        }
     });
 }
 
@@ -87,7 +91,7 @@ exports.makeMove = function(board, swapOrbs) {
         let swapEl = document.getElementById(`main ${swapOrbs[0][0]} ${swapOrbs[0][1]}`);
         swapEl.addEventListener(whichTransitionEvent(), function() {
             animate.repopulate(board.orbs, board.atticOrbs);
-            evaluate(board, swapOrbs);
+            evaluate(board);
         });
     }
 };
