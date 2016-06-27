@@ -94,7 +94,7 @@ let moveOrb = function(row, col, direction, distance = 1) {
   * 
   * More specifically, it tears down the entire main board (in html) and then recreates it immediately.
   */
-exports.repopulate = function(board) {
+exports.repopulate = function(orbs, atticOrbs) {
     console.log('repopulating');
     // tear down the board
     let HTMLBoard = document.getElementById('board');
@@ -102,7 +102,7 @@ exports.repopulate = function(board) {
         HTMLBoard.removeChild(HTMLBoard.firstChild);
     };
     // build the board back from scratch with the new board
-    exports.createHTMLBoard(board.orbs);
+    exports.createHTMLBoard(orbs);
     
     // tear down the attic
     let attic = document.getElementById('attic');
@@ -110,7 +110,7 @@ exports.repopulate = function(board) {
         attic.removeChild(attic.firstChild);
     };
     // build the attic back from scratch with the new board
-    exports.createHTMLAttic(board.atticOrbs);
+    exports.createHTMLAttic(atticOrbs);
 };
 
 exports.swap = function (board, firstOrb, secondOrb) {
@@ -181,9 +181,9 @@ let blanksBelow = function(width, height) {
     return blanksBelow;
 };
 
-let activateGravity = function(board) {
+let activateGravity = function(orbs) {
     console.log('activating gravity');
-    _.each(blanksBelow(board.width, board.height), (count, coord) => {
+    _.each(blanksBelow(orbs[0].length, orbs.length), (count, coord) => {
         let intCoord = _.map(coord.split(','), _.toInteger);
         moveOrb(intCoord[0], intCoord[1], 'down', count);
     })

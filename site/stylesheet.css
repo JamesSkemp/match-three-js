@@ -51,7 +51,7 @@ h2 {
     background-color: white;
     margin: auto;
     position: relative;
-    top: -908px;
+    top: -958px;
     height: 504px;
     width: 100%;
     z-index: 2;
@@ -63,13 +63,13 @@ h2 {
     width: 448px;
 }
 #attic {
-    top: -404px;
+    top: -454px;
 }
 #board {
     border: 8px solid darkgray;
     background-color: black;
     padding: 5px;
-    top: -908px;
+    top: -958px;
     padding-top: 0px;
     border-top: none;
     border-radius: 0 0 15px 15px;
@@ -84,12 +84,14 @@ h2 {
     text-align: center;
     border-radius: 25px;
     margin: 3px;
-    transition: transform 1s, opacity .2s;
+    opacity: 1;
+    transition: opacity 1s, transform 1s;
     z-index: 1;
 }
 #scoreboard {
     width: 300px;
     margin: auto;
+    margin-top: -900px;
 }
 #scoreboard tr td {
     height: 30px;
