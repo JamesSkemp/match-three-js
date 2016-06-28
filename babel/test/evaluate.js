@@ -44,7 +44,7 @@ testBoards -> {
 let testBoards = {};
 _.each(boards, (metadata, name) => {
     boardInstance.orbs = _.cloneDeep(metadata.orbs);
-    boardInstance.atticOrbs = _.cloneDeep(attic.orbs);
+    boardInstance.atticTypes = [6, 7, 8, 9, 0];
     testBoards[name] = {};
     testBoards[name].matchData = boardInstance.evaluate();
     testBoards[name].evaluatedOrbs = boardInstance.orbs;
@@ -73,7 +73,9 @@ _.each(boards, (metadata, name) => {
         _.each(metadata.evaluate.atticOrbsDropped, section => {
             let [sliceData, droppedAtticOrbs] = section;
             let [row, start, end] = sliceData;
-            t.ok(_.isEqual(_.slice(testBoards[name].evaluatedOrbs[row], start, end), droppedAtticOrbs));
+            _.each(_.slice(testBoards[name].evaluatedOrbs[row], start, end), orb => {
+                t.true(_.includes([6, 7, 8, 9, 0], orb))
+            });
         });
     });
     
