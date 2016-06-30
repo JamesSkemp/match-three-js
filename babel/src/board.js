@@ -4,14 +4,16 @@ import * as orbs from './orbs';
 import * as triples from './triples';
 
 export class Board {
-    constructor (width = 8, height = 8, types = _.range(7), atticTypes = types) {
+    constructor (width = 8, height = 8, types = _.range(7), needsAttic = true) {
         this.width = width;
         this.height = height;
         this.types = types;
-        this.atticTypes = atticTypes;
-        this.orbs = this.generateOrbs();
+        this.generateOrbs();
         if (this.hasMatch() || this.needsShuffle()) {
             this.shuffle();
+        };
+        if (needsAttic) {
+            this.attic = new Board(this.width, this.height, this.types, false);
         };
     }
 
@@ -31,22 +33,14 @@ export class Board {
         return triples.combine(this.triples);
     }
     
-    get atticOrbs() {
-        return _.cloneDeep(new Board(this.width, this.height, this.atticTypes).orbs);
-    }
-    
-    generateOrbs(types = this.types) {
-        let chooseOrb = () => { return _.sample(types); };
+    generateOrbs() {
+        let chooseOrb = () => { return _.sample(this.types); };
         let sampleRow = () => { return _.times(this.width, chooseOrb); };
-        return _.zip(..._.times(this.height, sampleRow));
-    }
-    
-    resetAttic(types = this.types) {
-        this.atticOrbs = _.cloneDeep(new Board(this.width, this.height, types, true).orbs);
+        this.orbs = _.zip(..._.times(this.height, sampleRow));
     }
 
     evaluate() {
-        let [newOrbs, matchData] = orbs.evaluate(this.orbs, this.height, this.width, this.matches, this.atticOrbs);
+        let [newOrbs, matchData] = orbs.evaluate(this.orbs, this.height, this.width, this.matches, this.attic.orbs);
         this.orbs = newOrbs;
         return matchData;
 

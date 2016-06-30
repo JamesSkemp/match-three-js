@@ -31,16 +31,18 @@ test('should have at least one possible match set and should not have a match ev
 test('attic orbs should have at least one possible match set and should not have a match event by default', t => {
     _.each(_.range(100), i => {
         board = new Board();
-        t.ok(orbs.hasPotentialMatch(board.atticOrbs) && !Boolean(triples.find(board.atticOrbs)[0]));
+        t.ok(orbs.hasPotentialMatch(board.attic.orbs) && !Boolean(triples.find(board.attic.orbs)[0]));
     });
 });
 
-test('unique attic orbs types can be assigned', t => {
-    let atticBoard1 = new Board(8, 8, _.range(5), _.range(5, 10));
-    t.same(atticBoard1.atticTypes, _.uniq(_.flatten(atticBoard1.atticOrbs)).sort());
+test('unique attic orb types can be assigned', t => {
+    let atticBoard1 = new Board(8, 8, _.range(5));
+    atticBoard1.attic.types = _.range(5, 10);
+    atticBoard1.attic.generateOrbs();
+    t.same(_.range(5, 10), _.uniq(_.flatten(atticBoard1.attic.orbs)).sort());
 });
 
-test.skip('attic orbs can be set manually', t => {
+test('attic orbs can be set manually', t => {
     let testAttic = [
         [0, 1, 2, 3, 4, 5, 6, 7],
         [0, 1, 2, 3, 4, 5, 6, 7],
@@ -51,6 +53,7 @@ test.skip('attic orbs can be set manually', t => {
         [0, 1, 2, 3, 4, 5, 6, 7],
         [0, 1, 2, 3, 4, 5, 6, 7]
     ];
-    let atticBoard2 = new Board(8, 8, _.range(8), testAttic);
-    t.is(atticBoard2.atticOrbs, testAttic);
+    let atticBoard2 = new Board();
+    atticBoard2.attic.orbs = testAttic;
+    t.is(atticBoard2.attic.orbs, testAttic);
 });

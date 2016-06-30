@@ -44,7 +44,8 @@ testBoards -> {
 let testBoards = {};
 _.each(boards, (metadata, name) => {
     boardInstance.orbs = _.cloneDeep(metadata.orbs);
-    boardInstance.atticTypes = [6, 7, 8, 9, 0];
+    boardInstance.attic.types = [6, 7, 8, 9, 0];
+    boardInstance.attic.generateOrbs();
     testBoards[name] = {};
     testBoards[name].matchData = boardInstance.evaluate();
     testBoards[name].evaluatedOrbs = boardInstance.orbs;
