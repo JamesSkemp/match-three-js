@@ -84,7 +84,7 @@ export function getBlanksBelow(orbs) {
 
 /**
   * @description Drops down unaffected orbs into their new post-evaluated position.
-  * NOTE: The orbs in the top rows that will be replaced with atticOrbs are left unchanged
+  * NOTE: The orbs in the top rows that will be replaced with attic.orbs are left unchanged
   * by this function.
   */
 export function activateGravity(orbs) {
