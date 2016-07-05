@@ -19,7 +19,7 @@
     "start": "scripts/server.js",
     "deploy": "tsc && npm run browserify && node site/scripts/generateReadme.js && cp ./site/*.html ./site-gh-pages && cp ./site/*.css ./site-gh-pages && cd site-gh-pages && git add . && git commit -m \"Update gh-pages\" && git push origin gh-pages && cd ..",
     "browserify": "browserify site/scripts/main.js > site-gh-pages/bundle.js",
-    "test": "ava",
+    "test": "tsc && ava",
     "test-es5": "ava"
   },
   "keywords": [

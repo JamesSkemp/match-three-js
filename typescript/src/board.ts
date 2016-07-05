@@ -1,4 +1,3 @@
-/// <reference path="typings/lodash/lodash.d.ts" />
 'use strict';
 import * as _ from 'lodash';
 import * as orbs from './orbs';
