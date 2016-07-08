@@ -3,14 +3,15 @@ import * as _ from 'lodash';
 import * as orbs from './orbs';
 import * as triples from './triples';
 import * as types from '../types';
+import { Orb } from '../types';
 
 export class Board {
     width: number;
     height: number;
-    types: any[]
-    orbs: any[][];
+    types: Orb[]
+    orbs: Orb[][];
     attic: Board;
-    constructor (width: number = 8, height: number = 8, types: any[] = _.range(7), needsAttic: boolean = true) {
+    constructor (width: number = 8, height: number = 8, types: Orb[] = _.range(7), needsAttic: boolean = true) {
         this.width = width;
         this.height = height;
         this.types = types;
@@ -27,7 +28,7 @@ export class Board {
         return [this.width, this.height];
     }
 
-    get availableTypes(): any[] {
+    get availableTypes(): Orb[] {
         return _.uniq(_.flatten(this.orbs)).sort();
     }
     

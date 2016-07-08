@@ -2,8 +2,9 @@ import * as _ from 'lodash';
 import * as tools from './tools';
 import { SortedSet } from 'collections/sorted-set';
 import * as types from '../types';
+import { Orb } from '../types';
 
-let _findTriples = (chunks: any[][], isTransposed: boolean): types.Coord[][] => {
+let _findTriples = (chunks: types.IterchunksWithPosition, isTransposed: boolean): types.Coord[][] => {
     let triples: types.Coord[][] = [];
 
     _.each(chunks, chunk => {
@@ -39,7 +40,7 @@ let _findTriples = (chunks: any[][], isTransposed: boolean): types.Coord[][] => 
   * @description Gathers all triples, which are the coordinates for all instances of 
   * three consecutive matching orbs, first in rows, then in columns.
   */
-export function find(orbs: any[][]): types.Coord[][] {
+export function find(orbs: Orb[][]): types.Coord[][] {
     let chunksOriginal = tools._iterchunks(orbs, [3, 1], true, false);
     let chunksTransposed = tools._iterchunks(_.zip(...orbs), [3, 1], true, true);
 

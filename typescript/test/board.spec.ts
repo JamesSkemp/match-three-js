@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import {Board} from '../src/board';
 import * as orbs from '../src/orbs';
 import * as triples from '../src/triples';
-let board;
+let board: Board;
 
 test.before(() => {
     board = new Board();

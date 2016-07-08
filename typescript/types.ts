@@ -13,6 +13,8 @@ export interface Board {
     shuffle(): void
 }
 
+export type Orb = string | number
+
 export type MatchData = [any, number][]
 
 export interface BlanksBelow {
@@ -28,10 +30,7 @@ export interface PositionInfo {
 	}
 }
 
-export type IterchunksWithPosition = [
-	[
-		any[],
-		any[],
-		PositionInfo
-	][]
-]
+export type IterchunksWithPosition = {
+    [first: number]: Orb[];
+    [index: number]: (Orb[] | PositionInfo)[][])
+}

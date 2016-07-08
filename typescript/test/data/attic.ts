@@ -1,4 +1,4 @@
-export const orbs = [
+export const orbs: number[][] = [
     [5, 6, 7, 8, 9],
     [6, 7, 8, 9, 5],
     [7, 8, 9, 5, 6],

@@ -1,8 +1,9 @@
 import * as _ from 'lodash';
 import * as types from '../types';
+import { Orb } from '../types';
 
 // return the index of all occurrences of `value` in `list`. [5, 3, 7, 5], 5 -> [0, 3]
-export function indexOfAll (list: any[], value: any): number[] {
+export function indexOfAll (list: Orb[], value: Orb): number[] {
     return _.reduce(list, (acc: number[], e, i: number) => {
         if (e === value) {
             acc.push(i);
@@ -18,13 +19,13 @@ export function indexOfAll (list: any[], value: any): number[] {
  * on a non-transposed set of orbs, as well as a transposed set of orbs.
  * @see findTriples
  */
-export function _iterchunks (orbs: any[][], chunkLimitRange: [number, number], includePositionInformation: boolean, isTransposed: boolean): any[][][] | types.IterchunksWithPosition {
+export function _iterchunks (orbs: Orb[][], chunkLimitRange: [number, number], includePositionInformation: boolean, isTransposed: boolean): types.IterchunksWithPosition[] {
     let chunks = [];
     let [width, height] = chunkLimitRange;
     let [finalPositionWidth, finalPositionHeight] = [orbs[0].length - width, orbs.length - height];
     _.each(_.range(0, finalPositionHeight + 1), heightIndex => {
         _.each(_.range(0, finalPositionWidth + 1), widthIndex => {
-            let chunkData: any[] = orbs.slice(heightIndex, heightIndex + height).map(row => {
+            let chunkData: types.IterchunksWithPosition = orbs.slice(heightIndex, heightIndex + height).map(row => {
                 return row.slice(widthIndex, widthIndex + width);
             });
 
@@ -103,8 +104,8 @@ export function _iterchunks (orbs: any[][], chunkLimitRange: [number, number], i
  *     ]
  * ]
  */
-export function iterchunks (orbs: any[][], chunkLimitRange: [number, number] = [4, 2], includePositionInformation = false): any[][][] | types.IterchunksWithPosition[] {
-    let transposedOrbs: any[][] = _.zip(...orbs);
+export function iterchunks (orbs: Orb[][], chunkLimitRange: [number, number] = [4, 2], includePositionInformation = false): types.IterchunksWithPosition[] {
+    let transposedOrbs: Orb[][] = _.zip(...orbs);
     return [
             ..._iterchunks(orbs, chunkLimitRange, includePositionInformation, false),
             ..._iterchunks(transposedOrbs, chunkLimitRange, includePositionInformation, true)
