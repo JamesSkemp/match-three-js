@@ -4,17 +4,16 @@ import { SortedSet } from 'collections/sorted-set';
 import * as types from '../types';
 import { Orb } from '../types';
 
-let _findTriples = (chunks: types.IterchunksWithPosition, isTransposed: boolean): types.Coord[][] => {
-    let triples: types.Coord[][] = [];
+let _findTriples = (chunks: types.Chunk[], isTransposed: boolean): number[][][] => {
+    let triples: number[][][] = [];
 
     _.each(chunks, chunk => {
-        let orbs = _.first(chunk);
-        let metadata: types.PositionInfo = _.last(chunk);
+        let orbs = chunk.chunk;
         if (_.uniq(orbs).length === 1) {
-            let anchor = metadata.position.first;
-            let firstOrb: types.Coord = anchor;
-            let secondOrb: types.Coord;
-            let thirdOrb: types.Coord;
+            let anchor = chunk.positionInfo.first;
+            let firstOrb: number[] = anchor;
+            let secondOrb: number[];
+            let thirdOrb: number[];
 
             if (isTransposed) {
                 secondOrb = [anchor[0] + 1, anchor[1]];
@@ -40,7 +39,7 @@ let _findTriples = (chunks: types.IterchunksWithPosition, isTransposed: boolean)
   * @description Gathers all triples, which are the coordinates for all instances of 
   * three consecutive matching orbs, first in rows, then in columns.
   */
-export function find(orbs: Orb[][]): types.Coord[][] {
+export function find(orbs: Orb[][]): number[][][] {
     let chunksOriginal = tools._iterchunks(orbs, [3, 1], true, false);
     let chunksTransposed = tools._iterchunks(_.zip(...orbs), [3, 1], true, true);
 

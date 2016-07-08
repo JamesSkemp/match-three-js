@@ -24,13 +24,11 @@ export interface BlanksBelow {
 export type Coord = [number, number]
 
 export interface PositionInfo {
-	position: {
-		first: Coord,
-		last: Coord
-	}
+    first: number[];
+	last: number[];
 }
 
-export type IterchunksWithPosition = {
-    [index: number]: Orb[];
-    positionInfo: PositionInfo[][]
+export interface Chunk {
+    chunk: Orb[][];
+    positionInfo?: PositionInfo
 }
