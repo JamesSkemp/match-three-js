@@ -31,6 +31,6 @@ export interface PositionInfo {
 }
 
 export type IterchunksWithPosition = {
-    [first: number]: Orb[];
-    [index: number]: (Orb[] | PositionInfo)[][])
+    [index: number]: Orb[];
+    positionInfo: PositionInfo[][]
 }
