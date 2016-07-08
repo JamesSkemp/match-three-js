@@ -32,11 +32,11 @@ export class Board {
         return _.uniq(_.flatten(this.orbs)).sort();
     }
     
-    get triples(): types.Coord[][] {
+    get triples(): number[][][] {
         return triples.find(this.orbs);
     }
     
-    get matches(): types.Coord[][] {
+    get matches(): number[][][] {
         return triples.combine(this.triples);
     }
     

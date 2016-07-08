@@ -8,7 +8,7 @@
     "noImplicitAny": false
   },
   "exclude": [
-      "node_modules",
-      "./typescript/types.ts"
-   ]
+    "node_modules",
+    "typescript/types.ts"
+  ]
 }

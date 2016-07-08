@@ -49,11 +49,11 @@ export function find(orbs: Orb[][]): number[][][] {
     ];
 };
 
-export function combine(triples: types.Coord[][]): types.Coord[][] {
-    let matches: types.Coord[][] = [];
+export function combine(triples: number[][][]): number[][][] {
+    let matches: number[][][] = [];
     let unused = triples;
-    let couldMatch: types.Coord[][];
-    let before: types.Coord[];
+    let couldMatch: number[][][];
+    let before: number[][];
     let currentMatch: SortedSet;
 
     while (unused[0] != null) {

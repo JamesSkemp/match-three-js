@@ -21,8 +21,6 @@ export interface BlanksBelow {
 	[coord: string]: number
 }
 
-export type Coord = [number, number]
-
 export interface PositionInfo {
     first: number[];
 	last: number[];

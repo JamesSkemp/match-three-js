@@ -27,10 +27,13 @@ export function hasPotentialMatchInPairOfRows(pairOfRows: Orb[][]): boolean {
 };
 
 export function hasPotentialMatch(orbs: Orb[][]): boolean {
-    let chunks: types.IterchunksWithPosition[] = tools.iterchunks(orbs);
-    // [[[1, 2, 3], [2, 3, 4]], [[3, 4, 5], [4, 5, 6]]] becomes
-    //  [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]]
-    let flatChunks: Orb[][] = _.flattenDepth<Orb>(chunks, 1);
+    // [[[1, 2, 3], [4, 5, 6]], [[6, 5, 4], [3, 2, 1]]]
+    let chunks: Orb[][][] = [];
+    _.each(tools.iterchunks(orbs), metadata => {
+        chunks.push(metadata.chunk)
+    });
+    // [[1, 2, 3], [4, 5, 6], [6, 5, 4], [3, 2, 1]]
+    let flatChunks: Orb[][] = _.flatten(chunks);
     let hasWideStyleMatch: boolean = _.some(_.map(flatChunks, hasPotentialMatchInSingleRow));
     return hasWideStyleMatch || _.some(_.map(chunks), hasPotentialMatchInPairOfRows);
 };

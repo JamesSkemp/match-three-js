@@ -3,15 +3,18 @@ import test from 'ava';
 import * as _ from 'lodash';
 import * as tools from '../src/tools';
 let orbs;
-let chunks;
-let chunksWithPositionInformation;
+let chunks: any[][][];
+let chunksWithPositionInformation: any[];
 
 test.before(() => {
     orbs  = [ [ 6, 5, 4, 1 ],
               [ 3, 2, 2, 5 ],
               [ 3, 3, 4, 2 ],
               [ 6, 4, 0, 6 ] ];
-    chunks = tools.iterchunks(orbs);
+    chunks = [];
+    _.each(tools.iterchunks(orbs), metadata => {
+        chunks.push(metadata.chunk);
+    });
     chunksWithPositionInformation = tools.iterchunks(orbs, [4, 2], true);
 });
 
@@ -62,68 +65,68 @@ test('has the correct chunk contents', t => {
 
 test('provides position information', t => {
     let correctChunks = [
-        [
-            [6, 5, 4, 1],
-            [3, 2, 2, 5],
-            {
-                position: {
-                    first: [0, 0],
-                    last: [1, 3]
-                }
+        {
+            chunk: [
+                [6, 5, 4, 1],
+                [3, 2, 2, 5]
+            ],
+            positionInfo: {
+                first: [0, 0],
+                last: [1, 3]
             }
-        ],
-        [
-            [3, 2, 2, 5],
-            [3, 3, 4, 2],
-            {
-                position: {
-                    first: [1, 0],
-                    last: [2, 3]
-                }
+        },
+        {
+            chunk: [
+                [3, 2, 2, 5],
+                [3, 3, 4, 2]
+            ],
+            positionInfo: {
+                first: [1, 0],
+                last: [2, 3]
             }
-        ],
-        [
-            [3, 3, 4, 2],
-            [6, 4, 0, 6],
-            {
-                position: {
-                    first: [2, 0],
-                    last: [3, 3]
-                }
+        },
+        {
+            chunk: [
+                [3, 3, 4, 2],
+                [6, 4, 0, 6]
+            ],
+            positionInfo: {
+                first: [2, 0],
+                last: [3, 3]
             }
-        ],
+        },
 
         // transposed
-        [
-            [6, 3, 3, 6],
-            [5, 2, 3, 4],
-            {
-                position: {
-                    first: [0, 0],
-                    last: [3, 1]
-                }
+        {
+            chunk: [
+                [6, 3, 3, 6],
+                [5, 2, 3, 4]
+            ],
+            positionInfo: {
+                first: [0, 0],
+                last: [3, 1]
             }
-        ],
-        [
-            [5, 2, 3, 4],
-            [4, 2, 4, 0],
-            {
-                position: {
-                    first: [0, 1],
-                    last: [3, 2]
-                }
+        },
+        {
+            chunk: [
+                [5, 2, 3, 4],
+                [4, 2, 4, 0]
+            ],
+            positionInfo: {
+                first: [0, 1],
+                last: [3, 2]
             }
-        ],
-        [
-            [4, 2, 4, 0],
-            [1, 5, 2, 6],
-            {
-                position: {
-                    first: [0, 2],
-                    last: [3, 3]
-                }
+        },
+        {
+            chunk: [
+                [4, 2, 4, 0],
+                [1, 5, 2, 6]
+            ],
+            positionInfo: {
+                first: [0, 2],
+                last: [3, 3]
             }
-        ]
+        }
     ];
 
     t.same(chunksWithPositionInformation, correctChunks);
