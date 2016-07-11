@@ -9,7 +9,7 @@ let _findTriples = (chunks: types.Chunk[], isTransposed: boolean): number[][][] 
     let triples: number[][][] = [];
 
     _.each(chunks, chunk => {
-        let orbs = chunk.chunk;
+        let orbs = chunk.chunk[0];
         if (_.uniq(orbs).length === 1) {
             let anchor = chunk.positionInfo.first;
             let firstOrb: number[] = anchor;
