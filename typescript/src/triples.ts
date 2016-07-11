@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import * as tools from './tools';
-import { SortedSet } from 'collections/sorted-set';
+declare var require: any;
+let SortedSet = require('collections/sorted-set');
 import * as types from '../types';
 import { Orb } from '../types';
 
@@ -54,7 +55,7 @@ export function combine(triples: number[][][]): number[][][] {
     let unused = triples;
     let couldMatch: number[][][];
     let before: number[][];
-    let currentMatch: SortedSet;
+    let currentMatch: any;
 
     while (unused[0] != null) {
         currentMatch = new SortedSet(unused[0]);
@@ -75,3 +76,4 @@ export function combine(triples: number[][][]): number[][][] {
     }
     return matches;
 };
+
