@@ -18,20 +18,20 @@ test('finds potential matches in valid single rows', t => {
     ];
 
     _.each(validRowPotentialMatches, validRowPotentialMatch => {
-        t.ok(orbs.hasPotentialMatchInSingleRow(validRowPotentialMatch));
+        t.true(orbs.hasPotentialMatchInSingleRow(validRowPotentialMatch));
     });
 });
 
 test('does not find potential matches in invalid single row', t => {
-    t.notOk(orbs.hasPotentialMatchInSingleRow([1, 1, 0, 0]));
+    t.false(orbs.hasPotentialMatchInSingleRow([1, 1, 0, 0]));
 });
 
 test('reports all indexes of a certain value in a list', t => {
     let row = [3, 3, 5, 8];
-    t.same(tools.indexOfAll(row, 3), [0, 1]);
-    t.same(tools.indexOfAll(row, 5), [2]);
-    t.same(tools.indexOfAll(row, 8), [3]);
-    t.same(tools.indexOfAll(row, 9), []);
+    t.deepEqual(tools.indexOfAll(row, 3), [0, 1]);
+    t.deepEqual(tools.indexOfAll(row, 5), [2]);
+    t.deepEqual(tools.indexOfAll(row, 8), [3]);
+    t.deepEqual(tools.indexOfAll(row, 9), []);
 });
 
 test('finds potential matches in valid row pairs', t => {
@@ -63,7 +63,7 @@ test('finds potential matches in valid row pairs', t => {
     ];
 
     _.each(validRowPairs, validRowPair => {
-        t.ok(orbs.hasPotentialMatchInPairOfRows(validRowPair));
+        t.true(orbs.hasPotentialMatchInPairOfRows(validRowPair));
     });
 });
 
@@ -84,7 +84,7 @@ test('does not find potential matches in invalid row pairs', t => {
     ];
 
     _.each(invalidRowPairs, invalidRowPair => {
-        t.notOk(orbs.hasPotentialMatchInPairOfRows(invalidRowPair));
+        t.false(orbs.hasPotentialMatchInPairOfRows(invalidRowPair));
     });
 });
 
@@ -99,8 +99,8 @@ test('needs shuffle for entire board', t => {
         [ 2, 3, 4, 5, 6, 7, 0, 1 ],
         [ 1, 2, 3, 4, 5, 6, 7, 0 ]
     ];
-    t.ok(board.needsShuffle());
-    t.notOk(board.hasPotentialMatch());
+    t.true(board.needsShuffle());
+    t.false(board.hasPotentialMatch());
 });
 
 test('has potential match for single row', t => {
@@ -114,8 +114,8 @@ test('has potential match for single row', t => {
         [ 2, 3, 4, 5, 6, 7, 0, 1 ],
         [ 1, 2, 3, 4, 8, 6, 8, 8 ]
     ];
-    t.notOk(board.needsShuffle());
-    t.ok(board.hasPotentialMatch());
+    t.false(board.needsShuffle());
+    t.true(board.hasPotentialMatch());
 });
 
 test('has potential match for single column', t => {
@@ -129,8 +129,8 @@ test('has potential match for single column', t => {
         [ 2, 3, 4, 5, 6, 7, 0, 8 ],
         [ 1, 2, 3, 4, 5, 6, 7, 8 ]
     ];
-    t.notOk(board.needsShuffle());
-    t.ok(board.hasPotentialMatch());
+    t.false(board.needsShuffle());
+    t.true(board.hasPotentialMatch());
 });
 
 test('has potential match for two rows', t => {
@@ -144,8 +144,8 @@ test('has potential match for two rows', t => {
         [ 2, 3, 4, 5, 6, 8, 0, 1 ],
         [ 1, 2, 3, 4, 5, 6, 8, 8 ]
     ];
-    t.notOk(board.needsShuffle());
-    t.ok(board.hasPotentialMatch());
+    t.false(board.needsShuffle());
+    t.true(board.hasPotentialMatch());
 });
 
 test('has potential match for two columns', t => {
@@ -159,8 +159,8 @@ test('has potential match for two columns', t => {
         [ 2, 3, 4, 5, 6, 7, 0, 8 ],
         [ 1, 2, 3, 4, 5, 6, 7, 8 ]
     ];
-    t.notOk(board.needsShuffle());
-    t.ok(board.hasPotentialMatch());
+    t.false(board.needsShuffle());
+    t.true(board.hasPotentialMatch());
 });
 
 test('has potential match for rows and columns', t => {
@@ -174,6 +174,6 @@ test('has potential match for rows and columns', t => {
         [ 2, 3, 4, 5, 6, 7, 8, 1 ],
         [ 1, 2, 3, 4, 5, 6, 7, 0 ]
     ];
-    t.notOk(board.needsShuffle());
-    t.ok(board.hasPotentialMatch());
+    t.false(board.needsShuffle());
+    t.true(board.hasPotentialMatch());
 });

@@ -23,12 +23,12 @@ test('has the correct length', t => {
 });
 
 test('has the correct chunk size', t => {
-    t.same(_.map(chunks, 'length'), _.fill(Array(6), 2));
+    t.deepEqual(_.map(chunks, 'length'), _.fill(Array(6), 2));
 });
 
 test('each chunk has the correct slice size', t => {
     let allLengths = _.flatten(_.map(chunks, chunk => _.map(chunk, 'length')));
-    t.same(allLengths, _.fill(Array(12), 4));
+    t.deepEqual(allLengths, _.fill(Array(12), 4));
 });
 
 test('has the correct chunk contents', t => {
@@ -60,7 +60,7 @@ test('has the correct chunk contents', t => {
             [1, 5, 2, 6]
         ]
     ];
-    t.same(chunks, correctChunks);
+    t.deepEqual(chunks, correctChunks);
 });
 
 test('provides position information', t => {
@@ -129,5 +129,5 @@ test('provides position information', t => {
         }
     ];
 
-    t.same(chunksWithPositionInformation, correctChunks);
+    t.deepEqual(chunksWithPositionInformation, correctChunks);
 });

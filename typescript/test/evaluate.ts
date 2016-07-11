@@ -65,7 +65,7 @@ _.each(boards, (metadata, name) => {
         _.each(metadata.evaluate.nonMatchDropped, section => {
             let [sliceData, droppedOrbs] = section;
             let [row, start, end] = sliceData;
-            t.ok(_.isEqual(_.slice(testBoards[name].evaluatedOrbs[row], start, end), droppedOrbs));
+            t.true(_.isEqual(_.slice(testBoards[name].evaluatedOrbs[row], start, end), droppedOrbs));
         });
     });
     
@@ -73,7 +73,7 @@ _.each(boards, (metadata, name) => {
         _.each(metadata.evaluate.atticOrbsDropped, section => {
             let [sliceData, droppedAtticOrbs] = section;
             let [row, start, end] = sliceData;
-            t.ok(_.isEqual(_.slice(testBoards[name].evaluatedOrbs[row], start, end), droppedAtticOrbs));
+            t.true(_.isEqual(_.slice(testBoards[name].evaluatedOrbs[row], start, end), droppedAtticOrbs));
         });
     });
     

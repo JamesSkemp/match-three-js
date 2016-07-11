@@ -13,6 +13,6 @@ _.each(boards, (metadata, name) => {
 
 _.each(boards, (metadata, name) => {
     test(`swaps into ${name}`, t => {
-       t.ok(_.isEqual(swappedOrbs[name], metadata.orbs));
+       t.true(_.isEqual(swappedOrbs[name], metadata.orbs));
     });
 });
