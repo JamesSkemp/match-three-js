@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import * as orbs from '../src/orbs';
 import * as tools from '../src/tools';
 import {Board} from '../src/board';
-let board;
+let board: Board;
 
 test.before(() => {
     board = new Board();
@@ -62,7 +62,7 @@ test('finds potential matches in valid row pairs', t => {
         ]
     ];
 
-    _.each(validRowPairs, validRowPair => {
+    _.each(validRowPairs, (validRowPair: number[][]) => {
         t.true(orbs.hasPotentialMatchInPairOfRows(validRowPair));
     });
 });
@@ -83,7 +83,7 @@ test('does not find potential matches in invalid row pairs', t => {
         ]
     ];
 
-    _.each(invalidRowPairs, invalidRowPair => {
+    _.each(invalidRowPairs, (invalidRowPair: number[][]) => {
         t.false(orbs.hasPotentialMatchInPairOfRows(invalidRowPair));
     });
 });

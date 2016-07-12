@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import {Board} from '../src/board';
 import {boards} from './data/boards';
 import * as attic from './data/attic';
+import {Orb} from '../types';
 let boardInstance = new Board(5, 5);
 
 /*
@@ -41,13 +42,18 @@ testBoards -> {
 }
 
 */
-let testBoards = {};
+let testBoards: {
+    [name: string]: {
+        matchData: number[][];
+        evaluatedOrbs: Orb[][];
+    }
+} = {};
 _.each(boards, (metadata, name) => {
     boardInstance.orbs = _.cloneDeep(metadata.orbs);
     boardInstance.attic.orbs = attic.orbs;
-    testBoards[name] = {};
-    testBoards[name].matchData = boardInstance.evaluate();
-    testBoards[name].evaluatedOrbs = boardInstance.orbs;
+    let testMatchData = boardInstance.evaluate();
+    let testEvaluatedOrbs = boardInstance.orbs;
+    testBoards[name] = { matchData: testMatchData, evaluatedOrbs: testEvaluatedOrbs };
 });
 
 _.each(boards, (metadata, name) => {
@@ -56,7 +62,7 @@ _.each(boards, (metadata, name) => {
     });
         
     test(`removes matches and replaces with valid type orbs for ${name}`, t => {
-        _.each(_.flattenDeep(testBoards[name].evaluatedOrbs), orb => {
+        _.each(_.flattenDeep<Orb>(testBoards[name].evaluatedOrbs), orb => {
             t.true(_.includes(_.range(10), orb));
         });        
     });
