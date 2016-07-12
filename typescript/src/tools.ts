@@ -66,8 +66,8 @@ export function _iterchunks (orbs: Orb[][], chunkLimitRange: [number, number], i
  * 
  * If you want to also return the position of the first member of the chunk,
  * as row/col coordinates, pass in `includePositionInformation`. That will return the
- * same data as above, but with a final piece of information, an object with a `position`
- * key that maps to the first and last row/col coordinates of that chunk.
+ * same data as above, but with an extra piece of information in each object, a 
+ * `position` key that maps to the first and last row/col coordinates of that chunk.
  * [
  *     {
  *         chunk: [[6, 5, 4], [3, 2, 2]],
