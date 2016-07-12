@@ -47,7 +47,7 @@ export function swap(orbs: Orb[][], swapOrbs: number[][]): Orb[][] {
 };
 
 /**
-  * @description Returns an object that tells how mOrb 'blanks' are below each coordinate.
+  * @description Returns an object that tells how many 'blanks' are below each coordinate.
   * It only records the data if there is at least one blank below that coordinate. A blank
   * is just an orb that was a part of a match and has subsequently been marked with a value
   * of '\u241a'.
@@ -131,7 +131,7 @@ export function releaseAttic(orbs: Orb[][], atticOrbs: Orb[][], orbCounts: { [co
 /**
   * @description Gets the orbCounts object based on a board's matches.
   *
-  * The orbCounts object tells how mOrb orbs from the matches are in each column.
+  * The orbCounts object tells how many orbs from the matches are in each column.
   * This is necessary data for the releaseAttic function.
   *
   * @see releaseAttic
