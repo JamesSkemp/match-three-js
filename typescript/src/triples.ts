@@ -1,18 +1,20 @@
 import * as _ from 'lodash';
 import * as tools from './tools';
+declare var require: any;
 let SortedSet = require('collections/sorted-set');
+import * as types from '../types';
+import { Orb } from '../types';
 
-let _findTriples = (chunks, isTransposed) => {
-    let triples = [];
+let _findTriples = (chunks: types.Chunk[], isTransposed: boolean): number[][][] => {
+    let triples: number[][][] = [];
 
     _.each(chunks, chunk => {
-        let orbs = _.first(chunk);
-        let metadata = _.last(chunk);
+        let orbs = chunk.chunk[0];
         if (_.uniq(orbs).length === 1) {
-            let anchor = metadata.position.first;
-            let firstOrb = anchor;
-            let secondOrb;
-            let thirdOrb;
+            let anchor = chunk.positionInfo.first;
+            let firstOrb: number[] = anchor;
+            let secondOrb: number[];
+            let thirdOrb: number[];
 
             if (isTransposed) {
                 secondOrb = [anchor[0] + 1, anchor[1]];
@@ -38,8 +40,8 @@ let _findTriples = (chunks, isTransposed) => {
   * @description Gathers all triples, which are the coordinates for all instances of 
   * three consecutive matching orbs, first in rows, then in columns.
   */
-export function find(orbs) {
-    let chunksOriginal = tools._iterchunks(orbs, [3, 1], true);
+export function find(orbs: Orb[][]): number[][][] {
+    let chunksOriginal = tools._iterchunks(orbs, [3, 1], true, false);
     let chunksTransposed = tools._iterchunks(_.zip(...orbs), [3, 1], true, true);
 
     return [
@@ -48,12 +50,12 @@ export function find(orbs) {
     ];
 };
 
-export function combine(triples) {
-    let matches = [];
+export function combine(triples: number[][][]): number[][][] {
+    let matches: number[][][] = [];
     let unused = triples;
-    let couldMatch;
-    let before;
-    let currentMatch;
+    let couldMatch: number[][][];
+    let before: number[][];
+    let currentMatch: any;
 
     while (unused[0] != null) {
         currentMatch = new SortedSet(unused[0]);
@@ -62,7 +64,7 @@ export function combine(triples) {
 
         _.each(couldMatch, m => {
             //only union if there is an overlap!
-            if (currentMatch.intersection(m).toArray()[0] != null) {
+            if (currentMatch.intersection(m).toArray()[0] != undefined) {
                 before = currentMatch.toArray();
                 currentMatch.swap(0, currentMatch.length, currentMatch.union(m));
                 if (before != currentMatch.toArray()) {
@@ -74,3 +76,4 @@ export function combine(triples) {
     }
     return matches;
 };
+

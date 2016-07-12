@@ -1,4 +1,21 @@
-export const boards = {
+interface Boards {
+    [name: string]: {
+        orbs: number[][];
+        triples: number[][][];
+        matches: number[][][];
+        evaluate: {
+            matchData: number[][];
+            nonMatchDropped: number[][][];
+            atticOrbsDropped: number[][][];
+            unaffectedOrbs: number[][];
+        };
+        swap: {
+            orbsBeforeSwap: number[][];
+            swapOrbs: number[][];
+        }
+    }
+}
+export const boards: Boards = {
     'a simple row match': {
         orbs: [
             [ 1, 2, 3, 4, 5 ],
