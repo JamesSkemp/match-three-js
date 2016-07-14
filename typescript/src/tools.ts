@@ -27,10 +27,10 @@ export function _iterchunks (orbs: Orb[][], chunkLimitRange: [number, number], i
     let [finalPositionWidth, finalPositionHeight] = [orbs[0].length - width, orbs.length - height];
     _.each(_.range(0, finalPositionHeight + 1), heightIndex => {
         _.each(_.range(0, finalPositionWidth + 1), widthIndex => {
-            let chunkData: Chunk = { chunk: undefined };
-            chunkData.chunk = orbs.slice(heightIndex, heightIndex + height).map(row => {
+            let thisChunk = orbs.slice(heightIndex, heightIndex + height).map(row => {
                 return row.slice(widthIndex, widthIndex + width);
             });
+            let chunkData: Chunk = { chunk: thisChunk };
 
             if (includePositionInformation) {
                 let startingCoordinates: number[] = [heightIndex, widthIndex];
