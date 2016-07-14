@@ -3,7 +3,10 @@ import * as _ from 'lodash';
 import {Board} from '../src/board';
 import {boards} from './data/boards';
 import * as attic from './data/attic';
+
 import {Orb} from '../types';
+import {MatchData} from '../types';
+
 let boardInstance = new Board(5, 5);
 
 /*
@@ -44,7 +47,7 @@ testBoards -> {
 */
 let testBoards: {
     [name: string]: {
-        matchData: number[][];
+        matchData: MatchData;
         evaluatedOrbs: Orb[][];
     }
 } = {};

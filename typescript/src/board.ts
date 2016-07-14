@@ -2,8 +2,9 @@
 import * as _ from 'lodash';
 import * as orbs from './orbs';
 import * as triples from './triples';
-import * as types from '../types';
+
 import { Orb } from '../types';
+import { MatchData } from '../types';
 
 export class Board {
     width: number;
@@ -46,7 +47,7 @@ export class Board {
         this.orbs = _.zip(..._.times(this.height, sampleRow));
     }
 
-    evaluate(): types.MatchData {
+    evaluate(): MatchData {
         let [newOrbs, matchData] = orbs.evaluate(this.orbs, this.matches, this.attic.orbs);
         this.orbs = newOrbs;
         return matchData;
