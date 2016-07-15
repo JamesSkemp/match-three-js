@@ -2,6 +2,7 @@ import test from 'ava';
 import * as _ from 'lodash';
 import {boards} from './data/boards';
 import {Board} from '../src/board';
+
 let boardInstance = new Board(5, 5);
 
 _.each(boards, (metadata, name) => {

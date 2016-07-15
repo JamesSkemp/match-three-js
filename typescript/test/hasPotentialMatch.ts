@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import * as orbs from '../src/orbs';
 import * as tools from '../src/tools';
 import {Board} from '../src/board';
+
 let board: Board;
 
 test.before(() => {

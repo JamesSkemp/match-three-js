@@ -1,7 +1,16 @@
 import * as _ from 'lodash';
 import * as tools from './tools';
-import * as types from '../types';
+
 import { Orb } from '../types';
+import { MatchData } from '../types';
+
+interface OrbCounts { 
+    [col: number]: number 
+}
+
+interface BlanksBelow {
+    [coord: string]: number
+}
 
 // checks for one row of the iterchunk board for a potential match like [0010].
 export function hasPotentialMatchInSingleRow(row: Orb[]): boolean {
@@ -67,8 +76,8 @@ export function swap(orbs: Orb[][], swapOrbs: number[][]): Orb[][] {
   *         [4, 0, 1, 2, 3]                 }
   *     ]
   */
-export function getBlanksBelow(orbs: Orb[][]): { [coord: string]: number } {
-    let blanksBelow: {[coord: string]: number} = {};
+export function getBlanksBelow(orbs: Orb[][]): BlanksBelow {
+    let blanksBelow: BlanksBelow = {};
     let height: number = orbs[0].length;
     let width: number = orbs.length;
     _.each(_.rangeRight(width - 1), row => {
@@ -119,7 +128,7 @@ export function atticOrbsToDropDown(atticOrbs: Orb[][], col: string | number, co
 /**
   * @description Drops down the necessary orbs from the attic into the main orb set.
   */
-export function releaseAttic(orbs: Orb[][], atticOrbs: Orb[][], orbCounts: { [col: number]: number }): Orb[][] {
+export function releaseAttic(orbs: Orb[][], atticOrbs: Orb[][], orbCounts: OrbCounts): Orb[][] {
     _.each(orbCounts, (count, col) => {
         let dropdowns = atticOrbsToDropDown(atticOrbs, col, count);
         _.each(_.range(count), row => {
@@ -128,6 +137,7 @@ export function releaseAttic(orbs: Orb[][], atticOrbs: Orb[][], orbCounts: { [co
     });
     return orbs
 };
+
 /**
   * @description Gets the orbCounts object based on a board's matches.
   *
@@ -136,8 +146,8 @@ export function releaseAttic(orbs: Orb[][], atticOrbs: Orb[][], orbCounts: { [co
   *
   * @see releaseAttic
   */
-export function getOrbCounts(matches: number[][][]): { [col: number]: number } {
-    let orbCounts: { [col: number]: number } = {};
+export function getOrbCounts(matches: number[][][]): OrbCounts {
+    let orbCounts: OrbCounts = {};
     _.each(matches, match => {
         _.each(match, coord => {
             if (orbCounts[coord[1]]) {
@@ -150,8 +160,8 @@ export function getOrbCounts(matches: number[][][]): { [col: number]: number } {
     return orbCounts;
 };
 
-export function getMatchData(orbs: Orb[][], matches: number[][][]): types.MatchData {
-    let matchData: types.MatchData = [];
+export function getMatchData(orbs: Orb[][], matches: number[][][]): MatchData {
+    let matchData: MatchData = [];
     _.each(matches, match => {
         matchData.push([orbs[match[0][0]][match[0][1]], match.length]);
     })
@@ -163,7 +173,7 @@ export function getMatchData(orbs: Orb[][], matches: number[][][]): types.MatchD
   * of '\u241a'
   */
 export function markMatches(orbs: Orb[][], matches: number[][][]): Orb[][] {
-    let matchData: types.MatchData = [];
+    let matchData: MatchData = [];
     _.each(matches, match => {
         _.each(match, coord => {
             let [row, col] = coord;
@@ -192,7 +202,7 @@ export function markMatches(orbs: Orb[][], matches: number[][][]): Orb[][] {
   *                 [3, 4, 0, 1, 2],                [3, 4, 0, 1, 2],    
   *                 [4, 0, 1, 2, 3]                 [4, 0, 1, 2, 3]
   */
-export function evaluate(orbs: Orb[][], matches: number[][][], atticOrbs: Orb[][]): [Orb[][], types.MatchData] {
+export function evaluate(orbs: Orb[][], matches: number[][][], atticOrbs: Orb[][]): [Orb[][], MatchData] {
     let matchData = getMatchData(orbs, matches);
     orbs = releaseAttic(activateGravity(markMatches(orbs, matches)), atticOrbs, getOrbCounts(matches));
     return [orbs, matchData];

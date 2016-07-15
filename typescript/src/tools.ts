@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import * as types from '../types';
 
 import { Orb } from '../types';
 import { Chunk } from '../types';

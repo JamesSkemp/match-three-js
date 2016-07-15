@@ -2,8 +2,10 @@
 import test from 'ava';
 import * as _ from 'lodash';
 import * as tools from '../src/tools';
+
 import { Chunk } from '../types';
 import { Orb } from '../types';
+
 let orbs;
 let chunks: Orb[][][];
 let chunksWithPositionInformation: Chunk[];
