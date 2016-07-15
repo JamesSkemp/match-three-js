@@ -1,4 +1,4 @@
-interface Boards {
+interface boards {
     [name: string]: {
         orbs: number[][];
         triples: number[][][];
@@ -14,8 +14,8 @@ interface Boards {
             swapOrbs: number[][];
         }
     }
-}
-export const boards: Boards = {
+};
+export const boards = {
     'a simple row match': {
         orbs: [
             [ 1, 2, 3, 4, 5 ],

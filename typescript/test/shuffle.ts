@@ -1,6 +1,7 @@
 import test from 'ava';
 import * as _ from 'lodash';
 import {Board} from '../src/board';
+
 let i = 100;
 let board5 = new Board(5, 5);
 let board8 = new Board(8, 8);

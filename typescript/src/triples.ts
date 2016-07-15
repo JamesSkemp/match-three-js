@@ -2,10 +2,11 @@ import * as _ from 'lodash';
 import * as tools from './tools';
 declare var require: any;
 let SortedSet = require('collections/sorted-set');
-import * as types from '../types';
-import { Orb } from '../types';
 
-let _findTriples = (chunks: types.Chunk[], isTransposed: boolean): number[][][] => {
+import { Orb } from '../types';
+import { Chunk } from '../types';
+
+let _findTriples = (chunks: Chunk[], isTransposed: boolean): number[][][] => {
     let triples: number[][][] = [];
 
     _.each(chunks, chunk => {
