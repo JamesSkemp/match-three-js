@@ -37,10 +37,10 @@ export function _walkBoard (orbs: Orb[][], chunkLimitRange: [number, number], in
     let [finalPositionWidth, finalPositionHeight] = [orbs[0].length - width, orbs.length - height];
     _.each(_.range(0, finalPositionHeight + 1), heightIndex => {
         _.each(_.range(0, finalPositionWidth + 1), widthIndex => {
-            let thisChunk = orbs.slice(heightIndex, heightIndex + height).map(row => {
+            let chunk: Chunk = { orbs: undefined };
+            chunk.orbs = orbs.slice(heightIndex, heightIndex + height).map(row => {
                 return row.slice(widthIndex, widthIndex + width);
             });
-            let chunkData: Chunk = { orbs: thisChunk };
 
             if (includePositionInformation) {
                 let startingCoordinates: number[] = [heightIndex, widthIndex];
@@ -50,13 +50,13 @@ export function _walkBoard (orbs: Orb[][], chunkLimitRange: [number, number], in
                     endingCoordinates = [endingCoordinates[1], endingCoordinates[0]];
                 }
 
-                chunkData.positionInfo = {
+                chunk.positionInfo = {
                     first: startingCoordinates,
                     last: endingCoordinates
                 };
             }
 
-            chunks.push(chunkData);
+            chunks.push(chunk);
         });
     });
     return chunks;
