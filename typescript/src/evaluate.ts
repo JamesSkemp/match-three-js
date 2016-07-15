@@ -130,7 +130,7 @@ export function getBlanksBelow(orbs: Orb[][]): BlanksBelow {
   * by this function.
   */
 export function activateGravity(orbs: Orb[][]): Orb[][] {
-    let orbsBefore = _.cloneDeep(orbs);
+    let orbsBefore = orbs;
     _.each(getBlanksBelow(orbs), (count: number, coord:string) => {
         let [row, col] = _.map(coord.split(','), _.toInteger);
         orbs[row + count][col] = orbsBefore[row][col];

@@ -31,7 +31,7 @@ function entireBoard (orbs: Orb[][], chunkLimitRange: [number, number] = [4, 2],
  * on a non-transposed set of orbs, as well as a transposed set of orbs.
  * @see findTriples
  */
-export function _walkBoard (orbs: Orb[][], chunkLimitRange: [number, number], includePositionInformation: boolean, isTransposed: boolean): Chunk[] {
+function _walkBoard (orbs: Orb[][], chunkLimitRange: [number, number], includePositionInformation: boolean, isTransposed: boolean): Chunk[] {
     let chunks: Chunk[] = [];
     let [width, height] = chunkLimitRange;
     let [finalPositionWidth, finalPositionHeight] = [orbs[0].length - width, orbs.length - height];
