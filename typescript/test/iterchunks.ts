@@ -2,6 +2,7 @@
 import test from 'ava';
 import * as _ from 'lodash';
 import * as tools from '../src/tools';
+import { walk } from '../src/walk';
 
 import { Chunk } from '../types';
 import { Orb } from '../types';
@@ -16,10 +17,10 @@ test.before(() => {
               [ 3, 3, 4, 2 ],
               [ 6, 4, 0, 6 ] ];
     chunks = [];
-    _.each(tools.iterchunks(orbs), metadata => {
-        chunks.push(metadata.chunk);
+    _.each(walk.entireBoard(orbs), (metadata: Chunk) => {
+        chunks.push(metadata.orbs);
     });
-    chunksWithPositionInformation = tools.iterchunks(orbs, [4, 2], true);
+    chunksWithPositionInformation = walk.entireBoard(orbs, [4, 2], true);
 });
 
 test('has the correct length', t => {
@@ -70,7 +71,7 @@ test('has the correct chunk contents', t => {
 test('provides position information', t => {
     let correctChunks = [
         {
-            chunk: [
+            orbs: [
                 [6, 5, 4, 1],
                 [3, 2, 2, 5]
             ],
@@ -80,7 +81,7 @@ test('provides position information', t => {
             }
         },
         {
-            chunk: [
+            orbs: [
                 [3, 2, 2, 5],
                 [3, 3, 4, 2]
             ],
@@ -90,7 +91,7 @@ test('provides position information', t => {
             }
         },
         {
-            chunk: [
+            orbs: [
                 [3, 3, 4, 2],
                 [6, 4, 0, 6]
             ],
@@ -102,7 +103,7 @@ test('provides position information', t => {
 
         // transposed
         {
-            chunk: [
+            orbs: [
                 [6, 3, 3, 6],
                 [5, 2, 3, 4]
             ],
@@ -112,7 +113,7 @@ test('provides position information', t => {
             }
         },
         {
-            chunk: [
+            orbs: [
                 [5, 2, 3, 4],
                 [4, 2, 4, 0]
             ],
@@ -122,7 +123,7 @@ test('provides position information', t => {
             }
         },
         {
-            chunk: [
+            orbs: [
                 [4, 2, 4, 0],
                 [1, 5, 2, 6]
             ],
@@ -133,5 +134,5 @@ test('provides position information', t => {
         }
     ];
 
-    t.deepEqual(chunksWithPositionInformation, correctChunks);
+    t.deepEqual<any>(chunksWithPositionInformation, correctChunks);
 });

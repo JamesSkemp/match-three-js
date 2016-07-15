@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import * as tools from './tools';
+import { walk } from './walk';
 
 import { Orb } from '../types';
 import { MatchData } from '../types';
@@ -30,8 +31,8 @@ export function hasPotentialMatchInPairOfRows(pairOfRows: Orb[][]): boolean {
 export function hasPotentialMatch(orbs: Orb[][]): boolean {
     // [[[1, 2, 3], [4, 5, 6]], [[6, 5, 4], [3, 2, 1]]]
     let chunks: Orb[][][] = [];
-    _.each(tools.iterchunks(orbs), metadata => {
-        chunks.push(metadata.chunk)
+    _.each(walk.entireBoard(orbs), metadata => {
+        chunks.push(metadata.orbs)
     });
     // [[1, 2, 3], [4, 5, 6], [6, 5, 4], [3, 2, 1]]
     let flatChunks: Orb[][] = _.flatten(chunks);
