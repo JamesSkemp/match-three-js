@@ -43,12 +43,12 @@ let _findTriples = (chunks: Chunk[], isTransposed: boolean): number[][][] => {
   * three consecutive matching orbs, first in rows, then in columns.
   */
 export function find(orbs: Orb[][]): number[][][] {
-    let chunksOriginal = walk.horizontally(orbs, [3, 1], true);
-    let chunksTransposed = walk.vertically(orbs, [3, 1], true);
+    let horizontalChunks = walk.horizontally(orbs, [3, 1], true);
+    let verticalChunks = walk.vertically(orbs, [3, 1], true);
 
     return [
-            ..._findTriples(chunksOriginal, false),
-            ..._findTriples(chunksTransposed, true)
+            ..._findTriples(horizontalChunks, false),
+            ..._findTriples(verticalChunks, true)
     ];
 };
 
