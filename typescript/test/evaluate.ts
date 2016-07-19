@@ -52,7 +52,7 @@ let testBoards: {
     }
 } = {};
 _.each(boards, (metadata, name) => {
-    boardInstance.orbs = _.cloneDeep(metadata.orbs);
+    boardInstance.orbs = metadata.orbs;
     boardInstance.attic.orbs = attic.orbs;
     let testMatchData = boardInstance.evaluate();
     let testEvaluatedOrbs = boardInstance.orbs;

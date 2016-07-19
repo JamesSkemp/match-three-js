@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import * as tools from './tools';
+import { walk } from './walk';
 declare var require: any;
 let SortedSet = require('collections/sorted-set');
 
@@ -10,7 +11,7 @@ let _findTriples = (chunks: Chunk[], isTransposed: boolean): number[][][] => {
     let triples: number[][][] = [];
 
     _.each(chunks, chunk => {
-        let orbs = chunk.chunk[0];
+        let orbs = chunk.orbs[0];
         if (_.uniq(orbs).length === 1) {
             let anchor = chunk.positionInfo.first;
             let firstOrb: number[] = anchor;
@@ -42,12 +43,12 @@ let _findTriples = (chunks: Chunk[], isTransposed: boolean): number[][][] => {
   * three consecutive matching orbs, first in rows, then in columns.
   */
 export function find(orbs: Orb[][]): number[][][] {
-    let chunksOriginal = tools._iterchunks(orbs, [3, 1], true, false);
-    let chunksTransposed = tools._iterchunks(_.zip(...orbs), [3, 1], true, true);
+    let horizontalChunks = walk.horizontally(orbs, [3, 1], true);
+    let verticalChunks = walk.vertically(orbs, [3, 1], true);
 
     return [
-            ..._findTriples(chunksOriginal, false),
-            ..._findTriples(chunksTransposed, true)
+            ..._findTriples(horizontalChunks, false),
+            ..._findTriples(verticalChunks, true)
     ];
 };
 

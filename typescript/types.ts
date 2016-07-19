@@ -8,6 +8,6 @@ export interface PositionInfo {
 }
 
 export interface Chunk {
-    chunk: Orb[][];
+    orbs: Orb[][];
     positionInfo?: PositionInfo
 }

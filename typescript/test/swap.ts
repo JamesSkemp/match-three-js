@@ -11,7 +11,7 @@ let swappedOrbs: {
 } = {};
 
 _.each(boards, (metadata, name) => {
-    boardInstance.orbs = _.cloneDeep(metadata.swap.orbsBeforeSwap);
+    boardInstance.orbs = metadata.swap.orbsBeforeSwap;
     boardInstance.swap(metadata.swap.swapOrbs);
     swappedOrbs[name] = boardInstance.orbs;
 });
