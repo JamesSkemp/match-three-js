@@ -1,5 +1,5 @@
 {
-  "name": "match-three",
+  "name": "match-3",
   "version": "0.0.1",
   "description": "Basic logic for implementing a match three game.",
   "main": "index.js",
