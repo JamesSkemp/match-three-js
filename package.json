@@ -1,6 +1,6 @@
 {
   "name": "match3",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Basic logic for implementing a match three game.",
   "main": "src/index.js",
   "repository": {
