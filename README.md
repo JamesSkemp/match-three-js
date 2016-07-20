@@ -1,4 +1,4 @@
-# match-3
+# match3
 
 An engine for driving [a "match three" game](https://en.wikipedia.org/wiki/Category:Match_3_games), written in Javascript. Allows for plenty of customization, but defaults to mimic the match three system found in [*Gems of War*](https://www.youtube.com/watch?v=GGWdqf1BnXo&t=13s). This app is meant to be used as a core engine for a match three game, meaning that it contains no business logic concerning turns, or stats. This module only handles the moving, matching, removing, replenishing, and shuffling of "orbs". Orbs are the units that populate the board, and must be matched in groups of three or more to be removed from the board.
 

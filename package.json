@@ -1,8 +1,8 @@
 {
-  "name": "match-3",
+  "name": "match3",
   "version": "0.0.1",
   "description": "Basic logic for implementing a match three game.",
-  "main": "index.js",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/PlaytestersKitchen/match-three-js"
