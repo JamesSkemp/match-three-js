@@ -1,0 +1,9 @@
+scripts
+site
+site-gh-pages
+test
+typescript
+typings
+tsconfig.*
+types.js
+typings.json

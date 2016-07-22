@@ -1,6 +1,6 @@
 {
   "name": "match3",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Basic logic for implementing a match three game.",
   "main": "src/index.js",
   "repository": {
@@ -34,6 +34,18 @@
     "game"
   ],
   "author": "Andrew Yurisich <droogans@gmail.com> (http://andrew.yurisich.com/)",
+  "contributors": [
+    {
+      "name": "Andrew Yurisich",
+      "email": "Droogans@gmail.com",
+      "url": "http://andrew.yurisich.com/"
+    },
+    {
+      "name": "Ryan Casperson",
+      "email": "casperson.ryan@gmail.com",
+      "url": "http://github.com/rbcasperson/"
+    }
+  ],
   "license": "MIT",
   "ava": {
     "files": [
