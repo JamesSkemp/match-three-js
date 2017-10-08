@@ -47,6 +47,10 @@ export class Board {
         this.orbs = _.zip(..._.times(this.height, sampleRow));
     }
 
+    resetAttic(): void {
+        this.attic = new Board(this.width, this.height, this.types, false);
+    }
+
     evaluate(): MatchData {
         let [newOrbs, matchData] = orbs.evaluate(this.orbs, this.matches, this.attic.orbs);
         this.orbs = newOrbs;
