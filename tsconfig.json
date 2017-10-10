@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "lib": ["es6"],
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "./",
+    "noImplicitAny": false,
+    "outDir": "./built",
+    "paths": {
+      "*": ["types/*"]
+    },
     "removeComments": false,
-    "noImplicitAny": false
+    "target": "es6"
   },
   "exclude": [
     "node_modules",
