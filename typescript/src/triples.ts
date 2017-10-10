@@ -39,7 +39,7 @@ let _findTriples = (chunks: Chunk[], isTransposed: boolean): number[][][] => {
 };
 
 /**
-  * @description Gathers all triples, which are the coordinates for all instances of 
+  * @description Gathers all triples, which are the coordinates for all instances of
   * three consecutive matching orbs, first in rows, then in columns.
   */
 export function find(orbs: Orb[][]): number[][][] {
@@ -78,4 +78,3 @@ export function combine(triples: number[][][]): number[][][] {
     }
     return matches;
 };
-
