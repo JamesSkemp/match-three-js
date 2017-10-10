@@ -7,6 +7,10 @@
     "type": "git",
     "url": "https://github.com/PlaytestersKitchen/match-three-js"
   },
+  "engines": {
+      "node": ">=8.1.x",
+      "npm": "5.4.x"
+  },
   "dependencies": {
     "collections": "^3.0.0",
     "lodash": "^4.6.1",
