@@ -3,5 +3,7 @@ test/*
 node_modules/
 site-gh-pages/
 
+built/
+
 # exclude in tsconfig.json is not excluding this file because other files depend on it
 types.js
