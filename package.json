@@ -28,7 +28,7 @@
     "start": "scripts/server.js",
     "clean": "rm -rf built site-gh-pages",
     "deploy": "npm run prestart && cd site-gh-pages && git add . && git commit -m \"Update gh-pages\" && git push origin gh-pages && cd ..",
-    "typescript": "./node_modules/.bin/tsc --allowJs site/scripts/main.js --outdir site-gh-pages",
+    "typescript": "tsc --allowJs site/scripts/main.js --outdir site-gh-pages/",
     "test": "npm run test:typescript && tsc && ava",
     "test:es5": "ava",
     "test:typescript": "tsc -p tsconfig.test.json"
