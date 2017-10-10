@@ -14,7 +14,7 @@ animate.createHTMLBoard(b.orbs);
 
 // create the atticOrbs orb set and append it to 'attic' div
 let atticBoard = document.getElementById('attic');
-animate.createHTMLAttic(b.atticOrbs);
+animate.createHTMLAttic(b.attic.orbs);
 
 // create a scoreboard for each orb type
 let types = document.getElementById('types');

@@ -65,7 +65,7 @@ function evaluate(board) {
     // after the attic has been released, update the js board and repopulate
     atticEl.addEventListener(transitionEvent, function() {
         board.resetAttic();
-        animate.repopulate(board.orbs, board.atticOrbs);
+        animate.repopulate(board.orbs, board.attic.orbs);
         if (board.hasMatch()) {
             evaluate(board);
         }
@@ -91,7 +91,7 @@ exports.makeMove = function(board, swapOrbs) {
         // after the swap is done, evaluate the board
         let swapEl = document.getElementById(`main ${swapOrbs[0][0]} ${swapOrbs[0][1]}`);
         swapEl.addEventListener(whichTransitionEvent(), function() {
-            animate.repopulate(board.orbs, board.atticOrbs);
+            animate.repopulate(board.orbs, board.attic.orbs);
             evaluate(board);
         });
     }
